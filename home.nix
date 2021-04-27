@@ -34,8 +34,30 @@
     bind  # dig
     python3
     onedrive
+    nodejs
+    ncdu
+    gitAndTools.gitstatus
   ];
 
+  programs.zsh.enable = true;
+  programs.zsh.plugins = [
+    {
+      name = "forgit";
+      file = "forgit.plugin.zsh";
+      src = builtins.fetchGit {
+        url = "https://github.com/wfxr/forgit";
+        rev = "7806fc3ab37ac479c315eb54b164f67ba9ed17ea";
+      };
+    }
+    {
+      name = "zsh-async";
+      file = "async.zsh";
+      src = builtins.fetchGit {
+        url = "https://github.com/mafredri/zsh-async";
+        rev = "a61239dd55028eec173374883809f439c93d292b";
+      };
+    }
+  ];
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
 
@@ -52,4 +74,5 @@
   programs.z-lua.options = [ "fzf" ];
 
   home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./nvim;
 }

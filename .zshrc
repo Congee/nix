@@ -75,8 +75,10 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
   # export NVM_LAZY_LOAD=true
   # [ -d "$HOME/.zsh-nvm" ] && \. "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
 
-  . $HOME/.asdf/asdf.sh
-  fpath=(${ASDF_DIR}/completions $fpath)
+  if [ -f $HOME/.asdf/asdf.sh ]; then
+    source $HOME/.asdf/asdf.sh
+    fpath=(${ASDF_DIR}/completions $fpath)
+  fi
 
   autoload bashcompinit && bashcompinit
   local aws_comp=$(whence aws_completer)
@@ -472,26 +474,28 @@ bindkey '^[[Z' reverse-menu-complete
 #bindkey 'ƒ'  forward-word		# OSX iTerm2 Opiton-F
 #bindkey '∫'  backward-word	# OSX iTerm2 Opiton-B
 
+# nix programs.fzf enables it already
+#
 # FZF CTRL-R - Paste the selected command from history into the command line
-bindkey -r '^R'  # remove default binding for history-incremental-search-backward
-fzf-history-widget() {
-local selected num
-setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-selected=( $(fc -rl 1 |
-  FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-  local ret=$?
-  if [ -n "$selected" ]; then
-    num=$selected[1]
-    if [ -n "$num" ]; then
-      zle vi-fetch-history -n $num
-    fi
-  fi
-  zle reset-prompt
-  return $ret
-}
-zle     -N   fzf-history-widget
-bindkey '^R' fzf-history-widget  # must be after `bindkey -e`
-bindkey '^T' transpose-chars
+# bindkey -r '^R'  # remove default binding for history-incremental-search-backward
+# fzf-history-widget() {
+# local selected num
+# setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
+# selected=( $(fc -rl 1 |
+#   FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
+#   local ret=$?
+#   if [ -n "$selected" ]; then
+#     num=$selected[1]
+#     if [ -n "$num" ]; then
+#       zle vi-fetch-history -n $num
+#     fi
+#   fi
+#   zle reset-prompt
+#   return $ret
+# }
+# zle     -N   fzf-history-widget
+# bindkey '^R' fzf-history-widget  # must be after `bindkey -e`
+# bindkey '^T' transpose-chars
 
 #
 # Ctrl+X Ctrl+E
