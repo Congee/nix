@@ -75,6 +75,13 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     neovim git
+    (
+      pkgs.writeScriptBin "fnix" ''
+        #!/usr/bin/env bash
+        nix=${pkgs.nixUnstable}/bin/nix
+        exec $nix --experimental-features "nix-command flakes" "$@"
+      ''
+    )
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
