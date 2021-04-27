@@ -71,8 +71,9 @@
   programs.gh.gitProtocol = "ssh";
   programs.git = {
     enable = true;
-    userName = "Congee";
-    userEmail = "***REMOVED***";
+    includes = [
+      { path = ./gitconfig; }
+    ];
   };
   programs.tmux.enable = true;
   programs.fzf.enable = true;

@@ -1,0 +1,53 @@
+[push]
+    default = simple
+[user]
+    name = Congee
+    email = ***REMOVED***
+    signingkey = 3748BEAEB1F5375071D02C32CB1B653DBEB49C43
+[color]
+    diff = auto
+    ui = false
+[alias]
+    push = push --follow-tags
+    authors = shortlog -sn
+    fetch = fetch --all --prune
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit --boundary
+    co = checkout
+    meh = commit --amend --no-edit
+    frebase = !"git rebase --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
+    lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
+    cmp = log --left-right --graph --oneline --cherry
+    cp = cherry-pick
+    prune-local = !"git branch --verbose | fgrep '[gone]' | awk '{print $1}' | xargs git branch -D"
+[merge]
+    tool = vimdiff
+    ff = true
+[pull]
+    ff = true
+[mergetool]
+    prompt = true
+[mergetool "vimdiff"]
+    cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[difftool]
+    prompt = true
+[diff]
+    tool = vimdiff
+[core]
+    trustctime = false
+    attributesfile = /home/congee/.gitattributes
+    # pager = delta --dark
+[commit]
+    gpgsign = false
+[cola]
+    spellcheck = false
+[filter "lfs"]
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+[sequence]
+    # editor = interactive-rebase-tool
+[credential]
+    helper = store
+[hub]
+    protocol = ssh
