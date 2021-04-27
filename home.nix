@@ -31,7 +31,11 @@
     socat
     ccache
     bind  # dig
+    python3
   ];
+
+  programs.neovim.enable = true;
+  programs.neovim.withPython3 = true;
 
   programs.gh.enable = true;
   programs.gh.gitProtocol = "ssh";
