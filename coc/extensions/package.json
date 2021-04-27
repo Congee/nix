@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "coc-git": ">=2.3.1",
+    "coc-julia": ">=0.8.0",
+    "coc-pyright": ">=1.1.133"
+  }
+}
