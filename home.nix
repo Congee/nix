@@ -62,6 +62,7 @@
   ];
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
+  programs.neovim.viAlias = true;
 
   # pass
   programs.password-store.enable = true;
