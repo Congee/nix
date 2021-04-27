@@ -26,15 +26,23 @@
     ripgrep
     croc
     bat
+    fzf
+    lua
+    socat
+    ccache
+    bind  # dig
   ];
 
   programs.gh.enable = true;
+  programs.gh.gitProtocol = "ssh";
   programs.git = {
     enable = true;
     userName = "Congee";
     userEmail = "***REMOVED***";
   };
   programs.tmux.enable = true;
+  programs.fzf.enable = true;
+  programs.z-lua.enable = true;
 
   home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
 }
