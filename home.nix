@@ -25,6 +25,7 @@
     htop
     ripgrep
     croc
+    bat
   ];
 
   programs.gh.enable = true;
@@ -33,4 +34,7 @@
     userName = "Congee";
     userEmail = "***REMOVED***";
   };
+  programs.tmux.enable = true;
+
+  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
 }
