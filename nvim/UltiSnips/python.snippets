@@ -1,0 +1,63 @@
+priority -10
+
+snippet br "breakpoint()"
+breakpoint()
+endsnippet
+
+snippet exit
+__import__('sys').exit()
+endsnippet
+
+snippet wwdb
+with __import__('wdb').trace():
+	$1
+endsnippet
+
+snippet wdb
+__import__('wdb').set_trace()
+endsnippet
+
+snippet aio
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import asyncio
+import uvloop
+
+
+async def fire():
+	await $1
+
+
+def main():
+	loop = uvloop.new_event_loop()
+	asyncio.set_event_loop(loop)
+	loop.run_until_complete(fire())
+
+
+if __name__ == '__main__':
+	main()
+endsnippet
+
+snippet py
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+from typing import *
+
+
+$1
+
+
+def main():
+	...
+
+
+if __name__ == '__main__':
+	main()
+endsnippet
+
+
+snippet exc
+__import__('traceback').print_exc()
+endsnippet

@@ -1,0 +1,65 @@
+{
+    "languageserver": {
+        "haskell": {
+            "command": "haskell-language-server-wrapper",
+            "args": [
+                "--lsp",
+                "--debug",
+                "--logfile=/tmp/hls.log"
+            ],
+            "rootPatterns": [
+                "*.cabal",
+                "stack.yaml",
+                "cabal.project",
+                "package.yaml",
+                "hie.yaml"
+            ],
+            "filetypes": [
+                "haskell",
+                "lhaskell"
+            ],
+            "initializationOptions": {
+                "haskell": {
+                    "formattingProvider": "fourmolu",
+                    "hlintOn": true
+                }
+            }
+        },
+        "terraform": {
+            "command": "terraform-lsp",
+            "filetypes": [
+                "terraform"
+            ]
+        }
+    },
+    "rust-analyzer.updates.channel": "stable",
+    "suggest.autoTrigger": "trigger",
+    "python.analysis.typeCheckingMode": "strict",
+    "python.analysis.useLibraryCodeForTypes": true,
+    "python.linting.flake8Enabled": true,
+    "julia.trace.server": "verbose",
+    "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+    "coc.preferences.colorSupport": true,
+    "coc.preferences.previewMaxHeight": 16,
+    "cSpell.enabledLanguageIds": ["markdown"],
+    "suggest.removeDuplicateItems": true,
+    "explorer.icon.enableNerdfont": true,
+    "explorer.icon.enableVimDevicons": true,
+    "explorer.previewAction.onHover": false,
+    "explorer.floating.border.enable": true,
+    "git.enableGutters": true,
+    "git.addedSign.hlGroup": "SignifySignAdd",
+    "git.removedSign.hlGroup": "SignifySignDelete",
+    "git.changedSign.hlGroup": "SignifySignChange",
+    "git.addGBlameToVirtualText": true,
+    "clangd.semanticHighlighting": true,
+    "clangd.fallbackFlags": [
+    ],
+    "diagnostic-languageserver.debug": true,
+    "diagnostic-languageserver.filetypes": {
+        "sh": "shellcheck"
+    },
+    "go.goplsOptions": {
+        "staticcheck": true
+    }
+}
