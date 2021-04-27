@@ -23,6 +23,7 @@
     jq
     tree
     htop
+    fd
     ripgrep
     croc
     bat
@@ -32,6 +33,7 @@
     ccache
     bind  # dig
     python3
+    onedrive
   ];
 
   programs.neovim.enable = true;
@@ -47,6 +49,7 @@
   programs.tmux.enable = true;
   programs.fzf.enable = true;
   programs.z-lua.enable = true;
+  programs.z-lua.options = [ "fzf" ];
 
   home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
 }

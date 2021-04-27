@@ -90,7 +90,7 @@ fi
 [ -d ~/.zsh/plugins/forgit ] && source ~/.zsh/plugins/forgit/forgit.plugin.zsh
 [ -d ~/.zsh/plugins/gitstatus/ ] && source ~/.zsh/plugins/gitstatus/gitstatus.prompt.zsh
 
-eval "$(lua $HOME/.z.lua/z.lua --init zsh fzf)"
+# eval "$(lua $HOME/.z.lua/z.lua --init zsh fzf)"
 # [ -f $HOME/.zsh/czmod/czmod.zsh ] && source $HOME/.zsh/czmod/czmod.zsh
 
 # color os ls output is also affected by TERM=xterm-256color
