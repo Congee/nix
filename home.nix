@@ -20,6 +20,7 @@
   home.stateVersion = "21.03";
 
   home.packages = with pkgs; [
+    (import ./packages/leetcode-cli)
     jq
     tree
     fd
