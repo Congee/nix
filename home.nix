@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Let Home Manager install and manage itself.
@@ -83,6 +83,7 @@
     includes = [
       { path = ./gitconfig; }
     ];
+    attributes = lib.splitString "\n" (builtins.readFile ./gitattributes);
   };
   programs.htop.enable = true;
   programs.tmux.enable = true;

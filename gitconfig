@@ -34,7 +34,7 @@
     tool = vimdiff
 [core]
     trustctime = false
-    attributesfile = /home/congee/.gitattributes
+    ; attributesfile = /home/congee/.gitattributes
     # pager = delta --dark
 [commit]
     gpgsign = false
