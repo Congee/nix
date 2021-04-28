@@ -25,7 +25,6 @@
     fd
     ripgrep
     croc
-    bat
     fzf
     lua
     socat
@@ -67,6 +66,12 @@
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
+
+  programs.bat.enable = true;
+  programs.bat.config = {
+    theme = "TwoDark";
+    style = "plain";
+  };
 
   # pass
   programs.password-store.enable = true;
