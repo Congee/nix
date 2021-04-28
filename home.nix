@@ -22,7 +22,6 @@
   home.packages = with pkgs; [
     jq
     tree
-    htop
     fd
     ripgrep
     croc
@@ -39,6 +38,11 @@
     gitAndTools.gitstatus
     awscli2
     aws-vault
+    sl
+    gti
+    cmatrix
+    cowsay
+    fortune
   ];
 
   programs.zsh.enable = true;
@@ -75,6 +79,7 @@
       { path = ./gitconfig; }
     ];
   };
+  programs.htop.enable = true;
   programs.tmux.enable = true;
   programs.fzf.enable = true;
   programs.z-lua.enable = true;
