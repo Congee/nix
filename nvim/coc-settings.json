@@ -30,6 +30,12 @@
             "filetypes": [
                 "terraform"
             ]
+        },
+        "nix": {
+            "command": "rnix-lsp",
+            "filetypes": [
+                "nix"
+            ]
         }
     },
     "rust-analyzer.updates.channel": "stable",

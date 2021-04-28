@@ -42,6 +42,7 @@
     cmatrix
     cowsay
     fortune
+    rnix-lsp
   ];
 
   programs.zsh.enable = true;
