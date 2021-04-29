@@ -37,6 +37,7 @@
     nodejs
     ncdu
     gitAndTools.gitstatus
+    gitAndTools.gh
     awscli2
     aws-vault
     sl
@@ -97,8 +98,6 @@
   programs.ssh.enable = true;
   home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink ./ssh_config;
 
-  programs.gh.enable = true;
-  programs.gh.gitProtocol = "ssh";
   programs.git = {
     enable = true;
     includes = [
@@ -106,6 +105,7 @@
     ];
     attributes = lib.splitString "\n" (builtins.readFile ./gitattributes);
   };
+
   programs.htop.enable = true;
   programs.tmux.enable = true;
   programs.fzf.enable = true;
