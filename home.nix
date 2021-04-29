@@ -21,6 +21,7 @@
 
   home.packages = with pkgs; [
     (import ./packages/leetcode-cli)
+    (import ./packages/xh)
     jq
     tree
     fd
