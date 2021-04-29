@@ -271,14 +271,11 @@ dadjoke() {
 }
 
 gh() {
-  if [[ -d .git ]]; then
-    local result=$(git remote get-url origin 2>/dev/null)
-    if [[ $result =~ 'youngalfred/' ]]; then
-      GH_CONFIG_DIR=$HOME/.config/gh-youngalfred command gh "$@"
-    fi
-  else
-    command gh "$@"
+  local result=$(git remote get-url origin 2>/dev/null)
+  if [[ $result =~ 'youngalfred' ]]; then
+    GH_CONFIG_DIR=$HOME/.config/gh-youngalfred command gh "$@"
   fi
+  command gh "$@"
 }
 
 # aprod() {

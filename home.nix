@@ -77,9 +77,12 @@
       };
     }
   ];
+  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
+
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./nvim;
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -89,6 +92,9 @@
 
   # pass
   programs.password-store.enable = true;
+
+  programs.ssh.enable = true;
+  home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink ./ssh_config;
 
   programs.gh.enable = true;
   programs.gh.gitProtocol = "ssh";
@@ -104,7 +110,4 @@
   programs.fzf.enable = true;
   programs.z-lua.enable = true;
   programs.z-lua.options = [ "fzf" ];
-
-  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./nvim;
 }
