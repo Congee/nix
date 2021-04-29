@@ -48,6 +48,10 @@
     file
     p7zip
     rnix-lsp
+    unstable.haskellPackages.cabal-install
+    unstable.haskellPackages.ghc
+    unstable.haskellPackages.implicit-hie
+    unstable.haskellPackages.hoogle
   ];
 
   programs.zsh.enable = true;

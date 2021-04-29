@@ -46,6 +46,7 @@ Plug 'mhinz/vim-signify'
 Plug 'wellle/tmux-complete.vim'
 Plug 'chiedo/vim-case-convert'
 Plug 'gyim/vim-boxdraw'
+Plug 'monkoose/fzf-hoogle.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'fisadev/vim-isort', {'for': 'python'}
