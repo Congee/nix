@@ -111,5 +111,13 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
 
+  # Binary Cache for Haskell.nix
+  nix.binaryCachePublicKeys = [
+    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+  ];
+  nix.binaryCaches = [
+    "https://hydra.iohk.io"
+  ];
+
 }
 
