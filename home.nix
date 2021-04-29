@@ -43,6 +43,8 @@
     cmatrix
     cowsay
     fortune
+    file
+    p7zip
     rnix-lsp
   ];
 
@@ -62,6 +64,16 @@
       src = builtins.fetchGit {
         url = "https://github.com/mafredri/zsh-async";
         rev = "a61239dd55028eec173374883809f439c93d292b";
+      };
+    }
+    {  # TODO: make it work with `nix flake develop`
+      name = "zsh-nix-shell";
+      file = "nix-shell.plugin.zsh";
+      src = pkgs.fetchFromGitHub {
+        owner = "chisui";
+        repo = "zsh-nix-shell";
+        rev = "v0.1.0";
+        sha256 = "0snhch9hfy83d4amkyxx33izvkhbwmindy0zjjk28hih1a9l2jmx";
       };
     }
   ];
