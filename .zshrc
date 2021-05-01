@@ -182,8 +182,8 @@ case $OSTYPE in
   linux*)
     # alias tmux='TERM=cygwin tmux'
     alias open=xdg-open
-    alias pbcopy="xclip -selection c"
-    alias pbpaste="xclip -selection clipboard -o"
+    alias pbcopy="wl-copy"
+    alias pbpaste="wl-paste"
     alias ls='ls --color=auto'
     alias drop_caches='sudo sysctl vm.drop_caches=1'
     alias godoc='godoc -goroot=/usr/share/go-1.15'

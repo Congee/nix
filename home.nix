@@ -56,6 +56,7 @@ in
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
+    wl-clipboard
 
     firefox
     unstable.slack-dark
