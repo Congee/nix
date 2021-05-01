@@ -61,7 +61,10 @@ in
     firefox
     unstable.slack-dark
     unstable.spotify
+    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
   ];
+
+  fontts.fontconfig.enable = true;
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [
