@@ -94,6 +94,12 @@ in
   ];
   home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
 
+  programs.tmux.enable = true;
+  programs.tmux.tmuxinator.enable = true;
+  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./.tmux.conf;
+  home.file.".tmuxinator".source = config.lib.file.mkOutOfStoreSymlink ./.tmuxinator.yml;
+
+
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
@@ -120,7 +126,6 @@ in
   };
 
   programs.htop.enable = true;
-  programs.tmux.enable = true;
   programs.fzf.enable = true;
   programs.z-lua.enable = true;
   programs.z-lua.options = [ "fzf" ];
