@@ -104,18 +104,18 @@ in
       };
     }
   ];
-  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./.zshrc;
+  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./config/.zshrc;
 
   programs.tmux.enable = true;
   programs.tmux.tmuxinator.enable = true;
-  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./.tmux.conf;
-  home.file.".tmuxinator".source = config.lib.file.mkOutOfStoreSymlink ./.tmuxinator.yml;
+  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmux.conf;
+  home.file.".tmuxinator".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
 
 
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./nvim;
+  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./config/nvim;
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -127,14 +127,14 @@ in
   programs.password-store.enable = true;
 
   programs.ssh.enable = true;
-  home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink ./ssh_config;
+  home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink ./config/ssh_config;
 
   programs.git = {
     enable = true;
     includes = [
-      { path = ./gitconfig; }
+      { path = ./config/gitconfig; }
     ];
-    attributes = lib.splitString "\n" (builtins.readFile ./gitattributes);
+    attributes = lib.splitString "\n" (builtins.readFile ./config/gitattributes);
   };
 
   programs.htop.enable = true;
@@ -142,7 +142,7 @@ in
   programs.z-lua.enable = true;
   programs.z-lua.options = [ "fzf" ];
   programs.alacritty.enable = true;
-  home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./alacritty.yml;
+  home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
 
   services.flameshot.enable = true;
 
