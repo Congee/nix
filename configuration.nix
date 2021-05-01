@@ -47,6 +47,11 @@
   # Enable the GNOME 3 Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome3.enable = true;
+  environment.gnome3.excludePackages = [
+    pkgs.gnome3.geary
+    pkgs.gnome3.gnome-music
+    pkgs.gnome3.gnome-weather
+  ];
   
 
   # Configure keymap in X11
