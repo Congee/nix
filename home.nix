@@ -53,12 +53,19 @@ in
     p7zip
     rnix-lsp
     lshw
+    exa
+    # unstable.fx  # json viewer. I don't like cli written in js tho
+    unstable.scc
+    unstable.navi # cheat sheet
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
     wl-clipboard
 
+    zathura  # pdf
+    youtube-dl-light
+    unstable.wofi  # rofi but with wayland
     thunderbird
     unstable.slack-dark
     unstable.spotify
