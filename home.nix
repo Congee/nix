@@ -77,12 +77,37 @@ in
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [
+    # OMG this is sick, aggresive
+    # {
+    #   name = "zsh-autocomplete";
+    #   file = "zsh-autocomplete.plugin.zsh";
+    #   src = builtins.fetchGit {
+    #     url = "https://github.com/marlonrichert/zsh-autocomplete";
+    #     rev = "306e221bfec548b8cb54f1cc333a13d02e4cbe80";
+    #   };
+    # }
+    {
+      name = "zsh-completions";
+      file = "zsh-completions.plugin.zsh";
+      src = builtins.fetchGit {
+        url = "https://github.com/zsh-users/zsh-completions";
+        rev = "e14d47010ac7fc096d6701585b42d89b6a59293c";
+      };
+    }
     {
       name = "forgit";
       file = "forgit.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/wfxr/forgit";
         rev = "7806fc3ab37ac479c315eb54b164f67ba9ed17ea";
+      };
+    }
+    {
+      name = "gitstatus";
+      file = "gitstatus.prompt.zsh";
+      src = builtins.fetchGit {
+        url = "https://github.com/romkatv/gitstatus";
+        rev = "97c2aa170a7a81b06c48279a3f3a875030a28ee2";
       };
     }
     {
@@ -104,7 +129,10 @@ in
       };
     }
   ];
-  home.file.".zshrc".source = config.lib.file.mkOutOfStoreSymlink ./config/.zshrc;
+  programs.zsh.initExtra = builtins.readFile ./config/.zshrc;
+
+  programs.zoxide.enable = true;
+  programs.zoxide.enableZshIntegration = true;
 
   programs.tmux.enable = true;
   programs.tmux.tmuxinator.enable = true;
@@ -139,8 +167,6 @@ in
 
   programs.htop.enable = true;
   programs.fzf.enable = true;
-  programs.z-lua.enable = true;
-  programs.z-lua.options = [ "fzf" ];
   programs.alacritty.enable = true;
   home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
 
