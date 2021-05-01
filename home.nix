@@ -63,7 +63,7 @@ in
     unstable.haskellPackages.hoogle
     wl-clipboard
 
-    zathura  # pdf
+    tdesktop  # telegram
     youtube-dl-light
     unstable.wofi  # rofi but with wayland
     thunderbird
@@ -166,6 +166,13 @@ in
   };
 
   programs.htop.enable = true;
+  programs.htop.highlightBaseName = true;
+  programs.htop.hideThreads = true;
+  programs.htop.showProgramPath = false;
+  programs.htop.treeView = true;
+
+  programs.zathura.enable = true;  # pdf
+
   programs.fzf.enable = true;
   programs.alacritty.enable = true;
   home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
@@ -181,7 +188,6 @@ in
   gtk.iconTheme.name = "Paper";  # Candy and Tela also look good
   gtk.iconTheme.package = unstable.paper-icon-theme;
 
-  # TODO: try dconf.settings
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
     $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 24
@@ -192,6 +198,6 @@ in
     $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>x']"
 
     # dconf dump / > dconf.settings
-    $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de']"
+    $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com']"
   '';
 }
