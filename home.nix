@@ -52,6 +52,7 @@ in
     file
     p7zip
     rnix-lsp
+    lshw
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
@@ -59,12 +60,14 @@ in
     wl-clipboard
 
     firefox
+    thunderbird
     unstable.slack-dark
     unstable.spotify
+    mpv
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
   ];
 
-  fontts.fontconfig.enable = true;
+  fonts.fontconfig.enable = true;
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [
@@ -135,6 +138,8 @@ in
   programs.alacritty.enable = true;
   home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./alacritty.yml;
 
+  services.flameshot.enable = true;
+
 
   gtk.enable = true;
   gtk.theme.name = "Dracula";
@@ -142,7 +147,7 @@ in
   gtk.iconTheme.name = "Paper";  # Candy and Tela also look good
   gtk.iconTheme.package = unstable.paper-icon-theme;
 
-
+  # TODO: try dconf.settings
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
     $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 24
