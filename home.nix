@@ -59,7 +59,6 @@ in
     unstable.haskellPackages.hoogle
     wl-clipboard
 
-    firefox
     thunderbird
     unstable.slack-dark
     unstable.spotify
@@ -140,6 +139,8 @@ in
 
   services.flameshot.enable = true;
 
+  programs.firefox.enable = true;
+  programs.firefox.enableGnomeExtensions = true;
 
   gtk.enable = true;
   gtk.theme.name = "Dracula";
