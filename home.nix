@@ -1,5 +1,8 @@
 { config, pkgs, lib, ... }:
 
+let
+  unstable = import <unstable> { config.allowUnfree = true; };
+in
 {
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
@@ -19,6 +22,7 @@
   # changes in each release.
   home.stateVersion = "21.03";
 
+  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     (import ./packages/leetcode-cli)
     (import ./packages/xh)
@@ -52,6 +56,10 @@
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
+
+    firefox
+    unstable.slack-dark
+    unstable.spotify
   ];
 
   programs.zsh.enable = true;
@@ -115,4 +123,24 @@
   programs.fzf.enable = true;
   programs.z-lua.enable = true;
   programs.z-lua.options = [ "fzf" ];
+  programs.alacritty.enable = true;
+  home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./alacritty.yml;
+
+
+  gtk.enable = true;
+  gtk.theme.name = "Dracula";
+  gtk.theme.package = unstable.dracula-theme;
+  gtk.iconTheme.name = "Paper";  # Candy and Tela also look good
+  gtk.iconTheme.package = unstable.paper-icon-theme;
+
+
+  home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
+    $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 24
+    $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard delay 300
+
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys play "['<Super>c']"
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['<Super>z']"
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>x']"
+  '';
 }
