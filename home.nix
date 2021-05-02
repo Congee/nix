@@ -196,8 +196,8 @@ in
   gtk.enable = true;
   gtk.theme.name = "Dracula";
   gtk.theme.package = unstable.dracula-theme;
-  gtk.iconTheme.name = "Paper";  # Candy and Tela also look good
-  gtk.iconTheme.package = unstable.paper-icon-theme;
+  gtk.iconTheme.name = "Papirus";  # Candy and Tela also look good
+  gtk.iconTheme.package = unstable.papirus-icon-theme;
   # FIXME: no effect yet
   gtk.gtk3.extraCss = ''
     bind "<super>c" { "copy-clipboard"  () };
