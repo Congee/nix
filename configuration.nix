@@ -123,6 +123,4 @@
   nix.binaryCaches = [
     "https://hydra.iohk.io"
   ];
-
 }
-

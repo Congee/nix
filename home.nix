@@ -181,12 +181,29 @@ in
 
   programs.firefox.enable = true;
   programs.firefox.enableGnomeExtensions = true;
+  programs.firefox.profiles.default = {
+    id = 0;  # means default
+    isDefault = true;  # also sets to default if id is not 0
+    path = "40rx423a.default";  # keep using the auto-generated default path
+
+    # This creates the user.js that overrides settings of the default prefs.js.
+    # Safe!
+    settings = {
+      "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
+    };
+  };
 
   gtk.enable = true;
   gtk.theme.name = "Dracula";
   gtk.theme.package = unstable.dracula-theme;
   gtk.iconTheme.name = "Paper";  # Candy and Tela also look good
   gtk.iconTheme.package = unstable.paper-icon-theme;
+  # FIXME: no effect yet
+  gtk.gtk3.extraCss = ''
+    bind "<super>c" { "copy-clipboard"  () };
+    bind "<super>v" { "paste-clipboard" () };
+    bind "<super>x" { "cut-clipboard"   () };
+  '';
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
@@ -197,9 +214,18 @@ in
     $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'
     $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout $((60 * 45))
 
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys play "['<Super>c']"
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['<Super>z']"
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>x']"
+    # Super_L already does the job, no need for <Super>s
+    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-overview '[]'
+    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-application-view '[]'  # I don't need <Super>a
+    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"  # remove <Super>v
+
+    # The concept of tab, window, and application are not so different in gnome
+    # $DRY_RUN_CMD gsettings set org.gnome.desktop.wm.keybindings close "['<Super>q']"
+
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['<Super>a']"
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>s']"
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys play "['<Super>d']"
+    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>BackSpace']"
 
     # dconf dump / > dconf.settings
     $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com']"
