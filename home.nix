@@ -139,7 +139,7 @@ in
   programs.tmux.enable = true;
   programs.tmux.tmuxinator.enable = true;
   home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmux.conf;
-  home.file.".tmuxinator".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
+  home.file.".tmuxinator.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
 
 
   programs.neovim.enable = true;
