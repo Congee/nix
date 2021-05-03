@@ -71,6 +71,8 @@ in
     unstable.spotify
     mpv
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+
+    openvpn  # depends on services.resolved.enable = true
   ];
 
   fonts.fontconfig.enable = true;
