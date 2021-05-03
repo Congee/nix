@@ -192,6 +192,7 @@ in
     # Safe!
     settings = {
       "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
+      "layout.css.devPixelsPerPx" = "1.25";  # HiDPI scaling factor
     };
   };
 
