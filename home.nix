@@ -63,6 +63,8 @@ in
     unstable.haskellPackages.hoogle
     wl-clipboard
 
+    # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
+    unstable.droidcam
     tdesktop  # telegram
     youtube-dl-light
     unstable.wofi  # rofi but with wayland

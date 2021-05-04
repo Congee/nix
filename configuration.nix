@@ -4,6 +4,9 @@
 
 { config, pkgs, ... }:
 
+let
+  linuxPackages = pkgs.linuxPackages_5_11;
+in
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -14,8 +17,18 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  boot.kernelPackages = pkgs.linuxPackages_5_11;
+  # Droidcam
+  boot.extraModulePackages = [ linuxPackages.v4l2loopback ];
+  boot.kernelModules = [ "v4l2loopback" "snd-aloop" ];
+  boot.extraModprobeConfig = ''
+    # 2 for droidcam hw=2,1,0
+    options snd_aloop index=2
+  '';
+  boot.kernelPackages = linuxPackages;
   boot.kernelParams = [ "console=ttyS0" ];
+
+  # will be available next
+  # programs.droidcam.enable = true;
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -53,7 +66,6 @@
     pkgs.gnome3.gnome-music
     pkgs.gnome3.gnome-weather
   ];
-  
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -89,6 +101,7 @@
       ''
     )
   ];
+  programs.adb.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
