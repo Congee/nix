@@ -81,6 +81,12 @@ in
 
   fonts.fontconfig.enable = true;
 
+  # must be put before zsh, or some zsh settings are overriden
+  programs.tmux.enable = true;
+  programs.tmux.tmuxinator.enable = true;
+  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmux.conf;
+  home.file.".tmuxinator.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
+
   programs.zsh.enable = true;
   programs.zsh.plugins = [
     # OMG this is sick, aggresive
@@ -140,12 +146,6 @@ in
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
 
-  programs.tmux.enable = true;
-  programs.tmux.tmuxinator.enable = true;
-  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmux.conf;
-  home.file.".tmuxinator.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
-
-
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
@@ -180,6 +180,7 @@ in
   programs.zathura.enable = true;  # pdf
 
   programs.fzf.enable = true;
+  # programs.fzf.tmux.enableShellIntegration = true;
   programs.alacritty.enable = true;
   home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
 
