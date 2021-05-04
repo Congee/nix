@@ -54,6 +54,8 @@ in
     rnix-lsp
     lshw
     exa
+    nix-index
+    nix-tree
     # unstable.fx  # json viewer. I don't like cli written in js tho
     unstable.scc
     unstable.navi # cheat sheet
