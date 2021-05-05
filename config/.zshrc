@@ -272,8 +272,9 @@ gh() {
   local result=$(git remote get-url origin 2>/dev/null)
   if [[ $result =~ 'youngalfred' ]]; then
     GH_CONFIG_DIR=$HOME/.config/gh-youngalfred command gh "$@"
+  else
+    command gh "$@"
   fi
-  command gh "$@"
 }
 
 # aprod() {
