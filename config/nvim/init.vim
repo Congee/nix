@@ -8,74 +8,16 @@ elseif has('unix')
   " source /usr/share/doc/fzf/examples/fzf.vim
 endif
 
-let g:plug_window = ''
+let g:vimsyn_embed = 'l'
 
-" Please declare this variable before polyglot is loaded (at the top of .vimrc)
-" vim-polyglot via https://github.com/vim-python/python-syntax improves nothing
-" not working with vim-markdown
-let g:polyglot_disabled = ['python', 'sensible']
-
-call plug#begin(stdpath('data') . '/plugged')
-Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
-Plug 'sheerun/vim-polyglot'
-Plug 'Yggdroot/indentLine'
-Plug 'joshdick/onedark.vim'
-Plug 'ryanoasis/vim-devicons'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-commentary'
-Plug 'machakann/vim-sandwich'
-Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/vim-peekaboo'
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
-Plug 'ryvnf/readline.vim'
-Plug 'kana/vim-fakeclip'
-Plug 'chrisbra/unicode.vim'
-Plug 'tpope/vim-liquid'
-Plug 'tpope/vim-dadbod'  " for SQL. TODO: help exrc
-Plug 'kristijanhusak/vim-dadbod-ui'
-
-Plug 'cohama/agit.vim'
-Plug 'rhysd/git-messenger.vim'  ", {'on': ['<Plug>(git-messenger)', 'GitMessenger']}
-" https://github.com/rhysd/conflict-marker.vim
-" https://github.com/christoomey/vim-conflicted
-Plug 'tpope/vim-fugitive'
-Plug 'rbong/vim-flog'
-Plug 'airblade/vim-gitgutter'
-Plug 'mhinz/vim-signify'
-Plug 'wellle/tmux-complete.vim'
-Plug 'chiedo/vim-case-convert'
-Plug 'gyim/vim-boxdraw'
-Plug 'monkoose/fzf-hoogle.vim'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'fisadev/vim-isort', {'for': 'python'}
-Plug 'tell-k/vim-autopep8'
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-Plug 'neomake/neomake', {'for': ['python', 'cpp', 'typescript', 'rust']}
-Plug 'skywind3000/asyncrun.vim'
-Plug 'mattn/emmet-vim', {'for': ['html', 'hbs', 'typescript']}
-Plug 'Rykka/colorv.vim', {'for': ['less', 'sass', 'css']}
-Plug 'rhysd/vim-grammarous'
-Plug 'norcalli/nvim-colorizer.lua', {'for': ['css', 'javascript', 'html', 'less']}
-Plug 'liuchengxu/vista.vim'
-Plug 'itchyny/lightline.vim'
-Plug 'ap/vim-buftabline'
-" Plug 'heavenshell/vim-pydocstring', {'for': 'python'}
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins', 'for': 'python'}
-Plug 'jackguo380/vim-lsp-cxx-highlight', {'for': 'cpp'}
-Plug 'alfredodeza/pytest.vim', {'for': ['python']}
-" Plug 'nvim-treesitter/nvim-treesitter'
-call plug#end()
-
-set rtp+=~/.vim
+lua require('packer.luarocks').install_commands()
+lua require('plugins')
 
 set termguicolors
 set background=dark
 let g:quantum_black=1
 let g:quantum_italics=1
 highlight MatchParen cterm=bold ctermbg=none ctermfg=magenta guibg=NONE guifg=Magenta
-let g:onedark_terminal_italics = 1
 " onedark.vim override: Don't set a background color when running in a terminal;
 " just use the terminal's background color
 " `gui` is the hex color code used in GUI mode/nvim true-color mode
@@ -113,13 +55,6 @@ nnoremap Q <Nop>
 nnoremap vv $v^
 nnoremap / /\v
 
-let g:mkdp_open_ip = 'localhost'
-" wsl2
-" function! g:OpenBrowser(url)
-"   silent exe '!lemonade open ' a:url
-" endfunction
-" let g:mkdp_browserfunc = 'g:OpenBrowser'
-
 autocmd FileType scheme let b:AutoPairs = {"(": ")"}
 
 
@@ -145,9 +80,6 @@ nmap <M-8> <Plug>BufTabLine.Go(8)
 nmap <M-9> <Plug>BufTabLine.Go(9)
 nmap <M-0> <Plug>BufTabLine.Go(10)
 
-let g:buftabline_show = 1
-let g:buftabline_numbers = 2
-
 function! Bufferline()
   call bufferline#refresh_status()
   return [
@@ -161,7 +93,6 @@ function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
-let g:autopep8_disable_show_diff=1
 let g:ale_linters = {
       \ 'python': ['flake8'],
       \ }
@@ -335,7 +266,6 @@ let g:neomake_typescript_tsc_args = [
 
 nnoremap <Leader>e :CocCommand explorer <CR>
 
-let g:indentLine_fileTypeExclude = ['coc-explorer']
 " clear italic
 hi CocExplorerIndentLine cterm=NONE guifg=#303030
 
@@ -359,7 +289,6 @@ set completeopt-=preview
 let g:qs_lazy_highlight = 1  " QuickScope
 " let g:signify_vcs_list = ['git']  " spped up; prevent checking other vcs
 " let g:signify_realtime = 1
-let g:git_messenger_include_diff = "current"
 let g:gitgutter_signs = 0
 autocmd CursorHold * CocCommand git.refresh  " in case gutters may not update
 
@@ -385,14 +314,6 @@ xmap ag <Plug>(coc-git-chunk-outer)
 " let g:haskell_enable_typeroles        = 1  " type roles
 " let g:haskell_enable_static_pointers  = 1  " `static`
 " let g:haskell_backpack                = 1  " backpack keywords
-
-
-""" UltiSnips
-let g:UltiSnipsListSnippets        = "<c-tab>"
-let g:UltiSnipsJumpForwardTrigger  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-let g:snips_author                 = "Congee"
-
 
 function! s:delete_trailing_white_spaces()
   %s/\s\+$//ge

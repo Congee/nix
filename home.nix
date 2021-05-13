@@ -2,8 +2,15 @@
 
 let
   unstable = import <unstable> { config.allowUnfree = true; };
+  neovim-nightly = import (builtins.fetchTarball {
+    url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+  });
 in
 {
+  nixpkgs.overlays = [
+    neovim-nightly
+  ];
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -31,8 +38,10 @@ in
     fd
     ripgrep
     croc
-    fzf
-    lua
+    gcc
+    unzip
+    luajit
+    luajitPackages.luarocks
     socat
     ccache
     bind  # dig
@@ -56,6 +65,7 @@ in
     exa
     nix-index
     nix-tree
+    patchelf
     # unstable.fx  # json viewer. I don't like cli written in js tho
     unstable.scc
     unstable.navi # cheat sheet
@@ -146,10 +156,21 @@ in
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
 
+  programs.fzf.enable = true;
+  programs.fzf.enableZshIntegration = true;
+
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
-  home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./config/nvim;
+  programs.neovim.withNodeJs = true;
+
+  # packer.nvim claims everything in packer/. To prevent it from manage itself,
+  # install it in a random name like nixpacker. Anything inside
+  # will be sourced ~/.local/share/nvim/site/pack/*/start
+  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}/share/vim-plugins/packer-nvim/";
+  xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
+  # home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./config/nvim;
+  xdg.configFile."nvim".source = ./config/nvim;
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -179,8 +200,8 @@ in
 
   programs.zathura.enable = true;  # pdf
 
-  programs.fzf.enable = true;
-  # programs.fzf.tmux.enableShellIntegration = true;
+  # programs.mcfly.enable = true;
+
   programs.alacritty.enable = true;
   home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
 
