@@ -5,6 +5,7 @@ let
   neovim-nightly = import (builtins.fetchTarball {
     url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
   });
+  ln = config.lib.file.mkOutOfStoreSymlink;
 in
 {
   nixpkgs.overlays = [
@@ -87,15 +88,18 @@ in
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
 
     openvpn  # depends on services.resolved.enable = true
+
+    tmux
+    tmuxinator
   ];
 
   fonts.fontconfig.enable = true;
 
   # must be put before zsh, or some zsh settings are overriden
-  programs.tmux.enable = true;
-  programs.tmux.tmuxinator.enable = true;
-  home.file.".tmux.conf".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmux.conf;
-  home.file.".tmuxinator.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/.tmuxinator.yml;
+  # programs.tmux.enable = true;
+  # programs.tmux.tmuxinator.enable = true;
+  home.file.".tmux.conf".source = ln ./config/.tmux.conf;
+  home.file.".tmuxinator.yml".source = ln ./config/.tmuxinator.yml;
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [
@@ -152,6 +156,9 @@ in
     }
   ];
   programs.zsh.initExtra = builtins.readFile ./config/.zshrc;
+  # tmux new sessions do not source .zshrc which is for an _interactive_ shell.
+  # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
+  home.file.".zlogin".source = ln ./config/.zlogin;
 
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
@@ -170,7 +177,7 @@ in
   xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}/share/vim-plugins/packer-nvim/";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
   # home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./config/nvim;
-  xdg.configFile."nvim".source = ./config/nvim;
+  xdg.configFile."nvim".source = ln ./config/nvim;
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -182,7 +189,7 @@ in
   programs.password-store.enable = true;
 
   programs.ssh.enable = true;
-  home.file.".ssh/config".source = config.lib.file.mkOutOfStoreSymlink ./config/ssh_config;
+  home.file.".ssh/config".source = ln ./config/ssh_config;
 
   programs.git = {
     enable = true;
@@ -203,7 +210,7 @@ in
   # programs.mcfly.enable = true;
 
   programs.alacritty.enable = true;
-  home.file.".config/alacritty/alacritty.yml".source = config.lib.file.mkOutOfStoreSymlink ./config/alacritty.yml;
+  home.file.".config/alacritty/alacritty.yml".source = ln ./config/alacritty.yml;
 
   services.flameshot.enable = true;
 
