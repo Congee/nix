@@ -2,8 +2,9 @@
 
 let
   unstable = import <unstable> { config.allowUnfree = true; };
-  neovim-nightly = import (builtins.fetchTarball {
-    url = https://github.com/nix-community/neovim-nightly-overlay/archive/master.tar.gz;
+  neovim-nightly = import (builtins.fetchGit {
+    url = https://github.com/nix-community/neovim-nightly-overlay;
+    rev = "216ece16db6a6781ed53e7414277bf49b34a53d7";
   });
   ln = config.lib.file.mkOutOfStoreSymlink;
 in
@@ -91,6 +92,8 @@ in
 
     tmux
     tmuxinator
+
+    unstable.vimPlugins.packer-nvim
   ];
 
   fonts.fontconfig.enable = true;
@@ -176,7 +179,6 @@ in
   # will be sourced ~/.local/share/nvim/site/pack/*/start
   xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}/share/vim-plugins/packer-nvim/";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
-  # home.file.".config/nvim".source = config.lib.file.mkOutOfStoreSymlink ./config/nvim;
   xdg.configFile."nvim".source = ln ./config/nvim;
 
   programs.bat.enable = true;

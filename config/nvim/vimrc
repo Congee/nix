@@ -4,14 +4,9 @@ se nu
 let g:loaded_python_provider = 1
 if has('macunix')
   let g:python3_host_prog = '/usr/local/bin/python3'
-elseif has('unix')
-  " source /usr/share/doc/fzf/examples/fzf.vim
 endif
 
 let g:vimsyn_embed = 'l'
-
-lua require('packer.luarocks').install_commands()
-lua require('plugins')
 
 set termguicolors
 set background=dark
@@ -55,14 +50,9 @@ nnoremap Q <Nop>
 nnoremap vv $v^
 nnoremap / /\v
 
-autocmd FileType scheme let b:AutoPairs = {"(": ")"}
-
 
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
-
-vnoremap <silent> <M-/> :Commentary<cr>gv
-nnoremap <silent> <M-/> :Commentary<cr>
 
 set pastetoggle=<Leader>p
 " Bufferline
@@ -93,43 +83,7 @@ function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
 endfunction
 
-let g:ale_linters = {
-      \ 'python': ['flake8'],
-      \ }
-let g:ale_python_flake8_options = '--extended-ignore=F841'  " unused local variables
-
 let g:node_client_debug = 0
-
-let CocCurrentFunction = {-> get(b:, 'coc_current_function', '')}
-let CocGitStatus = {-> get(g:, 'coc_git_status', '')}
-let LightlineReadony = {-> &readonly ? '' : ''}
-
-let g:lightline = {
-      \ 'colorscheme': 'onedark',
-      \ 'tabline': {'left': [['bufferline']], 'right': [['close']]},
-      \ 'component_expand': {'buffers': 'Bufferline'},
-      \ 'component_type': {'buffers': 'tabsel'},
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'currentfunction', 'modified', 'gitbranch' ] ]
-      \ },
-      \ 'component_function': {
-      \   'readonly': 'LightlineReadony',
-      \   'cocstatus': 'coc#status',
-      \   'currentfunction': 'CocCurrentFunction',
-      \   'gitbranch': 'CocGitStatus',
-      \ },
-      \ }
-let g:lightline.separator = {'left': '', 'right': ''}
-let g:lightline.subseparator = {'left': '', 'right': ''}
-
-" separator.left  ''    '' (\ue0b0)    '⮀' (\u2b80)
-" separator.right ''    '' (\ue0b2)    '⮂' (\u2b82)
-" subseparator.left '|'   '' (\ue0b1)    '⮁' (\u2b81)
-" subseparator.right  '|'   '' (\ue0b3)    '⮃' (\u2b83)
-" branch symbol   --    '' (\ue0a0)    '⭠' (\u2b60)
-" readonly symbol --    '' (\ue0a2)    '⭤' (\u2b64)
-" linecolumn symbol --    '' (\ue0a1)    '⭡' (\u2b61)
 
 " nnoremap <leader>m :CocList<cr>
 nmap <leader>ac <Plug>(coc-codeaction)
@@ -186,6 +140,7 @@ augroup file_type
   " au Filetype python nmap <LocalLeader>rn :Semshi rename
   au BufRead *.rkt se ft=racket
   " au FileType python set equalprg=autopep8\ -
+  au FileType scheme let b:AutoPairs = {"(": ")"}
   au Filetype python set keywordprg=pydoc3
   au FileType python hi semshiImported ctermfg=214 guifg=#aaaaaa cterm=bold gui=bold
   au FileType python setlocal foldmethod=marker
@@ -202,49 +157,6 @@ augroup file_type
   "au FileType typescript :syn clear jsxAttrib
 augroup END
 
-let g:firenvim_config = {
-  \ 'localSettings': {
-    \ '.*': {
-      \ 'selector': 'textarea'
-    \ }
-  \ }
-\ }
-
-
-" lua <<EOF
-" require'nvim-treesitter.configs'.setup {
-"   highlight = {
-"     enable = true,
-"     disable = {"cpp", "bash", "python", "typescript", "go"}
-"   },
-"   indent = {
-"     enable = true
-"   },
-"   incremental_selection = { enable = true },
-"   refactor = {
-"     highlight_current_scope = { enable = false },
-"     highlight_definitions = { enable = true },
-"     smart_rename = {
-"       enable = true,
-"       keymaps = {
-"         smart_rename = "<LocalLeader>rn",
-"       },
-"     },
-"   },
-"   textobjects = {
-"     select = {
-"       enable = true,
-"       keymaps = {
-"         ["af"] = "@function.outer",
-"         ["if"] = "@function.inner",
-"         ["ac"] = "@class.outer",
-"         ["ic"] = "@class.inner",
-"       },
-"     },
-"   },
-" }
-" EOF
-"
 " very slow
 " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()
 
@@ -255,27 +167,13 @@ let g:neomake_cmake_maker = {
       \ 'append_file': 0,
       \}
 " let g:neomake_cpp_enabled_makers = ['cmake', 'makeprg']
-let g:neomake_typescript_tsc_args = [
-      \ '--watch',
-      \ 'true',
-      \ '--pretty',
-      \ 'false',
-      \ '--project',
-      \ '/Users/CC/src/magic/lighthouse/tsconfig.json'
-      \]
 
 nnoremap <Leader>e :CocCommand explorer <CR>
 
 " clear italic
 hi CocExplorerIndentLine cterm=NONE guifg=#303030
 
-""" Tags
-let g:vista_default_executive = 'coc'
-let g:vista#renderer#enable_icon = 1
-nnoremap <silent> <leader>vt :Vista!!<CR>
 nnoremap <silent> <leader>q  :bp\|bd #<CR>
-" 'haskell': 'fast-tags -R -o - .',
-let g:vista_ctags_cmd = { 'haskell': 'hasktags -x -o - -c' }
 
 nnoremap <C-P> :FZF<CR>
 
@@ -287,8 +185,6 @@ set completeopt-=preview
 
 
 let g:qs_lazy_highlight = 1  " QuickScope
-" let g:signify_vcs_list = ['git']  " spped up; prevent checking other vcs
-" let g:signify_realtime = 1
 let g:gitgutter_signs = 0
 autocmd CursorHold * CocCommand git.refresh  " in case gutters may not update
 
@@ -327,7 +223,6 @@ function! s:syntax_query() abort
 endfunction
 command! SyntaxQuery call s:syntax_query()
 
-
 " bracketed paste
 if &term =~ '\(alacritty\|xterm.*\)'
     let &t_ti = &t_ti . "\e[?2004h"
@@ -353,5 +248,3 @@ function! s:convert__snake_case__to_CamelCase()
   s#_\(\l\)#\u\1#g
 endfunction
 command! SnakeCamelCase call s:convert__snake_case__to_camelCase()
-
-" vim: ts=2 sw=2
