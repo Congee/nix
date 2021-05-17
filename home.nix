@@ -212,6 +212,7 @@ in
   # programs.mcfly.enable = true;
 
   programs.alacritty.enable = true;
+  programs.alacritty.package = unstable.alacritty;
   home.file.".config/alacritty/alacritty.yml".source = ln ./config/alacritty.yml;
 
   services.flameshot.enable = true;
