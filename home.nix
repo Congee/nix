@@ -20,6 +20,7 @@ in
   # paths it should manage.
   home.username = "cwu";
   home.homeDirectory = "/home/cwu";
+  xdg.configFile."nixpkgs/home.nix".source = ln ./home.nix;
 
   # This value determines the Home Manager release that your
   # configuration is compatible with. This helps avoid breakage
