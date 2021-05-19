@@ -36,6 +36,7 @@ in
   home.packages = with pkgs; [
     (import ./packages/leetcode-cli)
     (import ./packages/xh)
+    (import ./packages/sncli)
     jq
     tree
     fd
