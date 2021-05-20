@@ -179,10 +179,16 @@ local plugins = function(use, use_rocks)
             vim.g.buftabline_numbers = 2
         end
     }
+    use {'voldikss/vim-floaterm'}
+    use {
+        "rcarriga/vim-ultest",
+        requires = {"vim-test/vim-test", 'mfussenegger/nvim-dap'},
+        run = ":UpdateRemotePlugins",
+        config = function() vim.g['test#strategy'] = 'floaterm' end
+    }
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     use {'numirias/semshi', run = ':UpdateRemotePlugins'}
     use {'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp'}
-    use {'alfredodeza/pytest.vim', ft = 'python'}
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
