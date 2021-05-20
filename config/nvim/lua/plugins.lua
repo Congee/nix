@@ -145,7 +145,14 @@ local plugins = function(use, use_rocks)
     use {'mattn/emmet-vim', ft = {'html', 'hbs', 'typescript'}}
     use {'Rykka/colorv.vim', ft = {'less', 'sass', 'css'}}
     use 'rhysd/vim-grammarous'
-    use {'norcalli/nvim-colorizer.lua', ft = {'css', 'javascript', 'html', 'less'}}
+    use {
+        'norcalli/nvim-colorizer.lua',
+        ft = {'css', 'javascript', 'html', 'less'},
+        config = function()
+            if vim.fn.has("mac") then require'colorizer'.setup() end
+        end,
+
+    }
     use {
         'liuchengxu/vista.vim',
         config = function()

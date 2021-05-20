@@ -28,10 +28,6 @@ if (has("autocmd") && !has("gui_running"))
 endif
 colorscheme onedark
 
-if has("mac")
-  lua require'colorizer'.setup()
-endif
-
 set mouse=a
 set colorcolumn=80
 highlight CursorLine guibg=#303030
