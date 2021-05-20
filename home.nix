@@ -209,8 +209,6 @@ in
   programs.htop.showProgramPath = false;
   programs.htop.treeView = true;
 
-  programs.zathura.enable = true;  # pdf
-
   # programs.mcfly.enable = true;
 
   programs.alacritty.enable = true;
