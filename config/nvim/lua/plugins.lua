@@ -199,7 +199,8 @@ local plugins = function(use, use_rocks)
                     disable = {"cpp", "bash", "python", "typescript", "go"}
                 },
                 indent = {
-                    enable = true
+                    enable = true,
+                    disable = {"python"},
                 },
                 incremental_selection = { enable = true },
                 refactor = {
