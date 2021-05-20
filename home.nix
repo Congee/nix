@@ -70,13 +70,16 @@ in
     nix-index
     nix-tree
     patchelf
+    ltrace
     # unstable.fx  # json viewer. I don't like cli written in js tho
+    unstable.gdb
     unstable.scc
     unstable.navi # cheat sheet
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
+    unstable.rbw pinentry
     wl-clipboard
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
@@ -87,7 +90,11 @@ in
     thunderbird
     unstable.slack-dark
     unstable.spotify
+    unstable.postman
+    unstable.ungoogled-chromium
+    teams
     mpv
+    tmate
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
 
     openvpn  # depends on services.resolved.enable = true
