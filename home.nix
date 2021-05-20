@@ -239,8 +239,11 @@ in
   gtk.theme.package = unstable.dracula-theme;
   gtk.iconTheme.name = "Papirus";  # Candy and Tela also look good
   gtk.iconTheme.package = unstable.papirus-icon-theme;
-  # FIXME: no effect yet
+
+  # unstable.gnomeExtensions.no-title-bar
   gtk.gtk3.extraCss = ''
+    @import url('${config.xdg.dataHome}/gnome-shell/extensions/no-title-bar@jonaspoehler.de/stylesheet.css');
+    @import url('${config.xdg.dataHome}/gnome-shell/extensions/no-title-bar@jonaspoehler.de/stylesheet-tiled.css');
     bind "<super>c" { "copy-clipboard"  () };
     bind "<super>v" { "paste-clipboard" () };
     bind "<super>x" { "cut-clipboard"   () };
@@ -269,6 +272,6 @@ in
     $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>BackSpace']"
 
     # dconf dump / > dconf.settings
-    $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com']"
+    $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com', 'no-title-bar@jonaspoehler.de']"
   '';
 }
