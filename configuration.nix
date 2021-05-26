@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  linuxPackages = pkgs.linuxPackages_5_11;
+  linuxPackages = pkgs.linuxPackages_5_10;
 in
 {
   imports =
@@ -60,7 +60,9 @@ in
 
   # Enable the GNOME 3 Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
+  services.xserver.displayManager.gdm.debug = true;
   services.xserver.desktopManager.gnome3.enable = true;
+  # services.gnome.core-utilities.enable = false;
   environment.gnome3.excludePackages = [
     pkgs.gnome3.geary
     pkgs.gnome3.gnome-music
@@ -111,7 +113,12 @@ in
     enableSSHSupport = true;
   };
 
+  xdg.portal.enable = true;
+  xdg.portal.gtkUsePortal = true;  # crashes
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+
   # List services that you want to enable:
+  services.pipewire.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;

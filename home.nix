@@ -224,7 +224,15 @@ in
 
   services.flameshot.enable = true;
 
+  home.sessionVariables = {
+    # https://github.com/NixOS/nixpkgs/issues/91218#issuecomment-822142127
+    MOZ_ENABLE_WAYLAND = "1";
+    # XDG_CURRENT_DESKTOP = "gnome";
+    XDG_SESSION_TYPE = "wayland";
+  };
+
   programs.firefox.enable = true;
+  programs.firefox.package = pkgs.firefox-wayland;
   programs.firefox.enableGnomeExtensions = true;
   programs.firefox.profiles.default = {
     id = 0;  # means default
