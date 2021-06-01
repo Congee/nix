@@ -216,10 +216,10 @@ in
   };
 
   programs.htop.enable = true;
-  programs.htop.highlightBaseName = true;
-  programs.htop.hideThreads = true;
-  programs.htop.showProgramPath = false;
-  programs.htop.treeView = true;
+  programs.htop.settings.highlight_basename = true;
+  programs.htop.settings.hide_threads = true;
+  programs.htop.settings.show_program_path = false;
+  programs.htop.settings.tree_view = true;
 
   # programs.mcfly.enable = true;
 
