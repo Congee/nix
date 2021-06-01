@@ -1,0 +1,103 @@
+{
+  "layer": "top",
+  "positition": "top",
+  "modules-left": ["idle_inhibitor"],
+  "modules-center": ["custom/weather"],
+  "modules-right": [
+    "custom/media",
+    "pulseaudio",
+    "network",
+    "backlight",
+    "battery",
+    "battery#bat2",
+    "clock",
+    "tray"
+  ],
+
+  "backlight": {
+    // "device": "acpi_video1",
+    "format": "{percent}% {icon}",
+    "format-icons": ["", ""]
+  },
+  "battery": {
+    "states": {
+      // "good": 95,
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% ",
+    "format-plugged": "{capacity}% ",
+    "format-alt": "{time} {icon}",
+    // "format-good": "", // An empty format will hide the module
+    // "format-full": "",
+    "format-icons": ["", "", "", "", ""]
+  },
+
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
+  },
+  "tray": {
+    // "icon-size": 21,
+    "spacing": 10
+  },
+  "clock": {
+    // "timezone": "America/New_York",
+    "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+
+  "network": {
+    // "interface": "wlp2*", // (Optional) To force the use of this interface
+    "format-wifi": "{essid} ({signalStrength}%) ",
+    "format-ethernet": "{ifname}: {ipaddr}/{cidr} ",
+    "format-linked": "{ifname} (No IP) ",
+    "format-disconnected": "Disconnected ⚠",
+    "fsdormat-alt": "{ifname}: {ipaddr}/{cidr}"
+  },
+
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    // "format": "{volume}% {icon} {format_source}",
+    "format": "{volume}% {icon}",
+    "format-muted": " {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-source": "{volume}% ",
+    "format-source-muted": "",
+    "format-icons": {
+      /* "headphone": "", */
+      "headphone": "🎧",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["奄", "奔", "墳", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+
+  "custom/media": {
+      "format": "{icon}{}",
+      "return-type": "json",
+      "max-length": 127,
+      "format-icons": {
+          "spotify": "",
+          "default": "🎜"
+      },
+      "escape": false,
+      "exec": "playerctl metadata --follow --format '{\"text\": \"{{title}}\", \"tooltip\": \"{{playerName}} : {{title}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' ",
+      "on-click": "playerctl play-pause"
+  },
+  "custom/weather": {
+    "exec": "curl --silent 'https://wttr.in/?format=1'",
+    "interval": 1800
+  }
+}
+
+// vim: ft=jsonc
