@@ -1,0 +1,5 @@
+allow_markup=true
+allow_images=true
+matching=contains
+mode=drun
+width=600
