@@ -163,6 +163,7 @@ local plugins = function(use, use_rocks)
             vim.cmd [[ nnoremap <silent> <leader>vt :Vista!!<CR> ]]
         end
     }
+    -- use {'nvim-lua/lsp-status.nvim'}
     use 'kyazdani42/nvim-web-devicons'
     use {
         'glepnir/galaxyline.nvim',
@@ -189,6 +190,36 @@ local plugins = function(use, use_rocks)
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     use {'numirias/semshi', run = ':UpdateRemotePlugins'}
     use {'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp'}
+    --[[ use {
+        'nvim-treesitter/playground',
+        config = function()
+            require "nvim-treesitter.configs".setup {
+                playground = {
+                    enable = true,
+                    disable = {},
+                    updatetime = 25, -- Debounced time for highlighting nodes in the playground from source code
+                    persist_queries = false, -- Whether the query persists across vim sessions
+                    keybindings = {
+                        toggle_query_editor = 'o',
+                        toggle_hl_groups = 'i',
+                        toggle_injected_languages = 't',
+                        toggle_anonymous_nodes = 'a',
+                        toggle_language_display = 'I',
+                        focus_language = 'f',
+                        unfocus_language = 'F',
+                        update = 'R',
+                        goto_node = '<cr>',
+                        show_help = '?',
+                    },
+                },
+                query_linter = {
+                    enable = true,
+                    use_virtual_text = true,
+                    lint_events = {"BufWrite", "CursorHold"},
+                },
+            }
+        end
+    } ]]
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
