@@ -65,12 +65,9 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
   local sdkman_init_sh="$HOME/.sdkman/bin/sdkman-init.sh" 
   [[ -s $sdkman_init_sh ]] && source $sdkman_init_sh
 
-  export JAVA_HOME=$SDKMAN_DIR/candidates/java/current
   export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH:$HOME/.yarn/bin
   export PATH=$PATH:/snap/bin:/snap/chromium/current/usr/lib/chromium-browser
   # export PATH=$PATH:$(echo $HOME/.gem/ruby/3.*/bin)
-
-  [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
   # export NVM_LAZY_LOAD=true
   # [ -d "$HOME/.zsh-nvm" ] && \. "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
