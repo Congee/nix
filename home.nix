@@ -108,16 +108,20 @@ in
     nix-tree
     patchelf
     ltrace
+    lsof
     # unstable.fx  # json viewer. I don't like cli written in js tho
+    unstable.mkcert  # https on localhost
+    unstable.weechat
     unstable.gdb
-    unstable.scc
-    unstable.navi # cheat sheet
+    unstable.scc unstable.navi # cheat sheet
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
     unstable.rbw pinentry
     wl-clipboard
+    unstable.goldendict
+    unstable.evolution
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
     unstable.droidcam
@@ -127,8 +131,10 @@ in
     unstable.slack-dark
     unstable.spotify
     unstable.postman
+    unstable.insomnia
+    unstable.charles
     unstable.ungoogled-chromium
-    teams
+    # teams
     mpv
     tmate
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
