@@ -13,6 +13,10 @@ in
       ./hardware-configuration.nix
     ];
 
+  hardware.bluetooth.enable = true;
+  hardware.opengl.enable = true;
+  hardware.opengl.driSupport = true;
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -32,6 +36,7 @@ in
 
   # networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  networking.networkmanager.enable = true;
 
   # Set your time zone.
   time.timeZone = "America/New_York";
@@ -47,31 +52,18 @@ in
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  fonts.fonts = with pkgs; [
+    noto-fonts
+    noto-fonts-cjk
+    noto-fonts-emoji
+  ];
+
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
   # console = {
   #   font = "Lat2-Terminus16";
   #   keyMap = "us";
   # };
-
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-
-  # Enable the GNOME 3 Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.displayManager.gdm.debug = true;
-  services.xserver.desktopManager.gnome3.enable = true;
-  # services.gnome.core-utilities.enable = false;
-  environment.gnome3.excludePackages = [
-    pkgs.gnome3.geary
-    pkgs.gnome3.gnome-music
-    pkgs.gnome3.gnome-weather
-  ];
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = "eurosign:e";
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
@@ -94,7 +86,19 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    neovim git
+    git
+    (
+      pkgs.writeTextFile {
+        name = "start-wayfire";
+        executable = true;
+        text = ''
+          #! ${pkgs.bash}/bin/bash
+          systemctl --user import-environment
+          dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
+          exec systemctl --user start wayfire.service
+        '';
+      }
+    )
   ];
   programs.adb.enable = true;
 
@@ -106,12 +110,28 @@ in
     enableSSHSupport = true;
   };
 
+  # TODO: move to userland
+  programs.dconf.enable = true;
+  programs.xwayland.enable = true;  # xcb (Qt), chromium and electron
+
   xdg.portal.enable = true;
-  xdg.portal.gtkUsePortal = true;  # crashes
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal.gtkUsePortal = true;
+  xdg.portal.extraPortals = [
+    pkgs.xdg-desktop-portal-wlr
+  ];
+
+  services.greetd.enable = true;
+  services.greetd.settings = {
+    default_session = {
+      command = "${pkgs.greetd.greetd}/bin/agreety --cmd start-wayfire";
+    };
+  };
 
   # List services that you want to enable:
+  security.rtkit.enable = true;
   services.pipewire.enable = true;
+  services.pipewire.alsa.enable = true;
+  services.pipewire.pulse.enable = true;
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
@@ -133,8 +153,10 @@ in
   # Binary Cache for Haskell.nix
   nix.binaryCachePublicKeys = [
     "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+    "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
   ];
   nix.binaryCaches = [
     "https://hydra.iohk.io"
+    "https://nixpkgs-wayland.cachix.org"
   ];
 }

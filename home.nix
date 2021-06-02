@@ -4,13 +4,19 @@ let
   unstable = import <unstable> { config.allowUnfree = true; };
   neovim-nightly = import (builtins.fetchGit {
     url = https://github.com/nix-community/neovim-nightly-overlay;
-    rev = "216ece16db6a6781ed53e7414277bf49b34a53d7";
+    rev = "0fab0e67422fddc4edbb91cd83e63debaa75a05d";
   });
+  wayland = import (builtins.fetchGit {
+    url = https://github.com/colemickens/nixpkgs-wayland;
+    rev = "f9085efb4befff29b1bd4bb4c4aaa65f3a792bb6";
+  });
+
   ln = config.lib.file.mkOutOfStoreSymlink;
 in
 {
   nixpkgs.overlays = [
     neovim-nightly
+    wayland
   ];
 
   # Let Home Manager install and manage itself.
@@ -38,6 +44,36 @@ in
     (import ./packages/xh)
     (import ./packages/sncli)
     unstable.nixUnstable
+
+    # wayland
+    waybar
+    wayfire
+    unstable.wcm  # wayfire config manager
+    wofi
+    mako  # notifacation daemon
+    gtk-layer-shell
+    aml  # vnc server
+    clipman
+    wev  # like xev to show keyboard events
+    pamixer  # pamixer to control volume
+    wlay  # graphical output management
+    pavucontrol
+    playerctl  # prev/next/play/pause music
+    grim slurp  # screenshot
+    imv  # image viewer
+    wayvnc
+    wf-recorder
+    gnome.nautilus
+    kanshi  # display configuration tool
+    greetd.tuigreet  # display/login manager
+    xdg-utils  # xdg-open
+
+    # FIXME: No schemas installed https://github.com/NixOS/nixpkgs/issues/72282
+    glib
+    gsettings_desktop_schemas
+
+    pciutils  # lspci
+    usbutils  # lsusb
     jq
     tree
     fd
@@ -87,7 +123,6 @@ in
     unstable.droidcam
     tdesktop  # telegram
     youtube-dl-light
-    unstable.wofi  # rofi but with wayland
     thunderbird
     unstable.slack-dark
     unstable.spotify
@@ -106,9 +141,47 @@ in
     unstable.vimPlugins.packer-nvim
   ];
 
+  xdg.enable = true;
   xdg.configFile."nix/nix.conf".text = ''
     experimental-features = nix-command flakes
   '';
+
+  # FIXME: dead code
+  systemd.user.targets.wayfire-session = {
+    Unit = {
+      Description = "wayfire compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
+  };
+
+  systemd.user.services.wayfire = {
+    Unit = {
+      Description = "Wayfire - 3D wayland compositor";
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" "xdg-desktop-portal-wlr.service" ];
+    };
+    # TODO: environment.PATH
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.wayfire}/bin/wayfire";
+      ExexStartPost = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY && systemctl --user restart xdg-desktop-portal-wlr.service";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+  };
+
+  programs.waybar.enable = true;
+  programs.waybar.systemd.enable = false;
+  xdg.configFile."waybar".source = ln ./config/waybar;
+
+  xdg.configFile."wayfire.ini".source = ln ./config/wayfire.conf;
+  xdg.configFile."wofi/config".source = ln ./config/wofi/config;
+  xdg.configFile."wofi/style.css".source = ln ./config/wofi/style.css;
 
   fonts.fontconfig.enable = true;
 
@@ -227,18 +300,15 @@ in
   programs.alacritty.package = unstable.alacritty;
   home.file.".config/alacritty/alacritty.yml".source = ln ./config/alacritty.yml;
 
-  services.flameshot.enable = true;
-
   home.sessionVariables = {
     # https://github.com/NixOS/nixpkgs/issues/91218#issuecomment-822142127
     MOZ_ENABLE_WAYLAND = "1";
-    # XDG_CURRENT_DESKTOP = "gnome";
+    XDG_CURRENT_DESKTOP = "Wayfire";
     XDG_SESSION_TYPE = "wayland";
   };
 
   programs.firefox.enable = true;
   programs.firefox.package = pkgs.firefox-wayland;
-  programs.firefox.enableGnomeExtensions = true;
   programs.firefox.profiles.default = {
     id = 0;  # means default
     isDefault = true;  # also sets to default if id is not 0
@@ -257,43 +327,49 @@ in
   gtk.theme.package = unstable.dracula-theme;
   gtk.iconTheme.name = "Papirus";  # Candy and Tela also look good
   gtk.iconTheme.package = unstable.papirus-icon-theme;
+  gtk.gtk3.extraConfig = {
+    gtk-application-prefer-dark-theme = true;
+    gtk-key-theme-name = "Emacs";
+  };
+  dconf.settings = {
+    "org/gnome/desktop/interface" = {
+      gtk-key-theme = "Emacs";
+    };
+  };
 
-  # unstable.gnomeExtensions.no-title-bar
-  gtk.gtk3.extraCss = ''
-    @import url('${config.xdg.dataHome}/gnome-shell/extensions/no-title-bar@jonaspoehler.de/stylesheet.css');
-    @import url('${config.xdg.dataHome}/gnome-shell/extensions/no-title-bar@jonaspoehler.de/stylesheet-tiled.css');
-    bind "<super>c" { "copy-clipboard"  () };
-    bind "<super>v" { "paste-clipboard" () };
-    bind "<super>x" { "cut-clipboard"   () };
-  '';
+  # gtk.gtk3.extraCss = ''
+  #   bind "<super>c" { "copy-clipboard"  () };
+  #   bind "<super>v" { "paste-clipboard" () };
+  #   bind "<super>x" { "cut-clipboard"   () };
+  # '';
 
-  home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
-    $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 24
-    $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard delay 300
+  # home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #   # https://askubuntu.com/questions/140255/how-to-override-the-new-limited-keyboard-repeat-rate-limit
+  #   $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard repeat-interval 24
+  #   $DRY_RUN_CMD gsettings set org.gnome.desktop.peripherals.keyboard delay 300
 
-    $DRY_RUN_CMD gsettings set org.gnome.desktop.session idle-delay $((60 * 15))  # black screen
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout $((60 * 45))
+  #   $DRY_RUN_CMD gsettings set org.gnome.desktop.session idle-delay $((60 * 15))  # black screen
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-type 'suspend'
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-ac-timeout $((60 * 45))
 
-    # Super_L already does the job, no need for <Super>s
-    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-overview '[]'
-    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-application-view '[]'  # I don't need <Super>a
-    $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"  # remove <Super>v
+  #   # Super_L already does the job, no need for <Super>s
+  #   $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-overview '[]'
+  #   $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-application-view '[]'  # I don't need <Super>a
+  #   $DRY_RUN_CMD gsettings set org.gnome.shell.keybindings toggle-message-tray "['<Super>m']"  # remove <Super>v
 
-    # The concept of tab, window, and application are not so different in gnome
-    # $DRY_RUN_CMD gsettings set org.gnome.desktop.wm.keybindings close "['<Super>q']"
+  #   # The concept of tab, window, and application are not so different in gnome
+  #   # $DRY_RUN_CMD gsettings set org.gnome.desktop.wm.keybindings close "['<Super>q']"
 
-    # Show Activities
-    # $DRY_RUN_CMD gsettings set org.gnome.desktop.wm.keybindings panel-main-menu "['<Super>Space']"
-    # $DRY_RUN_CMD gsettings set org.gnome.mutter overlay-key ""
+  #   # Show Activities
+  #   # $DRY_RUN_CMD gsettings set org.gnome.desktop.wm.keybindings panel-main-menu "['<Super>Space']"
+  #   # $DRY_RUN_CMD gsettings set org.gnome.mutter overlay-key ""
 
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['<Super>a']"
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>s']"
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys play "['<Super>d']"
-    $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>BackSpace']"
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys previous "['<Super>a']"
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys next "['<Super>s']"
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys play "['<Super>d']"
+  #   $DRY_RUN_CMD gsettings set org.gnome.settings-daemon.plugins.media-keys screensaver "['<Super>BackSpace']"
 
-    # dconf dump / > dconf.settings
-    $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com', 'no-title-bar@jonaspoehler.de']"
-  '';
+  #   # dconf dump / > dconf.settings
+  #   $DRY_RUN_CMD dconf write /org/gnome/shell/enabled-extensions "['openweather-extension@jenslody.de', 'appindicatorsupport@rgcjonas.gmail.com', 'no-title-bar@jonaspoehler.de']"
+  # '';
 }
