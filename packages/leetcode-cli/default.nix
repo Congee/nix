@@ -2,14 +2,14 @@ with import <nixpkgs> {};
 
 rustPlatform.buildRustPackage rec{
   pname = "leetcode-cli";
-  version = "0.3.3";
+  version = "0.3.5";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "162imf5qc70l7qhjir7jbiv139lgls4jxzjdasmq6q2v9yy1phf8";
+    sha256 = "09zf17awssrb8kr4ag5lbisng2abx7yazmaaxvf5j2l4pafivgfb";
   };
 
-  cargoSha256 = "0mhlx4xpfgg6babg24vp8310ldg9nxb1acs66ksq8xn2i8abs9n3";
+  cargoSha256 = "1mwvyb4f48y5nixddl5zh32s5d77zxsd4864db6lbjpdk0vfrsfr";
   
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP = 1;
