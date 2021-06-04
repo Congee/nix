@@ -25,7 +25,7 @@ local plugins = function(use, use_rocks)
         end
     }
     use {
-        '/lukas-reineke/indent-blankline.nvim',
+        'lukas-reineke/indent-blankline.nvim',
         branch = 'lua',
         config = function()
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
@@ -117,12 +117,6 @@ local plugins = function(use, use_rocks)
     use 'gyim/vim-boxdraw'
     use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
     use 'ojroques/vim-oscyank'
-
-    use {
-        'neoclide/coc.nvim',
-        branch = 'release',
-        run = ':CocInstall coc-lua coc-rust-analyzer coc-git coc-yaml coc-explorer coc-tsserver coc-pyright coc-metals coc-json coc-clangd coc-sh'
-    }
     use {'fisadev/vim-isort', ft = {'python'}}
     use {
         'tell-k/vim-autopep8',
@@ -169,6 +163,13 @@ local plugins = function(use, use_rocks)
         'glepnir/galaxyline.nvim',
         config = function() require('eviline') end,
         requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
+    }
+
+    use {
+        'neoclide/coc.nvim',
+        branch = 'release',
+        requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
+        run = ':CocInstall coc-lua coc-rust-analyzer coc-git coc-yaml coc-explorer coc-tsserver coc-pyright coc-metals coc-json coc-clangd coc-sh coc-html'
     }
 
     -- use 'kyazdani42/nvim-tree.lua'
