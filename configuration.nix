@@ -87,18 +87,6 @@ in
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
-    (
-      pkgs.writeTextFile {
-        name = "start-wayfire";
-        executable = true;
-        text = ''
-          #! ${pkgs.bash}/bin/bash
-          systemctl --user import-environment
-          dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY
-          exec systemctl --user start wayfire.service
-        '';
-      }
-    )
   ];
   programs.adb.enable = true;
 
@@ -123,7 +111,7 @@ in
   services.greetd.enable = true;
   services.greetd.settings = {
     default_session = {
-      command = "${pkgs.greetd.greetd}/bin/agreety --cmd start-wayfire";
+      command = "${pkgs.greetd.greetd}/bin/agreety --cmd wayfire";
     };
   };
 

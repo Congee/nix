@@ -152,34 +152,9 @@ in
     experimental-features = nix-command flakes
   '';
 
-  # FIXME: dead code
-  systemd.user.targets.wayfire-session = {
-    Unit = {
-      Description = "wayfire compositor session";
-      Documentation = [ "man:systemd.special(7)" ];
-      BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" ];
-    };
-  };
-
-  systemd.user.services.wayfire = {
-    Unit = {
-      Description = "Wayfire - 3D wayland compositor";
-      BindsTo = [ "graphical-session.target" ];
-      Wants = [ "graphical-session-pre.target" ];
-      After = [ "graphical-session-pre.target" "xdg-desktop-portal-wlr.service" ];
-    };
-    # TODO: environment.PATH
-    Service = {
-      Type = "simple";
-      ExecStart = "${pkgs.dbus}/bin/dbus-run-session ${pkgs.wayfire}/bin/wayfire";
-      ExexStartPost = "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP && dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY && systemctl --user restart xdg-desktop-portal-wlr.service";
-      Restart = "on-failure";
-      RestartSec = 1;
-      TimeoutStopSec = 10;
-    };
-  };
+  services.kanshi.enable = true;
+  services.kanshi.systemdTarget = "graphical-session.target";
+  xdg.configFile."kanshi/config".source = ln ./config/kanshi.conf;
 
   programs.waybar.enable = true;
   programs.waybar.systemd.enable = false;
