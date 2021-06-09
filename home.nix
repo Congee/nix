@@ -103,7 +103,6 @@ in
     p7zip
     rnix-lsp
     lshw
-    exa
     nix-index
     nix-tree
     patchelf
@@ -230,6 +229,10 @@ in
   # tmux new sessions do not source .zshrc which is for an _interactive_ shell.
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
   home.file.".zlogin".source = ln ./config/.zlogin;
+
+  programs.readline.enable = true;
+  programs.exa.enable = true;
+  programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa -al"; };
 
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
