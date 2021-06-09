@@ -526,6 +526,10 @@ my_prompt() {
       prefix_slash=/
     fi
 
+    local nix_logo="%{$fg[blue]%} %{$reset_color%}"
+    local nix_prompt
+    [[ -n $IN_NIX_SHELL ]] && nix_prompt="${nix_logo}" || nix_prompt=""
+
     # ugly work around
     # IFS=/ read -A pwdarr <<< "$pwd"
     local pwdarr=(${(ps:/:)pwd})
@@ -538,7 +542,7 @@ my_prompt() {
     else
       prompt="${prompt}${prefix_slash}${host_info}${pwdarr[1]}/.../${pwdarr[-1]}"
     fi
-    prompt="${prompt}${red_dollar} "
+    prompt="${nix_prompt}${prompt}${red_dollar} "
   else  # other user
     prompt=${red_at}'%c % '
   fi

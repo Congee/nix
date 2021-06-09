@@ -3,16 +3,16 @@ name: 0
 windows:
     - batmobile:
         layout: main-vertical
-        pre: cd ~/dev/batmobile && nix develop
+        pre: cd ~/dev/batmobile && nix develop --command $SHELL --login
         panes:
             -
             -
     - simplenote:
         panes:
-            - node -v && sncli
+            - sncli
 
     - personal:
         panes:
-            - cd ~/dev && node -v > /dev/null
+            - cd ~/dev
 
 # vim: shiftwidth=4 tabstop=4:
