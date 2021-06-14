@@ -11,6 +11,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./common.nix
     ];
 
   hardware.bluetooth.enable = true;
@@ -75,38 +76,35 @@ in
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  programs.zsh.enable = true;
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.cwu = {
-    isNormalUser = true;
-    shell = pkgs.zsh;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     git
+    at-spi2-core  # pkgs.xdg-desktop-portal-gtk
   ];
   programs.adb.enable = true;
 
-  # Some programs need SUID wrappers, can be configured further or are
-  # started in user sessions.
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
   # TODO: move to userland
+  # https://github.com/NixOS/nixpkgs/issues/31293
   programs.dconf.enable = true;
   programs.xwayland.enable = true;  # xcb (Qt), chromium and electron
 
   xdg.portal.enable = true;
   xdg.portal.gtkUsePortal = true;
   xdg.portal.extraPortals = [
+    pkgs.xdg-desktop-portal-gtk  # gtk apps need it anyway?
     pkgs.xdg-desktop-portal-wlr
   ];
+
+  services.avahi.enable = true;
+  services.geoclue2.enable = true;
+  # services.geoclue2.appConfig = {
+  #   "yo.congee.me" = {
+  #     isAllowed = true;
+  #     isSystem = false;
+  #     users = [ "1000" ];
+  #   };
+  # };
 
   services.greetd.enable = true;
   services.greetd.settings = {
@@ -114,6 +112,9 @@ in
       command = "${pkgs.greetd.greetd}/bin/agreety --cmd wayfire";
     };
   };
+
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
   # List services that you want to enable:
   security.rtkit.enable = true;
@@ -129,22 +130,4 @@ in
   networking.firewall.allowedTCPPorts = [ 5900 ];  # vnc. why doesn't it work?
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-
-  # This value determines the NixOS release from which the default
-  # settings for stateful data, like file locations and database versions
-  # on your system were taken. It‘s perfectly fine and recommended to leave
-  # this value at the release version of the first install of this system.
-  # Before changing this value read the documentation for this option
-  # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
-
-  # Binary Cache for Haskell.nix
-  nix.binaryCachePublicKeys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-  ];
-  nix.binaryCaches = [
-    "https://hydra.iohk.io"
-    "https://nixpkgs-wayland.cachix.org"
-  ];
 }
