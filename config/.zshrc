@@ -213,9 +213,21 @@ esac
 # }}}
 
 # {{{ Completion
+###############################################################################
 autoload -Uz compinit promptinit color
-compinit -u
+# compinit -u does full regeneration, not good.
+# https://gist.github.com/ctechols/ca1035271ad134841284
+setopt extendedglob
+if [[ -n ${ZDOTDIR:-${HOME}}/.zcompdump(#qN.mh+24) ]]; then
+  compinit;  # do a full check if the .zcompdump is older than 24hrs
+else
+  compinit -C;  # no check. see man 1 zcompsys, "Use of compinit"
+fi;
+unsetopt extendedglob
+
 promptinit
+###############################################################################
+
 
 [[ -d /usr/local/opt/coreutils/bin ]] &&\
   find /usr/local/opt/coreutils/bin\
