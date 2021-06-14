@@ -4,11 +4,11 @@ let
   unstable = import <unstable> { config.allowUnfree = true; };
   neovim-nightly = import (builtins.fetchGit {
     url = https://github.com/nix-community/neovim-nightly-overlay;
-    rev = "0fab0e67422fddc4edbb91cd83e63debaa75a05d";
+    rev = "8d8e974dd60b5ea5fa854bb2ce5db24eadf2b7df";
   });
   wayland = import (builtins.fetchGit {
     url = https://github.com/colemickens/nixpkgs-wayland;
-    rev = "f9085efb4befff29b1bd4bb4c4aaa65f3a792bb6";
+    rev = "226aa9c2a6019dce37787b32ed7274c23034ffb0";
   });
 
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -185,7 +185,7 @@ in
       file = "zsh-completions.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/zsh-users/zsh-completions";
-        rev = "e14d47010ac7fc096d6701585b42d89b6a59293c";
+        rev = "9dfd5c667072a9aef13a237fe3c3cc857ca9917f";
       };
     }
     {
@@ -193,7 +193,7 @@ in
       file = "forgit.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/wfxr/forgit";
-        rev = "7806fc3ab37ac479c315eb54b164f67ba9ed17ea";
+        rev = "2db37aa4ecc94e41247a0eecb1b11896fa25cded";
       };
     }
     {
@@ -201,7 +201,7 @@ in
       file = "gitstatus.prompt.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/romkatv/gitstatus";
-        rev = "97c2aa170a7a81b06c48279a3f3a875030a28ee2";
+        rev = "96b520b248ca872646e27b3df4535898356e4637";
       };
     }
     {
@@ -212,14 +212,12 @@ in
         rev = "a61239dd55028eec173374883809f439c93d292b";
       };
     }
-    {  # TODO: make it work with `nix flake develop`
+    {
       name = "zsh-nix-shell";
       file = "nix-shell.plugin.zsh";
-      src = pkgs.fetchFromGitHub {
-        owner = "chisui";
-        repo = "zsh-nix-shell";
-        rev = "v0.1.0";
-        sha256 = "0snhch9hfy83d4amkyxx33izvkhbwmindy0zjjk28hih1a9l2jmx";
+      src = builtins.fetchGit {
+        url = "https://github.com/chisui/zsh-nix-shell";
+        rev = "a2139b32fc1429160fc40658c9e16177c20597fc";
       };
     }
   ];
