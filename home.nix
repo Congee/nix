@@ -149,8 +149,6 @@ in
     experimental-features = nix-command flakes
   '';
 
-  services.kanshi.enable = true;
-  services.kanshi.systemdTarget = "graphical-session.target";
   xdg.configFile."kanshi/config".source = ln ./config/kanshi.conf;
 
   programs.waybar.enable = true;
