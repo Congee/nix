@@ -70,6 +70,7 @@ in
     glib
     gsettings_desktop_schemas
 
+    moreutils # sponge
     pciutils  # lspci
     usbutils  # lsusb
     jq
@@ -119,6 +120,9 @@ in
     wl-clipboard
     unstable.goldendict
     unstable.evolution
+    unstable.zathura
+    element-desktop
+    nheko
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
     unstable.droidcam
@@ -127,11 +131,11 @@ in
     thunderbird
     unstable.slack-dark
     unstable.spotify
+    unstable.spicetify-cli
     unstable.postman
     unstable.insomnia
     unstable.charles
     unstable.ungoogled-chromium
-    # teams
     mpv
     tmate
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
