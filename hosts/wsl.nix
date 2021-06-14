@@ -42,6 +42,9 @@ in
   systemd.services.systemd-resolved.enable = false;
   systemd.services.systemd-udevd.enable = false;
 
+  # welp, this is embarrassing. ConditionVirtualization=!container
+  # services.timesyncd.enable = true;
+
   # Don't allow emergency mode, because we don't have a console.
   systemd.enableEmergencyMode = false;
 }
