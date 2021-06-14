@@ -66,9 +66,12 @@ in
     greetd.tuigreet  # display/login manager
     xdg-utils  # xdg-open
 
-    # FIXME: No schemas installed https://github.com/NixOS/nixpkgs/issues/72282
     glib
-    gsettings_desktop_schemas
+    # FIXME: No schemas installed https://github.com/NixOS/nixpkgs/issues/72282
+    # https://github.com/NixOS/nixpkgs/blob/28a0d6d7a2c80f7bd6975312bfd0470fae2486e2/pkgs/development/libraries/gtk/3.x.nix#L204
+    # FIXME: wrapProgram?
+    # wrapGAppsHook should do it https://github.com/NixOS/nixpkgs/pull/32210
+    gsettings-desktop-schemas
 
     moreutils # sponge
     pciutils  # lspci
@@ -145,6 +148,7 @@ in
     tmux
     tmuxinator
 
+    unstable.capitaine-cursors
     unstable.vimPlugins.packer-nvim
   ];
 
@@ -164,6 +168,7 @@ in
   xdg.configFile."wofi/style.css".source = ln ./config/wofi/style.css;
 
   fonts.fontconfig.enable = true;
+  xdg.configFile."fontconfig/fonts.conf".source = ln ./config/fonts.conf;
 
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;
@@ -285,6 +290,7 @@ in
   home.sessionVariables = {
     # https://github.com/NixOS/nixpkgs/issues/91218#issuecomment-822142127
     MOZ_ENABLE_WAYLAND = "1";
+    MOZ_DBUS_REMOTE = "1";  # electron 12 uses XWayland. apps cannot open link to firefox
     XDG_CURRENT_DESKTOP = "Wayfire";
     XDG_SESSION_TYPE = "wayland";
   };
@@ -299,25 +305,35 @@ in
     # This creates the user.js that overrides settings of the default prefs.js.
     # Safe!
     settings = {
-      "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
+      # FIXME: not working, why?
+      # "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
       "layout.css.devPixelsPerPx" = "1.25";  # HiDPI scaling factor
     };
   };
 
   gtk.enable = true;
+  gtk.font.name = "Noto Sans";
+  gtk.font.package = pkgs.noto-fonts;
   gtk.theme.name = "Dracula";
   gtk.theme.package = unstable.dracula-theme;
-  gtk.iconTheme.name = "Papirus";  # Candy and Tela also look good
-  gtk.iconTheme.package = unstable.papirus-icon-theme;
+  gtk.iconTheme.name = "Papirus-Dark-Maia";  # Candy and Tela also look good
+  gtk.iconTheme.package = unstable.papirus-maia-icon-theme;
   gtk.gtk3.extraConfig = {
     gtk-application-prefer-dark-theme = true;
-    gtk-key-theme-name = "Emacs";
+    gtk-key-theme-name    = "Emacs";
+    gtk-icon-theme-name   = "Papirus-Dark-Maia";
+    gtk-cursor-theme-name = "capitaine-cursors";
   };
   dconf.settings = {
     "org/gnome/desktop/interface" = {
       gtk-key-theme = "Emacs";
+      cursor-theme = "Capitaine Cursors";
     };
   };
+  xdg.systemDirs.data = [
+    "${pkgs.gtk3}/share/gsettings-schemas/${pkgs.gtk3.name}"
+    "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}"
+  ];
 
   # gtk.gtk3.extraCss = ''
   #   bind "<super>c" { "copy-clipboard"  () };
