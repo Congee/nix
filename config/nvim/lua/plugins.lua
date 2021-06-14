@@ -29,6 +29,7 @@ local plugins = function(use, use_rocks)
         branch = 'lua',
         config = function()
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
+            vim.g.indent_blankline_char = '│';
             local guifg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID('Normal')), 'fg', 'gui')
             local ctermfg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID('Normal')), 'fg', 'cterm')
             -- local guifg = vim.api.nvim_eval("synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')")
@@ -69,7 +70,7 @@ local plugins = function(use, use_rocks)
 
     use {
         'iamcco/markdown-preview.nvim',
-        ft = {'markdown', 'vim-plug'},
+        ft = {'markdown'},
         run = function() vim.fn['mkdp#util#install']() end,
         config = function()
             vim.g.mkdp_open_ip = 'localhost'
