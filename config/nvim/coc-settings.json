@@ -43,7 +43,6 @@
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.useLibraryCodeForTypes": true,
     "python.linting.flake8Enabled": true,
-    "julia.trace.server": "verbose",
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "coc.preferences.colorSupport": true,
     "coc.preferences.previewMaxHeight": 16,
@@ -60,6 +59,7 @@
     "git.addGBlameToVirtualText": true,
     "clangd.semanticHighlighting": true,
     "clangd.fallbackFlags": [
+        "-std=c++17"
     ],
     "diagnostic-languageserver.debug": true,
     "diagnostic-languageserver.filetypes": {
