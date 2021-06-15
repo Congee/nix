@@ -16,13 +16,18 @@ in
 
   environment.etc.hosts.enable = false;
   environment.etc."resolv.conf".enable = false;
+  networking.dhcpcd.enable = false;
+  networking.hostName = "wsl";
+  environment.etc."wsl.conf".text = ''
+    [network]
+    hostname = ${config.networking.hostName}
+  '';
 
   environment.systemPackages = [
     pkgs.home-manager
     pkgs.git
     pkgs.vim
   ];
-  networking.dhcpcd.enable = false;
 
   users.users.root = {
     shell = "${syschdemd}/bin/syschdemd";
