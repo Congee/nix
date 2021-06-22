@@ -192,6 +192,9 @@ in
 
   # pass
   programs.password-store.enable = true;
+  home.sessionVariables = {
+    AWS_VAULT_PASS_PASSWORD_STORE_DIR = "${config.xdg.dataHome}/password-store";
+  };
 
   programs.ssh.enable = true;
   home.file.".ssh/config".source = ln ../config/ssh_config;
