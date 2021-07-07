@@ -55,6 +55,7 @@ in
     python3
     onedrive
     nodejs
+    duf
     ncdu
     gitAndTools.gitstatus
     gitAndTools.gh
@@ -85,6 +86,8 @@ in
     unstable.haskellPackages.hoogle
     unstable.rbw pinentry
     youtube-dl-light
+
+    docker-compose
 
     tmate
     tmux

@@ -44,6 +44,7 @@ in
 
     pciutils  # lspci
     usbutils  # lsusb
+    guvcview
 
     wl-clipboard
     unstable.goldendict
@@ -52,6 +53,7 @@ in
     element-desktop
     nheko
 
+    scrcpy
     tdesktop  # telegram
     thunderbird
     unstable.slack-dark
@@ -60,7 +62,7 @@ in
     unstable.postman
     unstable.insomnia
     unstable.charles
-    unstable.ungoogled-chromium
+    ungoogled-chromium
     mpv
 
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
@@ -79,6 +81,12 @@ in
   ];
 
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
+  # services.kanshi.enable = true;
+  # services.kanshi.systemdTarget = "graphical.target";
+
+  programs.obs-studio.enable = false;
+  programs.obs-studio.package = [unstable.obs-studio];
+  programs.obs-studio.plugins = [unstable.obs-studio-plugins.wlrobs];
 
   programs.waybar.enable = true;
   programs.waybar.systemd.enable = false;
