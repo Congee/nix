@@ -33,7 +33,7 @@ in
     wlay  # graphical output management
     pavucontrol
     playerctl  # prev/next/play/pause music
-    grim slurp  # screenshot
+    grim slurp swappy # screenshot
     imv  # image viewer
     wayvnc
     wf-recorder
