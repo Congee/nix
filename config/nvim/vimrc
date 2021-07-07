@@ -141,6 +141,7 @@ augroup file_type
 
   " au Filetype python nmap <LocalLeader>rn :Semshi rename
   au BufRead *.rkt se ft=racket
+  au BufRead flake.lock se ft=json
   " au FileType python set equalprg=autopep8\ -
   au FileType scheme let b:AutoPairs = {"(": ")"}
   au Filetype python set keywordprg=pydoc3

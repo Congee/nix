@@ -26,7 +26,6 @@ local plugins = function(use, use_rocks)
     }
     use {
         'lukas-reineke/indent-blankline.nvim',
-        branch = 'lua',
         config = function()
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
             vim.g.indent_blankline_char = '│';
