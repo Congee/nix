@@ -36,6 +36,7 @@ in
     (import ../packages/leetcode-cli)
     (import ../packages/xh)
     (import ../packages/sncli)
+    (import ../packages/mold)
     unstable.nixUnstable
 
 
@@ -106,6 +107,14 @@ in
   # programs.tmux.tmuxinator.enable = true;
   home.file.".tmux.conf".source = ln ../config/.tmux.conf;
   home.file.".tmuxinator.yml".source = ln ../config/.tmuxinator.yml;
+
+  home.file.".cargo/config.toml".text = ''
+    [target.x86_64-unknown-linux-gnu]
+    linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
+    rustflags = [
+      "-C", "link-arg=-fuse-ld=${(import ../packages/mold).outPath}/bin/mold"
+    ]
+  '';
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [
