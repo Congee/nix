@@ -116,6 +116,8 @@ in
     };
   };
 
+  services.usbmuxd.enable = true;
+
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
 
@@ -133,4 +135,6 @@ in
   networking.firewall.allowedTCPPorts = [ 5900 ];  # vnc. why doesn't it work?
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
+
+  virtualisation.docker.enable = true;
 }

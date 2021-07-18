@@ -22,7 +22,7 @@
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
-    enableSSHSupport = true;
+    enableSSHSupport = true;  # implies: programs.ssh.startAgent = true;
   };
 
   # This value determines the NixOS release from which the default

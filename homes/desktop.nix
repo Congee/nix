@@ -63,6 +63,7 @@ in
     unstable.insomnia
     unstable.charles
     ungoogled-chromium
+    unstable.dbeaver
     mpv
 
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
