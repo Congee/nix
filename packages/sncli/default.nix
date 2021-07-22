@@ -3,11 +3,11 @@ with import <nixpkgs> {};
 let
   __Simperium3 = python3.pkgs.pythonPackages.buildPythonPackage rec {
     pname = "Simperium3";
-    version = "0.1.3";
+    version = "0.1.4";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "d71ce5923b04b9853c7fc500a466ac724a767b5e33616c122564a71165233cc8";
+      sha256 = "0071yndvk44avw24n1v9w9v04xjaj965cg2l9h3pvqfgdna24w34";
     };
 
     propagatedBuildInputs = with python3.pkgs; [ requests ];
