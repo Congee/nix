@@ -36,7 +36,6 @@ in
     (import ../packages/leetcode-cli)
     (import ../packages/xh)
     (import ../packages/sncli)
-    (import ../packages/mold)
     unstable.nixUnstable
 
 
@@ -80,6 +79,7 @@ in
     unstable.mkcert  # https on localhost
     unstable.weechat
     unstable.gdb
+    unstable.mold
     unstable.scc unstable.navi # cheat sheet
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
@@ -112,7 +112,7 @@ in
     [target.x86_64-unknown-linux-gnu]
     linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
     rustflags = [
-      "-C", "link-arg=-fuse-ld=${(import ../packages/mold).outPath}/bin/mold"
+      "-C", "link-arg=-fuse-ld=${unstable.mold.outPath}/bin/mold"
     ]
   '';
 
