@@ -47,6 +47,8 @@ in
   systemd.services.systemd-resolved.enable = false;
   systemd.services.systemd-udevd.enable = false;
 
+  virtualisation.docker.enable = true;
+
   # welp, this is embarrassing. ConditionVirtualization=!container
   # services.timesyncd.enable = true;
 
