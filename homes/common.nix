@@ -176,7 +176,7 @@ in
 
   programs.readline.enable = true;
   programs.exa.enable = true;
-  programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa -al"; };
+  programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa"; };
 
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
