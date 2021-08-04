@@ -40,6 +40,7 @@ local plugins = function(use, use_rocks)
     }
     use {
         'joshdick/onedark.vim',
+        branch = "main",
         config = function() vim.g.onedark_terminal_italics = 1 end
     }
 
@@ -92,7 +93,7 @@ local plugins = function(use, use_rocks)
 
     use {
         'rhysd/git-messenger.vim',
-        -- cmd = {'<Plug>(git-messenger)', 'GitMessenger'}
+        keys = {'<leader>gm'},
         cmd = {'GitMessenger'},
         config = function() vim.g.git_messenger_include_diff = "current" end
     }
