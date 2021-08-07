@@ -1,0 +1,3 @@
+[sncli]
+cfg_sn_username = ***REMOVED***
+cfg_sn_password_eval = rbw get simplenote

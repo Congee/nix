@@ -102,6 +102,8 @@ in
     experimental-features = nix-command flakes
   '';
 
+  home.file.".snclirc".source = ln ../config/.snclirc;
+
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;
   # programs.tmux.tmuxinator.enable = true;
