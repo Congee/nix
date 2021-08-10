@@ -36,6 +36,7 @@ in
     (import ../packages/leetcode-cli)
     (import ../packages/xh)
     (import ../packages/sncli)
+    (import ../packages/hydra)
     unstable.nixUnstable
 
 
@@ -55,6 +56,8 @@ in
     python3
     onedrive
     nodejs
+    yarn
+    slurm
     duf
     ncdu
     gitAndTools.gitstatus
