@@ -137,7 +137,14 @@ local plugins = function(use, use_rocks)
 
     use {'neomake/neomake', ft = {'python', 'cpp', 'typescript', 'rust'}}
     use 'skywind3000/asyncrun.vim'
-    use {'mattn/emmet-vim', ft = {'html', 'hbs', 'typescript'}}
+    use {
+        'mattn/emmet-vim',
+        ft = {'html', 'hbs', 'typescript', 'typescriptreact'},
+        config = function()
+            vim.g.user_emmet_settings = {typescript = {extends = 'jsx'}}
+        end
+    }
+
     use {'Rykka/colorv.vim', ft = {'less', 'sass', 'css'}}
     use 'rhysd/vim-grammarous'
     use {
