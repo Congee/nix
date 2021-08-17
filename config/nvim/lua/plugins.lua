@@ -59,6 +59,7 @@ local plugins = function(use, use_rocks)
     use 'machakann/vim-sandwich'
     use 'junegunn/vim-easy-align'
     use 'junegunn/vim-peekaboo'
+    use 'ojroques/vim-oscyank'
 
     use 'Olical/conjure'
     use {
@@ -117,7 +118,6 @@ local plugins = function(use, use_rocks)
     use 'chiedo/vim-case-convert'
     use 'gyim/vim-boxdraw'
     use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
-    use 'ojroques/vim-oscyank'
     use {'fisadev/vim-isort', ft = {'python'}}
     use {
         'tell-k/vim-autopep8',
