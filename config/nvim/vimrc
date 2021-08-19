@@ -185,7 +185,7 @@ hi CocExplorerIndentLine cterm=NONE guifg=#303030
 nnoremap <silent> <leader>q  :bp\|bd #<CR>
 
 nnoremap <C-P> :FZF<CR>
-nnoremap <Leader>g :GFiles<CR>
+nnoremap <C-\> :GFiles<CR>
 
 
 " Required for operations modifying multiple buffers like rename.
