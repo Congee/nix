@@ -145,13 +145,15 @@ local plugins = function(use, use_rocks)
         end
     }
 
-    use {'Rykka/colorv.vim', ft = {'less', 'sass', 'css'}}
+    -- color picker
+    use {'Rykka/colorv.vim', ft = {'less', 'sass', 'css', 'typescriptreact'}}
     use 'rhysd/vim-grammarous'
     use {
         'norcalli/nvim-colorizer.lua',
-        ft = {'css', 'javascript', 'html', 'less'},
+        ft = {'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact'},
         config = function()
-            if vim.fn.has("mac") then require'colorizer'.setup() end
+            -- if vim.fn.has("mac") then require'colorizer'.setup() end
+            require'colorizer'.setup()
         end,
 
     }
