@@ -50,7 +50,7 @@ vnoremap <Leader>c :OSCYank<CR>
 " Any yank op
 " autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is ''  | OSCYankReg " | endif
 " Yank to system clipboard register
-autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
+" autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
 
 
 xmap ga <Plug>(EasyAlign)
