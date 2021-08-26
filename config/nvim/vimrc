@@ -108,11 +108,10 @@ inoremap <silent><expr> <C-X><C-O> coc#refresh()
 nnoremap <silent><space> :call CocActionAsync('doHover')<cr>
 command! -nargs=0 Format :call CocAction('format')  " format the whole buffer
 
-nnoremap <unique> <silent> <LocalLeader>l :<C-u>CocFzfList<CR>
-nnoremap <unique> <silent> <LocalLeader>c :<C-u>CocFzfList commands<CR>
-nnoremap <unique> <silent> <LocalLeader>d :<C-u>CocFzfList diagnostics --current-buf<CR>
-nnoremap <unique> <silent> <LocalLeader>o :<C-u>CocFzfList outline<CR>
-nnoremap <unique> <silent> <LocalLeader>s :<C-u>CocFzfList symbols<CR>
+nnoremap <unique> <silent> <LocalLeader>c <cmd>Telescope coc commands<CR>
+nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope coc diagnostics --current-buf<CR>
+nnoremap <unique> <silent> <LocalLeader>o <cmd>Telescope coc outline<CR>
+nnoremap <unique> <silent> <LocalLeader>s <cmd>Telescope coc symbols<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -184,8 +183,8 @@ hi CocExplorerIndentLine cterm=NONE guifg=#303030
 
 nnoremap <silent> <leader>q  :bp\|bd #<CR>
 
-nnoremap <C-P> :FZF<CR>
-nnoremap <C-\> :GFiles<CR>
+nnoremap <C-P> <cmd>Telescope<CR>
+nnoremap <C-\> <cmd>Telescope find_files<CR>
 
 
 " Required for operations modifying multiple buffers like rename.

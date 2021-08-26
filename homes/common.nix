@@ -40,6 +40,7 @@ in
     unstable.nixUnstable
 
 
+    gnumake
     moreutils # sponge
     jq
     tree
@@ -93,6 +94,7 @@ in
     # unstable.llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
     unstable.clang-tools
+    unstable.stylua
 
     docker-compose
 

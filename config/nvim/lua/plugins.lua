@@ -44,6 +44,32 @@ local plugins = function(use, use_rocks)
         config = function() vim.g.onedark_terminal_italics = 1 end
     }
 
+    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use {
+        'nvim-telescope/telescope.nvim',
+        requires = {{
+            'nvim-lua/plenary.nvim',
+            'nvim-telescope/telescope-symbols.nvim',
+            'fannheyward/telescope-coc.nvim',
+            'luc-tielen/telescope_hoogle',
+        }},
+        config = function()
+            local telescope = require('telescope')
+            telescope.setup {
+                set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
+                extensions = {
+                    fzf = {
+                        override_filter_sorter = true,
+                    }
+                }
+            }
+
+            telescope.load_extension('coc')
+            telescope.load_extension('hoogle')
+            telescope.load_extension('fzf')
+        end
+    }
+    use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
     use 'junegunn/fzf.vim'  -- depends on pkgs.fzf
     use 'rafcamlet/nvim-luapad'
     use {
@@ -130,7 +156,6 @@ local plugins = function(use, use_rocks)
     use 'wellle/tmux-complete.vim'
     use 'chiedo/vim-case-convert'
     use 'gyim/vim-boxdraw'
-    use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
     use {'fisadev/vim-isort', ft = {'python'}}
     use {
         'tell-k/vim-autopep8',
