@@ -60,6 +60,19 @@ local plugins = function(use, use_rocks)
     use 'junegunn/vim-easy-align'
     use 'junegunn/vim-peekaboo'
     use 'ojroques/vim-oscyank'
+    use {
+        'sbdchd/neoformat',
+        config = function()
+            vim.g.neoformat_enabled_typescript = {'clang-format'};
+            -- Enable alignment
+
+            vim.g.neoformat_basic_format_align = 1
+            -- Enable tab to spaces conversion
+            vim.g.neoformat_basic_format_retab = 1
+            -- Enable trimmming of trailing whitespace
+            vim.g.neoformat_basic_format_trim = 1
+        end
+    }
 
     use 'Olical/conjure'
     use {

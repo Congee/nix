@@ -90,6 +90,9 @@ in
     unstable.haskellPackages.hoogle
     unstable.rbw pinentry
     youtube-dl-light
+    # unstable.llvmPackages_latest.clang also ships this binary but bin/cc is in
+    # conflict with gcc/*/bin/cc
+    unstable.clang-tools
 
     docker-compose
 
