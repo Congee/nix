@@ -101,6 +101,10 @@ local plugins = function(use, use_rocks)
     use 'junegunn/vim-peekaboo'
     use 'ojroques/vim-oscyank'
     use {
+        'FooSoft/vim-argwrap',
+        config = function() vim.g.argwrap_tail_comma = 1 end
+    }
+    use {
         'sbdchd/neoformat',
         config = function()
             vim.g.neoformat_enabled_typescript = {'clang-format'};
