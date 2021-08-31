@@ -55,11 +55,25 @@ local plugins = function(use, use_rocks)
         }},
         config = function()
             local telescope = require('telescope')
+            local actions = require('telescope.actions')
+
             telescope.setup {
                 set_env = { ['COLORTERM'] = 'truecolor' }, -- default = nil,
                 extensions = {
                     fzf = {
                         override_filter_sorter = true,
+                    }
+                },
+                defaults = {
+                    mappings = {
+                        i = {
+                            ["<C-j>"] = actions.move_selection_next,
+                            ["<C-k>"] = actions.move_selection_previous,
+                        },
+                        n = {
+                            ["<C-j>"] = actions.move_selection_next,
+                            ["<C-k>"] = actions.move_selection_previous,
+                        }
                     }
                 }
             }
