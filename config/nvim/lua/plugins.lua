@@ -201,6 +201,7 @@ local plugins = function(use, use_rocks)
         end
     }
 
+    use 'florentc/vim-tla'
     use {'neomake/neomake', ft = {'python', 'cpp', 'typescript', 'rust'}}
     use 'skywind3000/asyncrun.vim'
     use {

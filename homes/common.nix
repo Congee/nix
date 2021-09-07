@@ -40,6 +40,8 @@ in
     unstable.nixUnstable
 
 
+    tlaplus
+    tlaplusToolbox
     gnumake
     moreutils # sponge
     jq
