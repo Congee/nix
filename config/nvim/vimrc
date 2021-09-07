@@ -195,7 +195,9 @@ set completeopt-=preview
 
 let g:qs_lazy_highlight = 1  " QuickScope
 let g:gitgutter_signs = 0
-autocmd CursorHold * silent! CocCommand git.refresh  " in case gutters may not update
+" in case gutters may not update
+let s:__cmd = "autocmd CursorHold * silent! CocCommand git.refresh"
+call timer_start(2000, {-> execute(s:__cmd)})
 
 " navigate chunks of current buffer
 " don't lie vim-fugitive
