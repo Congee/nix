@@ -129,14 +129,24 @@ local plugins = function(use, use_rocks)
     use {
         'iamcco/markdown-preview.nvim',
         ft = {'markdown'},
-        run = function() vim.fn['mkdp#util#install']() end,
+        run = 'cd app && yarn install',
+        cmd = 'MarkdownPreview',
         config = function()
             vim.g.mkdp_open_ip = 'localhost'
+
             -- wsl2
-            -- function! g:OpenBrowser(url)
-            --   silent exe '!lemonade open ' a:url
-            -- endfunction
-            -- let g:mkdp_browserfunc = 'g:OpenBrowser'
+            local file = io.open('/proc/sys/kernel/osrelease', 'r')
+            local is_wsl2 = file:read():find('microsoft')
+            file:close()
+
+            if is_wsl2 then
+              vim.cmd([[
+                function! g:OpenBrowser(url)
+                  silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
+                endfunction
+              ]]);
+              vim.g.mkdp_browserfunc = 'g:OpenBrowser'
+            end
         end
     }
 
