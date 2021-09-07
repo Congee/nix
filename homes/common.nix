@@ -202,7 +202,7 @@ in
   # packer.nvim claims everything in packer/. To prevent it from manage itself,
   # install it in a random name like nixpacker. Anything inside
   # will be sourced ~/.local/share/nvim/site/pack/*/start
-  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}/share/vim-plugins/packer-nvim/";
+  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}/share/vim-plugins/packer.nvim/";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
   # xdg.configFile."nvim".source = ln ../config/nvim;
 
