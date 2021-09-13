@@ -246,7 +246,22 @@ local plugins = function(use, use_rocks)
         'neoclide/coc.nvim',
         branch = 'release',
         requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
-        run = ':CocInstall coc-lua coc-rust-analyzer coc-git coc-yaml coc-explorer coc-tsserver coc-pyright coc-metals coc-json coc-clangd coc-sh coc-html'
+        config = function()
+            vim.g.coc_global_extensions = {
+                'coc-lua',
+                'coc-rust-analyzer',
+                'coc-git',
+                'coc-yaml',
+                'coc-explorer',
+                'coc-tsserver',
+                'coc-pyright',
+                'coc-metals',
+                'coc-json',
+                'coc-clangd',
+                'coc-sh',
+                'coc-html',
+            }
+        end,
     }
 
     -- use 'kyazdani42/nvim-tree.lua'
