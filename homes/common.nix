@@ -99,6 +99,12 @@ in
     unstable.stylua
 
     docker-compose
+    unstable.kubectl
+    unstable.kubernetes
+    unstable.kubernetes-helm
+    unstable.k3s
+    unstable.kube3d
+    unstable.pulumi-bin
 
     tmate
     tmux
