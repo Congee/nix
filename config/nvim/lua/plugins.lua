@@ -260,6 +260,11 @@ local plugins = function(use, use_rocks)
                 'coc-clangd',
                 'coc-sh',
                 'coc-html',
+                'coc-vimlsp',
+                'coc-clang-format-style-options',
+                'coc-ltex',
+                'coc-emmet',
+                'coc-markdown-preview-enhanced', 'coc-webview',
             }
         end,
     }

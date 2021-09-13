@@ -42,6 +42,7 @@ in
 
     tlaplus
     tlaplusToolbox
+    pandoc
     gnumake
     moreutils # sponge
     jq
@@ -202,6 +203,7 @@ in
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
 
+  programs.java.enable = true;
   programs.neovim.enable = true;
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;

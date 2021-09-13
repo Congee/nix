@@ -46,6 +46,7 @@
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "coc.preferences.colorSupport": true,
     "coc.preferences.extensionUpdateCheck": "weekly",
+    "markdown-preview-enhanced.usePandocParser": true,
     "Lua.diagnostics.globals": ["vim"],
     "cSpell.enabledLanguageIds": ["markdown"],
     "suggest.removeDuplicateItems": true,
