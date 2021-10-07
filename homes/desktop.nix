@@ -8,6 +8,16 @@ let
   });
 
   ln = config.lib.file.mkOutOfStoreSymlink;
+
+  wsudo = (pkgs.writeScriptBin "wsudo" ''
+    #small script to enable root access to x-windows system
+    xhost +SI:localuser:root
+    sudo --shell "$@"
+    #disable root access after application terminates
+    xhost -SI:localuser:root
+    #print access status to allow verification that root access was removed
+    xhost
+  '').overrideAttrs (_: { prefreLocalBuild = true; buildInputs = [pkgs.xorg.xhost]; });
 in
 {
   imports = [
@@ -53,6 +63,10 @@ in
     element-desktop
     nheko
 
+    xorg.xhost
+    wsudo
+    wireshark
+    termshark
     scrcpy
     tdesktop  # telegram
     thunderbird
