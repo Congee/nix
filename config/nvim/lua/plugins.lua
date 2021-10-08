@@ -87,14 +87,18 @@ local plugins = function(use, use_rocks)
     use 'junegunn/fzf.vim'  -- depends on pkgs.fzf
     use 'rafcamlet/nvim-luapad'
     use {
-        'b3nj5m1n/kommentary',
+        'numToStr/Comment.nvim',
+        requires = 'JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
-            vim.g.kommentary_create_default_mappings = false
-            vim.cmd([[
-                vmap <M-/> <Plug>kommentary_visual_default
-                nmap <M-/> <Plug>kommentary_line_default
-            ]])
-        end
+            local ts_ctx_cms = require('ts_context_commentstring.internal')
+            return require('Comment').setup({
+                pre_hook = ts_ctx_cms.calculate_commentstring;
+                mappings = {
+                    basic = true,
+                    extra = true,
+                }
+            })
+        end,
     }
     use 'machakann/vim-sandwich'
     use 'junegunn/vim-easy-align'
