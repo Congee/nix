@@ -57,6 +57,7 @@ in
     socat
     ccache
     bind  # dig
+    racket-minimal
     python3
     onedrive
     nodejs

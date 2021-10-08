@@ -14,5 +14,9 @@ in
     ./common.nix
   ];
 
+  home.packages = with pkgs; [
+    xvfb-run
+  ];
+
   home.file.".zprofile".source = ln ../config/.zprofile;
 }

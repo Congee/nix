@@ -51,6 +51,7 @@ in
     kanshi  # display configuration tool
     greetd.tuigreet  # display/login manager
     xdg-utils  # xdg-open
+    xvfb-run
 
     pciutils  # lspci
     usbutils  # lsusb
