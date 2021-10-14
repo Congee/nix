@@ -60,7 +60,6 @@ in
     wl-clipboard
     unstable.goldendict
     unstable.evolution
-    unstable.zathura
     element-desktop
     nheko
 
@@ -99,6 +98,9 @@ in
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
   # services.kanshi.enable = true;
   # services.kanshi.systemdTarget = "graphical.target";
+
+  programs.zathura.enable = true;
+  programs.zathura.package = unstable.zathura;
 
   programs.obs-studio.enable = false;
   programs.obs-studio.package = [unstable.obs-studio];
