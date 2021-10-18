@@ -273,6 +273,10 @@ c() {
   rm $tmp
 }
 
+cheat() {
+  curl cheat.sh/"$1"
+}
+
 dadjoke() {
   curl --silent --header "Accept: text/plain" https://icanhazdadjoke.com/ && echo
 }
