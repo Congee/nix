@@ -34,7 +34,6 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     (import ../packages/leetcode-cli)
-    (import ../packages/xh)
     (import ../packages/sncli)
     (import ../packages/hydra)
     unstable.nixUnstable
@@ -83,6 +82,7 @@ in
     patchelf
     ltrace
     lsof
+    unstable.xh
     # unstable.fx  # json viewer. I don't like cli written in js tho
     unstable.mkcert  # https on localhost
     unstable.weechat
