@@ -142,6 +142,8 @@ in
       # FIXME: not working, why?
       # "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
       "layout.css.devPixelsPerPx" = "1.25";  # HiDPI scaling factor
+      # A NixOS issue. It always asks if it's the default browser
+      "browser.shell.checkDefaultBrowser" = false;
     };
   };
 
