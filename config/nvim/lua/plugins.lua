@@ -69,12 +69,14 @@ local plugins = function(use, use_rocks)
     use {
         'nvim-telescope/telescope.nvim',
         requires = {{
+            'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
             'fannheyward/telescope-coc.nvim',
             'luc-tielen/telescope_hoogle',
         }},
         config = function()
+            require('octo').setup()
             local telescope = require('telescope')
             local actions = require('telescope.actions')
 
