@@ -1,5 +1,14 @@
 local util = require('packer.util')
 
+M = {}
+--- @param id string
+--- @param what "'fg'" | "'bg'"
+--- @param mode "'gui'" | "'cterm'" | "'term'"
+--- @return string
+M.hiof = function(id, what, mode)
+    return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode)
+end
+
 local plugins = function(use, use_rocks)
     use {
         'glacambre/firenvim',
@@ -29,8 +38,9 @@ local plugins = function(use, use_rocks)
         config = function()
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
             vim.g.indent_blankline_char = '│';
-            local guifg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID('Normal')), 'fg', 'gui')
-            local ctermfg = vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID('Normal')), 'fg', 'cterm')
+
+            local guifg = M.hiof('Normal', 'fg', 'gui');
+            local ctermfg = M.hiof('Normal', 'fg', 'cterm');
             -- local guifg = vim.api.nvim_eval("synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')")
 
             -- Actually need something like the freground color of the text
@@ -39,9 +49,20 @@ local plugins = function(use, use_rocks)
         end,
     }
     use {
-        'joshdick/onedark.vim',
-        branch = "main",
-        config = function() vim.g.onedark_terminal_italics = 1 end
+        'olimorris/onedarkpro.nvim',
+        config = function()
+            local onedarkpro = require('onedarkpro')
+            onedarkpro.setup({
+                options = { transparent = true },
+                hlgroups = {
+                    Normal = { fg = '#abb2bf' },
+                    DiffAdd = { fg = 'green', bg = 'NONE' },
+                    DiffDelete = { fg = 'red', bg = 'NONE' },
+                    CocFloating = { link = 'Pmenu' },  -- originally NormalFloat
+                },
+            })
+            onedarkpro.load()
+        end,
     }
 
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
