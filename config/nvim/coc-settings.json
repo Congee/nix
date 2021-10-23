@@ -71,7 +71,9 @@
     "git.removedSign.hlGroup": "SignifySignDelete",
     "git.changedSign.hlGroup": "SignifySignChange",
     "git.addGBlameToVirtualText": true,
+    "tailwindCSS.trace.server": "verbose",
     "metals.statusBarEnabled": true,
+    "sumneko-lua.enableNvimLuaDev": true,
     "clangd.semanticHighlighting": true,
     "clangd.fallbackFlags": [
         "-std=c++17"

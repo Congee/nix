@@ -271,11 +271,11 @@ local plugins = function(use, use_rocks)
 
     use {
         'neoclide/coc.nvim',
-        branch = 'release',
+        run = 'yarn install --frozen-lockfile',
         requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
         config = function()
             vim.g.coc_global_extensions = {
-                'coc-lua',
+                'coc-sumneko-lua',
                 'coc-rust-analyzer',
                 'coc-git',
                 'coc-yaml',
@@ -292,6 +292,10 @@ local plugins = function(use, use_rocks)
                 'coc-ltex',
                 'coc-emmet',
                 'coc-markdown-preview-enhanced', 'coc-webview',
+                'coc-prettier',
+                'coc-docker',
+                'coc-cmake',
+                'coc-tailwindcss',
             }
         end,
     }
@@ -350,6 +354,11 @@ local plugins = function(use, use_rocks)
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
+                ensure_installed = {
+                    'python', 'typescript', 'fennel', 'ocaml', 'haskell', 'lua',
+                    'scala', 'nix', 'ocaml_interface', 'vim', 'zig', 'bibtex',
+                    'cmake', 'comment', 'hcl', 'graphql',
+                },
                 highlight = {
                     enable = true,
                     disable = {"cpp", "bash", "python", "typescript", "go"}
