@@ -110,16 +110,13 @@ local plugins = function(use, use_rocks)
     use 'junegunn/fzf.vim'  -- depends on pkgs.fzf
     use 'rafcamlet/nvim-luapad'
     use {
-        'numToStr/Comment.nvim',
+        'b3nj5m1n/kommentary',
         requires = 'JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
-            local ts_ctx_cms = require('ts_context_commentstring.internal')
-            return require('Comment').setup({
-                pre_hook = ts_ctx_cms.calculate_commentstring;
-                mappings = {
-                    basic = true,
-                    extra = true,
-                }
+            require('kommentary.config').configure_language('typescriptreact', {
+                single_line_comment_string = 'auto',
+                multi_line_comment_strings = 'auto',
+                hook_function = require('ts_context_commentstring.internal').update_commentstring
             })
         end,
     }
@@ -358,6 +355,10 @@ local plugins = function(use, use_rocks)
                     'python', 'typescript', 'fennel', 'ocaml', 'haskell', 'lua',
                     'scala', 'nix', 'ocaml_interface', 'vim', 'zig', 'bibtex',
                     'cmake', 'comment', 'hcl', 'graphql',
+                },
+                context_commentstring = {
+                    enable = true,
+                    enable_autocmd = false,
                 },
                 highlight = {
                     enable = true,
