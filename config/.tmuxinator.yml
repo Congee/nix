@@ -1,9 +1,10 @@
 name: 0
 
+startup_window: simplenote
 windows:
     - batmobile:
-        layout: main-vertical
-        pre: cd ~/dev/batmobile && nix develop --command exec $SHELL --login
+        layout: 393b,295x75,0,0{209x75,0,0,0,85x75,210,0,3}  # big left
+        pre: cd ~/dev/batmobile && nix develop --command $SHELL --login
         panes:
             -
             -
