@@ -64,6 +64,7 @@ local plugins = function(use, use_rocks)
             onedarkpro.load()
         end,
     }
+    use 'qxxxb/vim-searchhi'
 
     use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {
@@ -72,6 +73,7 @@ local plugins = function(use, use_rocks)
             'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
+            'xiyaowong/telescope-emoji.nvim',
             'fannheyward/telescope-coc.nvim',
             'luc-tielen/telescope_hoogle',
         }},
