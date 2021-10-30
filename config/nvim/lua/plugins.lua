@@ -198,6 +198,27 @@ local plugins = function(use, use_rocks)
     -- https://github.com/christoomey/vim-conflicted
     use 'tpope/vim-fugitive'
     use 'rbong/vim-flog'
+
+    -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
+    -- vim despite netrw#CheckIfRemote() returns 1.
+    --
+    -- So may be xdg-open.
+    -- xdg-open uses both Chromium and Firefox🤷, and it does not care about
+    -- fragments in a url.
+    use {
+        'tyru/open-browser.vim',
+        config = function()
+            vim.g.netrw_nogx = 1
+            vim.g.openbrowser_browser_commands = {
+                {name = "firefox",       args = {"{browser}", "{uri}"}},
+                {name = "xdg-open",      args = {"{browser}", "{uri}"}},
+                {name = "x-www-browser", args = {"{browser}", "{uri}"}},
+                {name = "w3m",           args = {"{browser}", "{uri}"}},
+            }
+            vim.cmd [[ nmap gx <Plug>(openbrowser-smart-search) ]]
+            vim.cmd [[ vmap gx <Plug>(openbrowser-smart-search) ]]
+        end,
+    }
     use 'airblade/vim-gitgutter'
     use {
         'mhinz/vim-signify',
