@@ -73,6 +73,7 @@ endfunction
 
 let g:node_client_debug = 0
 
+set tagfunc=CocTagFunc
 " nnoremap <leader>m :CocList<cr>
 nmap <leader>ac <Plug>(coc-codeaction)
 nmap <leader>dg <Plug>(coc-diagnostic-info)
