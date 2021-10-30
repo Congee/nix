@@ -83,18 +83,24 @@ in
     ltrace
     lsof
     unstable.xh
+    unstable.exercism
+    unstable.litecli
+    unstable.nmap
     # unstable.fx  # json viewer. I don't like cli written in js tho
     unstable.mkcert  # https on localhost
     unstable.weechat
     unstable.gdb
     unstable.mold
     unstable.scc unstable.navi # cheat sheet
+    unstable.haskellPackages.stack
     unstable.haskellPackages.cabal-install
     unstable.haskellPackages.ghc
+    unstable.haskellPackages.haskell-language-server
     unstable.haskellPackages.implicit-hie
     unstable.haskellPackages.hoogle
     unstable.rbw pinentry
-    youtube-dl-light
+    unstable.yt-dlp-light
+    ffmpeg
     # unstable.llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
     unstable.clang-tools
