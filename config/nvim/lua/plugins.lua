@@ -94,6 +94,9 @@ local plugins = function(use, use_rocks)
                         i = {
                             ["<C-j>"] = actions.move_selection_next,
                             ["<C-k>"] = actions.move_selection_previous,
+                            ["<C-u>"] = false,  -- do not scroll up in preview
+                            ["<C-b>"] = actions.preview_scrolling_up,
+                            ["<C-f>"] = actions.preview_scrolling_down,
                         },
                         n = {
                             ["<C-j>"] = actions.move_selection_next,
