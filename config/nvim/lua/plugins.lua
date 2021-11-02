@@ -53,7 +53,7 @@ local plugins = function(use, use_rocks)
         config = function()
             local onedarkpro = require('onedarkpro')
             onedarkpro.setup({
-                options = { transparent = true },
+                options = { transparency = true },
                 hlgroups = {
                     Normal = { fg = '#abb2bf' },
                     DiffAdd = { fg = 'green', bg = 'NONE' },
