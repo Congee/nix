@@ -107,6 +107,10 @@ local plugins = function(use, use_rocks)
                     DiffAdd = { fg = 'green', bg = 'NONE' },
                     DiffDelete = { fg = 'red', bg = 'NONE' },
                     CocFloating = { link = 'Pmenu' },  -- originally NormalFloat
+                    -- CocUnusedHighlight -> CocFadeOut -> Conceal
+                    CocUnusedHighlight = { fg='Gray', bg='NONE' },
+                    CocInfoSign = { fg = 'LightBlue' },
+                    CocHintSign = { fg = 'Cyan' },
                 },
             })
             onedarkpro.load()
@@ -367,6 +371,7 @@ local plugins = function(use, use_rocks)
                 'coc-cmake',
                 'coc-tailwindcss',
             }
+            vim.g.coc_default_semantic_highlight_groups = 1
         end,
     }
 
