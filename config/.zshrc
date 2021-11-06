@@ -71,9 +71,6 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
 
 fi
 
-# color os ls output is also affected by TERM=xterm-256color
-[ -f ~/.zsh/lscolors.sh ] && source ~/.zsh/lscolors.sh
-
 typeset -U fpath
 fpath=(
   /usr/local/opt/git/share/zsh/site-functions

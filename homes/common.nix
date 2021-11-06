@@ -200,6 +200,8 @@ in
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
   home.file.".zlogin".source = ln ../config/.zlogin;
 
+  programs.dircolors.enable = true;
+
   programs.readline.enable = true;
   programs.exa.enable = true;
   programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa"; };
