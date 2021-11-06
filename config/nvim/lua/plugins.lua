@@ -9,6 +9,50 @@ M.hiof = function(id, what, mode)
     return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode)
 end
 
+--- @generic K, V
+--- @param tbl table<K, V>
+--- @return K[]
+table.keys = function(tbl)
+    local keys = {}
+    for k, _ in pairs(tbl) do
+        keys[#keys+1] = k
+    end
+    return keys;
+end
+
+--- @generic K, V
+--- @param tbl table<K, V>
+--- @return V[]
+table.values = function(tbl)
+    local values = {}
+    for i, v in ipairs(tbl) do
+        values[i] = v;
+    end
+    return values
+end
+
+-- Use nvim-treesitter instead of vim-polyglot for:
+-- filetype => module
+M.treesitter_ft_mod = {
+    bibtex          = 'bibtex',
+    cmake           = 'cmake',
+    comment         = 'comment',
+    fennel          = 'fennel',
+    graphql         = 'graphql',
+    haskell         = 'haskell',
+    hcl             = 'hcl',
+    lua             = 'lua',
+    nix             = 'nix',
+    ocaml           = 'ocaml',
+    ocaml_interface = 'ocaml_interface',
+    python          = 'python',
+    scala           = 'scala',
+    tla             = 'tlaplus',
+    typescript      = 'typescript',
+    vim             = 'vim',
+    zig             = 'zig',
+};
+
 local plugins = function(use, use_rocks)
     use 'lewis6991/impatient.nvim'
     use {
@@ -32,7 +76,10 @@ local plugins = function(use, use_rocks)
             -- vim-polyglot via https://github.com/vim-python/python-syntax improves nothing
             -- not working with vim-markdown
             vim.g.polyglot_disabled = {'python', 'sensible'}
-        end
+        end,
+        cond = function()
+            return vim.bo.filetype ~= '' and not M.treesitter_ft_mod[vim.bo.filetype];
+        end,
     }
     use {
         'lukas-reineke/indent-blankline.nvim',
@@ -252,7 +299,6 @@ local plugins = function(use, use_rocks)
         end
     }
 
-    use 'florentc/vim-tla'
     use {'neomake/neomake', ft = {'python', 'cpp', 'typescript', 'rust'}}
     use 'skywind3000/asyncrun.vim'
     use {
@@ -378,11 +424,7 @@ local plugins = function(use, use_rocks)
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
-                ensure_installed = {
-                    'python', 'typescript', 'fennel', 'ocaml', 'haskell', 'lua',
-                    'scala', 'nix', 'ocaml_interface', 'vim', 'zig', 'bibtex',
-                    'cmake', 'comment', 'hcl', 'graphql',
-                },
+                ensure_installed = table.values(M.treesitter_ft_mod);
                 context_commentstring = {
                     enable = true,
                     enable_autocmd = false,
