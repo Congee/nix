@@ -10,6 +10,7 @@ M.hiof = function(id, what, mode)
 end
 
 local plugins = function(use, use_rocks)
+    use 'lewis6991/impatient.nvim'
     use {
         'glacambre/firenvim',
         config = function()

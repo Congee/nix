@@ -1,3 +1,4 @@
+require('impatient')
 require('packer.luarocks').install_commands()
 require('plugins')
 
