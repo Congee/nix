@@ -60,22 +60,7 @@ if [[ $OSTYPE =~ 'darwin*' ]]; then
 elif [[ $OSTYPE =~ 'linux*' ]]; then
   export EDITOR=nvim
 
-  #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-  export SDKMAN_DIR="$HOME/.sdkman"
-  local sdkman_init_sh="$HOME/.sdkman/bin/sdkman-init.sh" 
-  [[ -s $sdkman_init_sh ]] && source $sdkman_init_sh
-
-  export PATH=$HOME/.ghcup/bin:$HOME/.cabal/bin:$PATH:$HOME/.yarn/bin
-  export PATH=$PATH:/snap/bin:/snap/chromium/current/usr/lib/chromium-browser
-  # export PATH=$PATH:$(echo $HOME/.gem/ruby/3.*/bin)
-
-  # export NVM_LAZY_LOAD=true
-  # [ -d "$HOME/.zsh-nvm" ] && \. "$HOME/.zsh-nvm/zsh-nvm.plugin.zsh"
-
-  if [ -f $HOME/.asdf/asdf.sh ]; then
-    source $HOME/.asdf/asdf.sh
-    fpath=(${ASDF_DIR}/completions $fpath)
-  fi
+  export PATH=$HOME/.cabal/bin:$PATH:$HOME/.yarn/bin
 
   autoload bashcompinit && bashcompinit
   local aws_comp=$(whence aws_completer)
@@ -86,10 +71,6 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
 
 fi
 
-[ -d ~/.zsh/plugins/forgit ] && source ~/.zsh/plugins/forgit/forgit.plugin.zsh
-[ -d ~/.zsh/plugins/gitstatus/ ] && source ~/.zsh/plugins/gitstatus/gitstatus.prompt.zsh
-
-
 # color os ls output is also affected by TERM=xterm-256color
 [ -f ~/.zsh/lscolors.sh ] && source ~/.zsh/lscolors.sh
 
@@ -99,8 +80,7 @@ fpath=(
   /usr/local/share/zsh-completions
   $HOME/.zsh/zsh-completions/src
   $HOME/.zfunc
-  $HOME/.zsh/plugins/{zsh-notify,ansiweather,zsh-async,forgit}
-  $fpath  # placed at last to be override
+  $fpath  # placed at last to be overridden
 )
 
 typeset -U module_path
