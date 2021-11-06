@@ -48,6 +48,7 @@ in
     wayvnc
     wf-recorder
     gnome.nautilus
+    gnome.zenity  # --color-selection
     kanshi  # display configuration tool
     greetd.tuigreet  # display/login manager
     xdg-utils  # xdg-open

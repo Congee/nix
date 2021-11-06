@@ -310,7 +310,7 @@ local plugins = function(use, use_rocks)
     }
 
     -- color picker
-    use {'Rykka/colorv.vim', ft = {'less', 'sass', 'css', 'typescriptreact'}}
+    use {'KabbAmine/vCoolor.vim', ft = {'less', 'sass', 'css', 'typescriptreact'}}
     use 'rhysd/vim-grammarous'
     use {
         'norcalli/nvim-colorizer.lua',
