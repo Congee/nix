@@ -195,6 +195,8 @@ in
     }
   ];
   # programs.mcfly.enable = true;
+  programs.zsh.enableCompletion = false;  # the nix-zsh-completions is too old;
+  programs.zsh.initExtraBeforeCompInit = "autoload -U compinit && compinit";
   programs.zsh.initExtra = builtins.readFile ../config/.zshrc;
   # tmux new sessions do not source .zshrc which is for an _interactive_ shell.
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
