@@ -4,7 +4,7 @@ let
   unstable = import <unstable> { config.allowUnfree = true; };
   wayland = import (builtins.fetchGit {
     url = https://github.com/colemickens/nixpkgs-wayland;
-    rev = "226aa9c2a6019dce37787b32ed7274c23034ffb0";
+    rev = "3e5733d39f395050a7a924eb99254dd708e222e0";  # sept 8, 2021
   });
 
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -28,6 +28,7 @@ in
     wayland
   ];
 
+  home.enableNixpkgsReleaseCheck = false;
   home.packages = with pkgs; [
     # wayland
     waybar
@@ -131,7 +132,7 @@ in
   };
 
   programs.firefox.enable = true;
-  programs.firefox.package = pkgs.firefox-wayland;
+  programs.firefox.package = unstable.firefox-wayland;
   programs.firefox.profiles.default = {
     id = 0;  # means default
     isDefault = true;  # also sets to default if id is not 0
