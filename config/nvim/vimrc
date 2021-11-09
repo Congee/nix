@@ -147,7 +147,7 @@ augroup file_type
   au FileType markdown set textwidth=80
   au FileType scheme inoreabbrev lambda λ
 
-  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal setlocal shiftwidth=2 tabstop=2
+  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix setlocal shiftwidth=2 tabstop=2
   "au FileType typescript :syn clear jsxAttrib
 augroup END
 
