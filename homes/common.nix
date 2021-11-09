@@ -4,7 +4,7 @@ let
   unstable = import <unstable> { config.allowUnfree = true; };
   neovim-nightly = import (builtins.fetchGit {
     url = https://github.com/nix-community/neovim-nightly-overlay;
-    rev = "5072a7980f1a9313c7a274e49f2b94ec27de4e81";
+    rev = "7e6ceab198af8b716162a51308c488193b50a974";
   });
 
   ln = config.lib.file.mkOutOfStoreSymlink;

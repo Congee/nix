@@ -2,10 +2,11 @@
 
 let
   unstable = import <unstable> { config.allowUnfree = true; };
-  wayland = import (builtins.fetchGit {
-    url = https://github.com/colemickens/nixpkgs-wayland;
-    rev = "3e5733d39f395050a7a924eb99254dd708e222e0";  # sept 8, 2021
-  });
+  # nixpkgs-wayland requires nixpkgs-unstable when used as overlay below.
+  wayland = import "${builtins.fetchGit {
+    url = https://github.com/nix-community/nixpkgs-wayland;
+    rev = "da0546c37134cff1994eda84c3899fa817383806";  # Nov 8, 2021
+  }}/overlay.nix";
 
   ln = config.lib.file.mkOutOfStoreSymlink;
 
