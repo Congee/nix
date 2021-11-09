@@ -25,8 +25,8 @@ end
 --- @return V[]
 table.values = function(tbl)
     local values = {}
-    for i, v in ipairs(tbl) do
-        values[i] = v;
+    for _, v in pairs(tbl) do
+        values[#values+1] = v;
     end
     return values
 end
