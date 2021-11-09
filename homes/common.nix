@@ -39,6 +39,7 @@ in
     unstable.nixUnstable
 
 
+    man-pages
     tlaplus
     tlaplusToolbox
     pandoc
