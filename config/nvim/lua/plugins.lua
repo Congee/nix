@@ -31,6 +31,15 @@ table.values = function(tbl)
     return values
 end
 
+--- @generic T
+--- @param object T
+--- @return T
+M.trace = function(object)
+    local inspect = require('inspect')
+    print(inspect(object));
+    return object
+end
+
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
 M.treesitter_ft_mod = {
