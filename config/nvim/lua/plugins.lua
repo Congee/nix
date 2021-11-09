@@ -372,6 +372,13 @@ local plugins = function(use, use_rocks)
                 'coc-tailwindcss',
             }
             vim.g.coc_default_semantic_highlight_groups = 1
+            -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
+            -- need to dynamically evaluate $JAVA_HOME:
+            -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
+            vim.api.nvim_call_function(
+                "coc#config",
+                {'ltex.java.path', os.getenv('JAVA_HOME')}
+            );
         end,
     }
 
