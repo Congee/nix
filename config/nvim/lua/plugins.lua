@@ -375,10 +375,47 @@ local plugins = function(use, use_rocks)
             -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
             -- need to dynamically evaluate $JAVA_HOME:
             -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
-            vim.api.nvim_call_function(
-                "coc#config",
-                {'ltex.java.path', os.getenv('JAVA_HOME')}
-            );
+            vim.fn["coc#config"]('ltex.java.path', vim.env.JAVA_HOME);
+        end,
+    }
+    use {
+        'gelguy/wilder.nvim',
+        requires = {'romgrk/fzy-lua-native'},
+        run = ":UpdateRemotePlugins",
+        config = function()
+            vim.fn["wilder#setup"]({modes = {':', '/', '?'}});
+            vim.fn['wilder#set_option']('use_python_remote_plugin', 0)
+            -- VimL lambdas cannot be used with Lua calls. Will make a switch
+            -- once it's fixed. https://github.com/gelguy/wilder.nvim/issues/52
+            vim.cmd[[
+                call wilder#set_option('pipeline', [
+                  \   wilder#branch(
+                  \     wilder#cmdline_pipeline({
+                  \       'fuzzy': 1,
+                  \       'fuzzy_filter': wilder#lua_fzy_filter(),
+                  \     }),
+                  \     wilder#vim_search_pipeline(),
+                  \   ),
+                  \ ])
+
+                call wilder#set_option('renderer', wilder#renderer_mux({
+                      \ ':': wilder#popupmenu_renderer({
+                      \   'highlighter': wilder#lua_fzy_highlighter(),
+                      \   'max_height': '25%',
+                      \   'left': [
+                      \     ' ',
+                      \     wilder#popupmenu_devicons(),
+                      \   ],
+                      \   'right': [
+                      \     ' ',
+                      \     wilder#popupmenu_scrollbar(),
+                      \   ],
+                      \ }),
+                      \ '/': wilder#wildmenu_renderer({
+                      \   'highlighter': wilder#lua_fzy_highlighter(),
+                      \ }),
+                      \ }))
+            ]];
         end,
     }
 
