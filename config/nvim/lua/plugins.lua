@@ -497,6 +497,15 @@ local plugins = function(use, use_rocks)
                         },
                     },
                 },
+            }
+        end
+    }
+
+    use {
+        'nvim-treesitter/nvim-treesitter-textobjects',
+        requires = 'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
                 textobjects = {
                     select = {
                         enable = true,
@@ -507,9 +516,14 @@ local plugins = function(use, use_rocks)
                             ["ic"] = "@class.inner",
                         },
                     },
+                    swap = {
+                        enable = true,
+                        swap_next = { ["<LocalLeader>xp"] = "@parameter.inner" },
+                        swap_previous = { ["<LocalLeader>px"] = "@parameter.inner" },
+                    },
                 },
             }
-        end
+        end,
     }
 
     use_rocks {'luaposix', 'lua-cjson', 'inspect', 'stdlib', 'penlight', 'lua-path'}
