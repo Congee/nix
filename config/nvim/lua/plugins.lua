@@ -281,7 +281,6 @@ local plugins = function(use, use_rocks)
             vim.cmd [[ vmap gx <Plug>(openbrowser-smart-search) ]]
         end,
     }
-    use 'airblade/vim-gitgutter'
     use {
         'mhinz/vim-signify',
         config = function()
