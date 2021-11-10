@@ -247,8 +247,6 @@ local plugins = function(use, use_rocks)
     use 'tpope/vim-dadbod'  -- for SQL. TODO: help exrc
     use 'kristijanhusak/vim-dadbod-ui'
 
-    use 'cohama/agit.vim'
-
     use {
         'rhysd/git-messenger.vim',
         keys = {'<leader>gm'},
@@ -261,7 +259,7 @@ local plugins = function(use, use_rocks)
     -- https://github.com/rhysd/conflict-marker.vim
     -- https://github.com/christoomey/vim-conflicted
     use 'tpope/vim-fugitive'
-    use 'rbong/vim-flog'
+    use 'cohama/agit.vim'
 
     -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
     -- vim despite netrw#CheckIfRemote() returns 1.
