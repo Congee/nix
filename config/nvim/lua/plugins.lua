@@ -392,34 +392,45 @@ local plugins = function(use, use_rocks)
         requires = {'romgrk/fzy-lua-native'},
         run = ":UpdateRemotePlugins",
         config = function()
-            vim.fn["wilder#setup"]({modes = {':', '/', '?'}});
-            vim.fn['wilder#set_option']('use_python_remote_plugin', 0)
             -- VimL lambdas cannot be used with Lua calls. Will make a switch
             -- once it's fixed. https://github.com/gelguy/wilder.nvim/issues/52
             vim.cmd[[
-                call wilder#set_option('pipeline', [
-                  \   wilder#branch(
-                  \     wilder#cmdline_pipeline({
-                  \       'fuzzy': 1,
-                  \       'fuzzy_filter': wilder#lua_fzy_filter(),
-                  \     }),
-                  \     wilder#vim_search_pipeline(),
-                  \   ),
-                  \ ])
+                function! s:wilder_init() abort
+                    call wilder#setup({'modes': [':', '/', '?']})
+                    call wilder#set_option('use_python_remote_plugin', 0)
+                    call wilder#set_option('pipeline', [
+                      \   wilder#branch(
+                      \     wilder#cmdline_pipeline({
+                      \       'fuzzy': 1,
+                      \       'fuzzy_filter': wilder#lua_fzy_filter(),
+                      \     }),
+                      \     wilder#vim_search_pipeline(),
+                      \   ),
+                      \ ])
 
-                call wilder#set_option('renderer', wilder#renderer_mux({
+                    let l:hightlight_accent = wilder#make_hl(
+                      \   'WilderAccent',
+                      \   'Pmenu',
+                      \   [{}, {}, {'foreground': '#f4468f'}]
+                      \ )
+                    call wilder#set_option('renderer', wilder#renderer_mux({
                       \ ':': wilder#popupmenu_renderer({
                       \   'highlighter': wilder#lua_fzy_highlighter(),
+                      \   'highlights': {'accent': l:hightlight_accent},
                       \   'max_height': '25%',
-                      \   'left':  [ wilder#popupmenu_devicons() ],
+                      \   'left':  [ ' ', wilder#popupmenu_devicons() ],
                       \   'right': [ ' ', wilder#popupmenu_scrollbar() ],
                       \ }),
                       \ '/': wilder#popupmenu_renderer({
                       \   'highlighter': wilder#lua_fzy_highlighter(),
+                      \   'highlights': {'accent': l:hightlight_accent},
                       \   'max_height': '25%',
                       \   'right': [ ' ', wilder#popupmenu_scrollbar() ],
                       \ }),
                       \ }))
+                endfunction
+                " defer startup
+                autocmd CmdlineEnter * ++once call s:wilder_init() | call wilder#main#start()
             ]];
         end,
     }
