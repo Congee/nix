@@ -56,6 +56,7 @@ in
     xdg-utils  # xdg-open
     xvfb-run
 
+    wavemon  # wifi signal strength
     pciutils  # lspci
     usbutils  # lsusb
     guvcview
