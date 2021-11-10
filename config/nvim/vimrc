@@ -184,11 +184,6 @@ let g:qs_lazy_highlight = 1  " QuickScope
 " show chunk diff at current position
 nmap <Leader>d <Plug>(coc-git-chunkinfo)
 
-omap ig <plug>(signify-motion-inner-pending)
-xmap ig <plug>(signify-motion-inner-visual)
-omap ag <plug>(signify-motion-outer-pending)
-xmap ag <plug>(signify-motion-outer-visual)
-
 " highlighting
 " let g:haskell_enable_quantification   = 1  " `forall`
 " let g:haskell_enable_recursivedo      = 1  " `mdo` and `rec`

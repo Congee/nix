@@ -287,6 +287,13 @@ local plugins = function(use, use_rocks)
             -- spped up; prevent checking other vcs
             vim.g.signify_vcs_list = {'git'}
             vim.g.signify_realtime = 1
+            vim.cmd[[
+                omap ig <plug>(signify-motion-inner-pending)
+                xmap ig <plug>(signify-motion-inner-visual)
+                omap ag <plug>(signify-motion-outer-pending)
+                xmap ag <plug>(signify-motion-outer-visual)
+            ]];
+
         end
     }
     use 'wellle/tmux-complete.vim'
