@@ -109,6 +109,7 @@ local plugins = function(use, use_rocks)
         'olimorris/onedarkpro.nvim',
         config = function()
             local onedarkpro = require('onedarkpro')
+            local colors = onedarkpro.get_colors('onedark')
             onedarkpro.setup({
                 options = { transparency = true },
                 hlgroups = {
@@ -119,12 +120,13 @@ local plugins = function(use, use_rocks)
                     diffChanged = { fg = '#d2a8ff', bg = 'NONE' },
                     CocFloating = { link = 'Pmenu' },  -- originally NormalFloat
                     -- CocUnusedHighlight -> CocFadeOut -> Conceal
-                    CocUnusedHighlight = { fg='Gray', bg='NONE' },
+                    CocUnusedHighlight = { fg = colors.gray, bg='NONE' },
                     CocInfoSign = { fg = 'LightBlue' },
-                    CocHintSign = { fg = 'Cyan' },
+                    CocHintSign = { fg = colors.cyan },
                 },
             })
             onedarkpro.load()
+            vim.cmd[[hi Operator gui=None ]]  -- no longer italic
         end,
     }
     use 'qxxxb/vim-searchhi'
