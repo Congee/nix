@@ -511,6 +511,13 @@ local plugins = function(use, use_rocks)
         end,
     }
 
+    -- vim.fn.synstack(...) no longer works under treesitter
+    -- use :TSHighlightCapturesUnderCursor instead
+    use {
+        'nvim-treesitter/playground',
+        requires = 'nvim-treesitter/nvim-treesitter',
+    }
+
     use_rocks {'luaposix', 'lua-cjson', 'inspect', 'stdlib', 'penlight', 'lua-path'}
 end
 
