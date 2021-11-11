@@ -115,6 +115,8 @@ local plugins = function(use, use_rocks)
                     Normal = { fg = '#abb2bf' },
                     DiffAdd = { fg = 'green', bg = 'NONE' },
                     DiffDelete = { fg = 'red', bg = 'NONE' },
+                    DiffChange = { fg = '#d2a8ff', bg = 'NONE' },
+                    diffChanged = { fg = '#d2a8ff', bg = 'NONE' },
                     CocFloating = { link = 'Pmenu' },  -- originally NormalFloat
                     -- CocUnusedHighlight -> CocFadeOut -> Conceal
                     CocUnusedHighlight = { fg='Gray', bg='NONE' },
@@ -282,19 +284,9 @@ local plugins = function(use, use_rocks)
         end,
     }
     use {
-        'mhinz/vim-signify',
-        config = function()
-            -- spped up; prevent checking other vcs
-            vim.g.signify_vcs_list = {'git'}
-            vim.g.signify_realtime = 1
-            vim.cmd[[
-                omap ig <plug>(signify-motion-inner-pending)
-                xmap ig <plug>(signify-motion-inner-visual)
-                omap ag <plug>(signify-motion-outer-pending)
-                xmap ag <plug>(signify-motion-outer-visual)
-            ]];
-
-        end
+        'lewis6991/gitsigns.nvim',
+        requires = 'nvim-lua/plenary.nvim',
+        config = function() require('gitsigns').setup() end,
     }
     use 'wellle/tmux-complete.vim'
     use 'chiedo/vim-case-convert'
