@@ -127,6 +127,17 @@ local plugins = function(use, use_rocks)
             })
             onedarkpro.load()
             vim.cmd[[hi Operator gui=None ]]  -- no longer italic
+
+            -- make indent area contrast
+            vim.o.guicursor = table.concat({
+                'n-v-c:block',
+                'i-ci-ve:hor100',
+                'r-cr:hor20',
+                'o:hor50',
+                'a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor',
+                'sm:block-blinkwait175-blinkoff150-blinkon175',
+            }, ',');
+            vim.cmd[[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
         end,
     }
     use 'qxxxb/vim-searchhi'
