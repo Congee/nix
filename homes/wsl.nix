@@ -1,8 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  unstable = import <unstable> { config.allowUnfree = true; };
-
   ln = config.lib.file.mkOutOfStoreSymlink;
 in
 {

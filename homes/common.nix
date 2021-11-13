@@ -1,10 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-  unstable = import <unstable> { config.allowUnfree = true; };
   neovim-nightly = import (builtins.fetchGit {
     url = https://github.com/nix-community/neovim-nightly-overlay;
-    rev = "7e6ceab198af8b716162a51308c488193b50a974";
+    rev = "a1b2666067972ba21fd019ec99c9ab92a2ae3fad";
   });
 
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -36,9 +35,9 @@ in
     (import ../packages/leetcode-cli)
     (import ../packages/sncli)
     (import ../packages/hydra)
-    unstable.nixUnstable
+    nixUnstable
 
-
+    nix-zsh-completions
     man-pages
     tlaplus
     tlaplusToolbox
@@ -83,45 +82,46 @@ in
     patchelf
     ltrace
     lsof
-    unstable.xh
-    unstable.exercism
-    unstable.litecli
-    unstable.nmap
-    # unstable.fx  # json viewer. I don't like cli written in js tho
-    unstable.mkcert  # https on localhost
-    unstable.weechat
-    unstable.cargo  # for shell completion
-    unstable.cargo-edit
-    unstable.gdb
-    unstable.mold
-    unstable.scc unstable.navi # cheat sheet
-    unstable.haskellPackages.stack
-    unstable.haskellPackages.cabal-install
-    unstable.haskellPackages.ghc
-    unstable.haskellPackages.haskell-language-server
-    unstable.haskellPackages.implicit-hie
-    unstable.haskellPackages.hoogle
-    unstable.rbw pinentry
-    unstable.yt-dlp-light
+    xh
+    exercism
+    litecli
+    nmap
+    # fx  # json viewer. I don't like cli written in js tho
+    mkcert  # https on localhost
+    weechat
+    cargo  # for shell completion
+    cargo-edit
+    gdb
+    mold
+    scc
+    navi # cheat sheet
+    haskellPackages.stack
+    haskellPackages.cabal-install
+    haskellPackages.ghc
+    haskellPackages.haskell-language-server
+    haskellPackages.implicit-hie
+    haskellPackages.hoogle
+    rbw pinentry
+    yt-dlp-light
     ffmpeg
-    # unstable.llvmPackages_latest.clang also ships this binary but bin/cc is in
+    # llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
-    unstable.clang-tools
-    unstable.stylua
+    clang-tools
+    stylua
 
     docker-compose
-    unstable.kubectl
-    unstable.kubernetes
-    unstable.kubernetes-helm
-    unstable.k3s
-    unstable.kube3d
-    unstable.pulumi-bin
+    kubectl
+    kubernetes
+    kubernetes-helm
+    k3s
+    kube3d
+    pulumi-bin
 
     tmate
     tmux
     tmuxinator
 
-    unstable.vimPlugins.packer-nvim
+    vimPlugins.packer-nvim
   ];
 
   xdg.enable = true;
@@ -141,7 +141,9 @@ in
     [target.x86_64-unknown-linux-gnu]
     linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
     rustflags = [
-      "-C", "link-arg=-fuse-ld=${unstable.mold.outPath}/bin/mold"
+      "-C", "link-arg=-fuse-ld=${pkgs.mold.outPath}/bin/mold"
+      "-C", "link-arg=-fuse-ld=${pkgs.llvmPackages_latest.lld.outPath}/bin/lld"
+      "-C", "link-arg=-fuse-ld=gold"
     ]
   '';
 
@@ -227,7 +229,7 @@ in
   # install it in a random name like nixpacker. Anything inside
   # will be sourced ~/.local/share/nvim/site/pack/*/start
   # https://github.com/nix-community/home-manager/issues/1907#issuecomment-934316296
-  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${unstable.vimPlugins.packer-nvim}";
+  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim}";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
   # xdg.configFile."nvim".source = ln ../config/nvim;
 

@@ -1,11 +1,12 @@
 { config, pkgs, lib, ... }:
 
 let
-  unstable = import <unstable> { config.allowUnfree = true; };
+  unstable = import <nixpkgs> { config.allowUnfree = true; };
+  stable = import <stable> { config.allowUnfree = true; };
   # nixpkgs-wayland requires nixpkgs-unstable when used as overlay below.
   wayland = import "${builtins.fetchGit {
     url = https://github.com/nix-community/nixpkgs-wayland;
-    rev = "da0546c37134cff1994eda84c3899fa817383806";  # Nov 8, 2021
+    rev = "04b7b02f715e8cd221cea20542ce65a418ce4ea0";  # Nov 8, 2021
   }}/overlay.nix";
 
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -27,7 +28,7 @@ in
 
   nixpkgs.overlays = [
     wayland
-  ];
+  ];  # on being new: overlay > unstable > stable
 
   home.enableNixpkgsReleaseCheck = false;
   home.packages = with pkgs; [
@@ -62,8 +63,8 @@ in
     guvcview
 
     wl-clipboard
-    unstable.goldendict
-    unstable.evolution
+    goldendict
+    evolution
     element-desktop
     nheko
 
@@ -74,21 +75,23 @@ in
     scrcpy
     tdesktop  # telegram
     thunderbird
-    unstable.slack-dark
-    unstable.spotify
-    unstable.spicetify-cli
-    unstable.postman
-    unstable.insomnia
-    unstable.charles
+    slack-dark
+    spotify
+    spicetify-cli
+    postman
+    insomnia
+    charles
     ungoogled-chromium
-    unstable.dbeaver
+    dbeaver
+    waydroid
+    zoom-us
     mpv
 
     (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
     openvpn  # depends on services.resolved.enable = true
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
-    unstable.droidcam
+    droidcam
 
     glib
     # FIXME: No schemas installed https://github.com/NixOS/nixpkgs/issues/72282
@@ -96,7 +99,7 @@ in
     # FIXME: wrapProgram?
     # wrapGAppsHook should do it https://github.com/NixOS/nixpkgs/pull/32210
     gsettings-desktop-schemas
-    unstable.capitaine-cursors
+    capitaine-cursors
   ];
 
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
@@ -104,11 +107,11 @@ in
   # services.kanshi.systemdTarget = "graphical.target";
 
   programs.zathura.enable = true;
-  programs.zathura.package = unstable.zathura;
+  programs.zathura.package = pkgs.zathura;
 
   programs.obs-studio.enable = false;
-  programs.obs-studio.package = [unstable.obs-studio];
-  programs.obs-studio.plugins = [unstable.obs-studio-plugins.wlrobs];
+  programs.obs-studio.package = [pkgs.obs-studio];
+  programs.obs-studio.plugins = [pkgs.obs-studio-plugins.wlrobs];
 
   programs.waybar.enable = true;
   programs.waybar.systemd.enable = false;
@@ -122,7 +125,7 @@ in
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
 
   programs.alacritty.enable = true;
-  programs.alacritty.package = unstable.alacritty;
+  programs.alacritty.package = pkgs.alacritty;
   home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.yml;
 
   home.sessionVariables = {
@@ -134,7 +137,7 @@ in
   };
 
   programs.firefox.enable = true;
-  programs.firefox.package = unstable.firefox-wayland;
+  programs.firefox.package = pkgs.firefox-wayland;
   programs.firefox.profiles.default = {
     id = 0;  # means default
     isDefault = true;  # also sets to default if id is not 0
@@ -155,9 +158,9 @@ in
   gtk.font.name = "Noto Sans";
   gtk.font.package = pkgs.noto-fonts;
   gtk.theme.name = "Dracula";
-  gtk.theme.package = unstable.dracula-theme;
+  gtk.theme.package = pkgs.dracula-theme;
   gtk.iconTheme.name = "Papirus-Dark-Maia";  # Candy and Tela also look good
-  gtk.iconTheme.package = unstable.papirus-maia-icon-theme;
+  gtk.iconTheme.package = pkgs.papirus-maia-icon-theme;
   gtk.gtk3.extraConfig = {
     gtk-application-prefer-dark-theme = true;
     gtk-key-theme-name    = "Emacs";
