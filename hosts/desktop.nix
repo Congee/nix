@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  linuxPackages = pkgs.linuxPackages_5_10;
+  linuxPackages = pkgs.linuxPackages_xanmod;
 in
 {
   imports =
