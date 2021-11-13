@@ -90,6 +90,8 @@ in
     # unstable.fx  # json viewer. I don't like cli written in js tho
     unstable.mkcert  # https on localhost
     unstable.weechat
+    unstable.cargo  # for shell completion
+    unstable.cargo-edit
     unstable.gdb
     unstable.mold
     unstable.scc unstable.navi # cheat sheet
