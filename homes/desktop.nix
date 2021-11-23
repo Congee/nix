@@ -75,7 +75,15 @@ in
     scrcpy
     tdesktop  # telegram
     thunderbird
-    slack-dark
+    (slack-dark.overrideAttrs (old: {
+      installPhase = old.installPhase + ''
+      rm $out/bin/slack
+
+      makeWrapper $out/lib/slack/slack $out/bin/slack \
+        --prefix PATH : ${lib.makeBinPath [pkgs.xdg-utils]} \
+        --add-flags "--ozone-platform=wayland --enable-features=UseOzonePlatform,WebRTCPipeWireCapturer"
+      '';
+    }))
     spotify
     spicetify-cli
     postman
