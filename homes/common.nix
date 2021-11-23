@@ -64,8 +64,9 @@ in
     slurm
     duf
     ncdu
-    gitAndTools.gitstatus
-    gitAndTools.gh
+    gitstatus
+    gh
+    git-branchless
     awscli2
     aws-vault
     sl
