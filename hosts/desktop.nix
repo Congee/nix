@@ -120,6 +120,8 @@ in
 
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
+  security.pam.services.greetd.sshAgentAuth = true;
+  security.pam.enableSSHAgentAuth = true;
 
   # List services that you want to enable:
   security.rtkit.enable = true;

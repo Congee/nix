@@ -23,6 +23,7 @@
   programs.gnupg.agent = {
     enable = true;
     enableSSHSupport = true;  # implies: programs.ssh.startAgent = true;
+    pinentryFlavor = "tty";  # default null for the poor man's wayfire DE
   };
 
   # This value determines the NixOS release from which the default
