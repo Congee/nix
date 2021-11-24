@@ -1,4 +1,6 @@
-with import <nixpkgs> {};
+{ pkgs, ... }:
+
+with pkgs;
 
 let
   __Simperium3 = python3.pkgs.pythonPackages.buildPythonPackage rec {

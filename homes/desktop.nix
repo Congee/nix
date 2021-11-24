@@ -1,14 +1,6 @@
 { config, pkgs, lib, ... }:
 
 let
-  unstable = import <nixpkgs> { config.allowUnfree = true; };
-  stable = import <stable> { config.allowUnfree = true; };
-  # nixpkgs-wayland requires nixpkgs-unstable when used as overlay below.
-  wayland = import "${builtins.fetchGit {
-    url = https://github.com/nix-community/nixpkgs-wayland;
-    rev = "f08f674a02761c1c30941e747b405ac5fe4cccca";  # Dec 4, 2021
-  }}/overlay.nix";
-
   ln = config.lib.file.mkOutOfStoreSymlink;
 
   wsudo = (pkgs.writeScriptBin "wsudo" ''
@@ -22,14 +14,6 @@ let
   '').overrideAttrs (_: { prefreLocalBuild = true; buildInputs = [pkgs.xorg.xhost]; });
 in
 {
-  imports = [
-    ./common.nix
-  ];
-
-  nixpkgs.overlays = [
-    wayland
-  ];  # on being new: overlay > unstable > stable
-
   home.enableNixpkgsReleaseCheck = false;
   home.packages = with pkgs; [
     # wayland

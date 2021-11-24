@@ -1,18 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
-  neovim-nightly = import (builtins.fetchGit {
-    url = https://github.com/nix-community/neovim-nightly-overlay;
-    rev = "a1b2666067972ba21fd019ec99c9ab92a2ae3fad";
-  });
-
   ln = config.lib.file.mkOutOfStoreSymlink;
 in
 {
-  nixpkgs.overlays = [
-    neovim-nightly
-  ];
-
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "cwu";
@@ -27,14 +18,14 @@ in
   # You can update Home Manager without changing this value. See
   # the Home Manager release notes for a list of state version
   # changes in each release.
-  home.stateVersion = "21.03";
+  home.stateVersion = "21.05";
 
   programs.home-manager.enable = true;  # to use the unstable in nix-channel
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
-    (import ../packages/leetcode-cli)
-    (import ../packages/sncli)
-    (import ../packages/hydra)
+    leetcode-cli
+    (callPackage ../packages/sncli {})
+    (callPackage ../packages/hydra {})
     nixUnstable
 
     man-pages
