@@ -15,7 +15,7 @@
     homeConfigurations = let
       common = {
         system = "x86_64-linux";
-        stateVersion = "21.05";
+        stateVersion = "21.11";
         username = "cwu";
         homeDirectory = "/home/cwu";
         extraSpecialArgs = { inherit inputs; };
