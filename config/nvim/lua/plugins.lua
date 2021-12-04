@@ -190,15 +190,38 @@ local plugins = function(use, use_rocks)
     use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
     use 'junegunn/fzf.vim'  -- depends on pkgs.fzf
     use 'rafcamlet/nvim-luapad'
+
     use {
-        'b3nj5m1n/kommentary',
+        'numToStr/Comment.nvim',
         requires = 'JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
-            require('kommentary.config').configure_language('typescriptreact', {
-                single_line_comment_string = 'auto',
-                multi_line_comment_strings = 'auto',
-                hook_function = require('ts_context_commentstring.internal').update_commentstring
-            })
+            local cms_internal = require('ts_context_commentstring.internal');
+            local cms_utils = require('ts_context_commentstring.utils');
+            require('Comment').setup {
+                pre_hook = function(ctx)
+                    local U = require('Comment.utils')
+                    local ty = ctx.type == U.ctype.line and '__single' or '__multi'
+
+                    local location = nil;
+
+                    if vim.bo.filetype == 'typescriptreact' then
+                        if ctx.ctype == U.ctype.block then
+                            location = cms_utils.get_cursor_location()
+                        elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
+                            location = cms_utils.get_visual_start_location()
+                        end
+                    end
+
+                    return cms_internal.calculate_commentstring({
+                        key = ty,
+                        location = location,
+                    })
+                end,
+                mappings = {
+                    basic = true,
+                    extra = false,
+                }
+            }
         end,
     }
     use 'machakann/vim-sandwich'
