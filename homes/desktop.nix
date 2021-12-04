@@ -74,6 +74,7 @@ in
     termshark
     scrcpy
     tdesktop  # telegram
+    musescore
     thunderbird
     (slack-dark.overrideAttrs (old: {
       installPhase = old.installPhase + ''
