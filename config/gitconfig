@@ -37,7 +37,7 @@
     ; attributesfile = /home/congee/.gitattributes
     # pager = delta --dark
 [commit]
-    gpgsign = false
+    gpgsign = true
 [cola]
     spellcheck = false
 [filter "lfs"]
