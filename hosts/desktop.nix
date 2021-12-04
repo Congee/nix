@@ -139,4 +139,5 @@ in
   # Or disable the firewall altogether.
 
   virtualisation.docker.enable = true;
+  virtualisation.waydroid.enable = true;
 }

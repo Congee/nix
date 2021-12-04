@@ -91,7 +91,6 @@ in
     charles
     ungoogled-chromium
     dbeaver
-    waydroid
     zoom-us
     mpv
 
