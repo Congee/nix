@@ -6,7 +6,7 @@ let
   # nixpkgs-wayland requires nixpkgs-unstable when used as overlay below.
   wayland = import "${builtins.fetchGit {
     url = https://github.com/nix-community/nixpkgs-wayland;
-    rev = "04b7b02f715e8cd221cea20542ce65a418ce4ea0";  # Nov 8, 2021
+    rev = "f08f674a02761c1c30941e747b405ac5fe4cccca";  # Dec 4, 2021
   }}/overlay.nix";
 
   ln = config.lib.file.mkOutOfStoreSymlink;
