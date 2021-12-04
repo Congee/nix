@@ -53,3 +53,5 @@
     protocol = ssh
 [init]
     defaultBranch = master
+
+# vi: ft=gitconfig
