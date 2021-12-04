@@ -16,4 +16,8 @@ windows:
         panes:
             - cd ~/dev
 
+    - vpn:
+        panes:
+            - test -f ~/vpn/vpn.sh && cd ~/vpn && ./vpn.sh
+
 # vim: shiftwidth=4 tabstop=4:
