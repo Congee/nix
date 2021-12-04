@@ -62,6 +62,8 @@ M.treesitter_ft_mod = {
     zig             = 'zig',
 };
 
+--- @param use fun(_: string | table)
+--- @param use_rocks fun(_: table)
 local plugins = function(use, use_rocks)
     use 'lewis6991/impatient.nvim'
     use {
