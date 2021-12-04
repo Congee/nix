@@ -37,7 +37,6 @@ in
     (import ../packages/hydra)
     nixUnstable
 
-    nix-zsh-completions
     man-pages
     tlaplus
     tlaplusToolbox
