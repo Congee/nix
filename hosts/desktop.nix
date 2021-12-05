@@ -32,6 +32,13 @@ in
   boot.kernelPackages = linuxPackages;
   boot.kernelParams = [ "console=ttyS0" ];
 
+  boot.crashDump.enable = true;
+  # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/kernel_crash_dump_guide#sect-memory-requirements
+  # Y@offset is required for x86 architecture
+  # https://www.kernel.org/doc/Documentation/kdump/kdump.txt
+  # 160M + 2bits per 4KB = 160MB + 6MB
+  boot.crashDump.reservedMemory = "192M@0M";
+
   # will be available next
   # programs.droidcam.enable = true;
 
