@@ -118,7 +118,12 @@ in
   xdg.enable = true;
   xdg.configFile."nix/nix.conf".text = ''
     experimental-features = nix-command flakes
+    keep-outputs = true
+    keep-derivations = true
   '';
+
+  programs.direnv.enable = true;
+  programs.direnv.nix-direnv.enable = true;
 
   home.file.".snclirc".source = ln ../config/.snclirc;
 
@@ -238,6 +243,7 @@ in
   programs.password-store.enable = true;
   home.sessionVariables = {
     AWS_VAULT_PASS_PASSWORD_STORE_DIR = "${config.xdg.dataHome}/password-store";
+    DIRENV_LOG_FORMAT = "";  # quiet direnv
   };
 
   home.file.".ssh/config".source = ln ../config/ssh_config;
