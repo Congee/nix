@@ -30,7 +30,6 @@ in
     options snd_aloop index=2
   '';
   boot.kernelPackages = linuxPackages;
-  boot.kernelParams = [ "console=ttyS0" ];
 
   boot.crashDump.enable = true;
   # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/kernel_administration_guide/kernel_crash_dump_guide#sect-memory-requirements
