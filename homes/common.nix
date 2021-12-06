@@ -209,6 +209,7 @@ in
 
   programs.dircolors.enable = true;
 
+  programs.broot.enable = true;
   programs.readline.enable = true;
   programs.exa.enable = true;
   programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa"; };
