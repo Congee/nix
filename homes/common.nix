@@ -26,7 +26,6 @@ in
     leetcode-cli
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
-    nixUnstable
 
     man-pages
     tlaplus
@@ -116,11 +115,6 @@ in
   ];
 
   xdg.enable = true;
-  xdg.configFile."nix/nix.conf".text = ''
-    experimental-features = nix-command flakes
-    keep-outputs = true
-    keep-derivations = true
-  '';
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;

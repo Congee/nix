@@ -17,6 +17,16 @@
     vim
   ];
 
+  nix = {
+     package = pkgs.nixUnstable;
+     autoOptimiseStore = true;  # Replace identical files in the store by hard links.
+     extraOptions = ''
+       experimental-features = nix-command flakes
+       keep-outputs = true
+       keep-derivations = true
+     '';
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
