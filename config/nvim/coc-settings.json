@@ -72,6 +72,7 @@
     "tailwindCSS.trace.server": "verbose",
     "metals.statusBarEnabled": true,
     "sumneko-lua.enableNvimLuaDev": true,
+    "sumneko-lua.checkUpdate": false,
     "clangd.semanticHighlighting": true,
     "clangd.fallbackFlags": [
         "-std=c++17"
