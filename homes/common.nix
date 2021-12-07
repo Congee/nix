@@ -26,6 +26,7 @@ in
     leetcode-cli
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
+    nixUnstable
 
     man-pages
     tlaplus
