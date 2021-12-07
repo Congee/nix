@@ -40,6 +40,7 @@ in
     croc
     gcc
     unzip
+    binutils  # ar for libluajit.a
     luajit
     luajitPackages.luarocks
     socat
