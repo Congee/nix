@@ -255,7 +255,7 @@ in
 
   programs.htop.enable = true;
   programs.htop.settings.highlight_basename = true;
-  programs.htop.settings.hide_threads = true;
+  programs.htop.settings.hide_userland_threads = true;
   programs.htop.settings.show_program_path = false;
   programs.htop.settings.tree_view = true;
 }
