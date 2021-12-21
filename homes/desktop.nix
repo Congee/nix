@@ -71,7 +71,7 @@ in
     zoom-us
     mpv
 
-    (nerdfonts.override { fonts = [ "CascadiaCode" ]; })
+    (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     openvpn  # depends on services.resolved.enable = true
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
