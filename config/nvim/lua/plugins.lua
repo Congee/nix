@@ -226,7 +226,12 @@ local plugins = function(use, use_rocks)
             }
         end,
     }
-    use 'machakann/vim-sandwich'
+    use {
+        'blackCauldron7/surround.nvim',
+        config = function()
+            require"surround".setup {mappings_style = "surround"}
+        end
+    }
     use 'junegunn/vim-easy-align'
     use 'junegunn/vim-peekaboo'
     use 'ojroques/vim-oscyank'
