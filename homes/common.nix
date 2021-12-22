@@ -229,7 +229,7 @@ in
   # https://github.com/nix-community/home-manager/issues/1907#issuecomment-934316296
   xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim}";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
-  xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/Linux/lua-language-server".source = ln "${pkgs.    sumneko-lua-language-server}/bin/lua-language-server";
+  xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/lua-language-server".source = ln "${pkgs.sumneko-lua-language-server}/bin/lua-language-server";
   # xdg.configFile."nvim".source = ln ../config/nvim;
 
   programs.bat.enable = true;
