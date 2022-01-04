@@ -1,0 +1,3 @@
+[submodule "config/fcitx5/themes/fcitx5-nord"]
+	path = config/fcitx5/themes/fcitx5-nord
+	url = git@github.com:tonyfettes/fcitx5-nord.git

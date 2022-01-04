@@ -20,7 +20,19 @@ in
     waybar
     wayfire
     unstable.wcm  # wayfire config manager
-    wofi
+    # XXX: wofi does not pick up envs from ~/.pam_environment 😠
+    (symlinkJoin {
+      name = "wofi";
+      paths = [ wofi ];
+      buildInputs = [ makeWrapper ];
+      postBuild = ''
+        wrapProgram $out/bin/wofi \
+          --set GTK_IM_MODULE "fcitx" \
+          --set QT_IM_MODULE "fcitx" \
+          --set SDL_IM_MODULE "fcitx" \
+          --set XMODIFIERS "@im=fcitx"
+      '';
+    })
     mako  # notifacation daemon
     gtk-layer-shell
     aml  # vnc server
@@ -85,6 +97,23 @@ in
     gsettings-desktop-schemas
     capitaine-cursors
   ];
+
+  i18n.inputMethod.enabled = "fcitx5";
+  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ rime ];
+  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-rime fcitx5-with-addons ];
+  pam.sessionVariables = {
+    # actually cannot be picked up by wofi 😠
+    GTK_IM_MODULE="fcitx";
+    QT_IM_MODULE="fcitx";
+    SDL_IM_MODULE="fcitx";
+    XMODIFIERS="@im=fcitx";
+  };
+  xdg.configFile."fcitx5/conf/classicui.conf".source = ln "${config.home.homeDirectory}/nix/config/fcitx5/conf/classicui.conf";
+  home.file.".local/share/fcitx5/rime/default.custom.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/default.custom.yaml";
+  home.file.".local/share/fcitx5/rime/double_pinyin.custom.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/double_pinyin.custom.yaml";
+  home.file.".local/share/fcitx5/rime/double_pinyin.schema.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/double_pinyin.schema.yaml";
+  home.file.".local/share/fcitx5/rime/emoji.schema.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/emoji.schema.yaml";
+  home.file.".local/share/fcitx5/themes/Nord-Dark".source = ln "${config.home.homeDirectory}/nix/config/fcitx5/themes/fcitx5-nord/Nord-Dark";
 
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
   # services.kanshi.enable = true;
