@@ -529,6 +529,22 @@ local plugins = function(use, use_rocks)
     }
 
     use {
+        'windwp/nvim-autopairs',
+        config = function() require('nvim-autopairs').setup{}; end,
+    }
+
+    use {
+        'yioneko/nvim-yati',
+        requires = 'nvim-treesitter/nvim-treesitter',
+        -- cond = function() return vim.bo.filetype == 'python'; end,
+        config = function()
+            require("nvim-treesitter.configs").setup {
+                yati = { enable = true },
+            };
+        end
+    }
+
+    use {
         'nvim-treesitter/nvim-treesitter-textobjects',
         requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
