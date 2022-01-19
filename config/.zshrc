@@ -439,6 +439,12 @@ case $OSTYPE in
   }
   ;;
 
+  linux*)
+    wifi-password() {
+      sudo nmcli device wifi show-password | awk '$1 == "Password:" {print $2}'
+    }
+    ;;
+
   *)
     ;;
 esac
