@@ -28,6 +28,7 @@ in
     (callPackage ../packages/hydra {})
     nixUnstable
 
+    expect
     man-pages
     tlaplus
     tlaplusToolbox
@@ -67,6 +68,7 @@ in
     cowsay
     fortune
     file
+    zip
     p7zip
     rnix-lsp
     lshw
