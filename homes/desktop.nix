@@ -52,6 +52,8 @@ in
     greetd.tuigreet  # display/login manager
     xdg-utils  # xdg-open
     xvfb-run
+    psmisc  # pstree, fuser
+    progress
 
     wavemon  # wifi signal strength
     pciutils  # lspci
