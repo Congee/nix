@@ -3,7 +3,8 @@
 [user]
     name = Congee
     email = ***REMOVED***
-    signingkey = 3748BEAEB1F5375071D02C32CB1B653DBEB49C43
+    # signingkey = 3748BEAEB1F5375071D02C32CB1B653DBEB49C43
+    signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPBv281aUV+Wzc5ITvWERgzT2830xLNP7tZXIsP1D1aR"
 [color]
     diff = auto
     ui = false
@@ -34,8 +35,12 @@
     tool = vimdiff
 [core]
     trustctime = false
-    ; attributesfile = /home/congee/.gitattributes
+    ; attributesfile = ~/.gitattributes
     # pager = delta --dark
+[gpg]
+    format = ssh
+[gpg "ssh"]
+    allowedSignersFile = ~/.ssh/allowed_signers
 [commit]
     gpgsign = true
 [cola]

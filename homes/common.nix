@@ -228,7 +228,8 @@ in
     DIRENV_LOG_FORMAT = "";  # quiet direnv
   };
 
-  home.file.".ssh/config".source = ln ../config/ssh_config;
+  home.file.".ssh/config".source = ln ../config/ssh/config;
+  home.file.".ssh/allowed_signers".source = ln ../config/ssh/allowed_signers;
 
   programs.git = {
     enable = true;
