@@ -106,6 +106,7 @@ in
   services.avahi.nssmdns = true;
   services.avahi.publish.enable = true;
   services.avahi.publish.addresses = true;
+  services.avahi.publish.userServices = true;
   services.geoclue2.enable = true;
   # services.geoclue2.appConfig = {
   #   "yo.congee.me" = {
