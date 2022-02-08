@@ -109,7 +109,7 @@
         "utils": "utils"
       },
       "locked": {
-        "narHash": "sha256-3yiO7pKSvYI0ZBASmLBSkHgdj+7XWgWyVj9xYVmbFSk=",
+        "narHash": "sha256-2adGTIdY7MPBXajsqFlywsHJZQgGk/iGzEOnpf5A1/0=",
         "path": "./packages/leetcode-cli",
         "type": "path"
       },

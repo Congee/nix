@@ -16,14 +16,14 @@
         };
         package = with pkgs; platform.buildRustPackage rec {
           pname = "leetcode-cli";
-          version = "0.3.9";
+          version = "0.3.10";
 
           src = fetchCrate {
             inherit pname version;
-            sha256 = "1aiksg4iyrhkmwl4djy7bm3xjras4qqfixi6ml8k6pz0s9ynknws";
+            sha256 = "SkJLA49AXNTpiWZByII2saYLyN3bAAJTlCvhamlOEXA=";
           };
 
-          cargoSha256 = "1ldzr2bspy288nydk2lnkc4akc2myk2jk7aw87vr4kmzl0jmh329";
+          cargoSha256 = "xhKF4qYOTdt8iCSPY5yT8tH3l54HdkOAIS2SBGzqsdo=";
 
           # a nightly compiler is required unless we use this cheat code.
           RUSTC_BOOTSTRAP = 0;
@@ -33,7 +33,7 @@
 
           nativeBuildInputs = [
             pkg-config
-            rust-bin.nightly."2021-05-16".minimal
+            rust-bin.stable.latest.default
           ];
 
           buildInputs = [
