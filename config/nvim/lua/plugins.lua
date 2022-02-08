@@ -611,6 +611,7 @@ end
 
 local config = {
     compile_path = util.join_paths(vim.fn.stdpath('data'), 'site', 'plugin', 'packer_compiled.vim'),
+    max_jobs = 8;
 }
 
 return require('packer').startup({plugins, config = config})

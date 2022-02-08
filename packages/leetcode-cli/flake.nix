@@ -40,7 +40,7 @@
             openssl
             dbus
             sqlite
-          ];
+          ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
           meta = with pkgs.lib; {
             description = "Leet your code in command-line.";

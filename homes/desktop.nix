@@ -54,11 +54,18 @@ in
     xvfb-run
     psmisc  # pstree, fuser
     progress
+    lshw
+    ltrace
+    weechat
+    mold
 
     wavemon  # wifi signal strength
     pciutils  # lspci
     usbutils  # lsusb
     guvcview
+    onedrive
+    tlaplus
+    tlaplusToolbox
 
     wl-clipboard
     goldendict
@@ -117,6 +124,17 @@ in
   home.file.".local/share/fcitx5/rime/emoji.schema.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/emoji.schema.yaml";
   home.file.".local/share/fcitx5/themes/Nord-Dark".source = ln "${config.home.homeDirectory}/nix/config/fcitx5/themes/fcitx5-nord/Nord-Dark";
 
+  home.file.".cargo/config.toml".text = ''
+    [target.x86_64-unknown-linux-gnu]
+    linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
+    rustflags = [
+      "-C", "link-arg=-fuse-ld=${pkgs.mold.outPath}/bin/mold"
+      "-C", "link-arg=-fuse-ld=${pkgs.llvmPackages_latest.lld.outPath}/bin/lld"
+      "-C", "link-arg=-fuse-ld=gold"
+    ]
+  '';
+
+
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
   # services.kanshi.enable = true;
   # services.kanshi.systemdTarget = "graphical.target";
@@ -141,7 +159,7 @@ in
 
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
-  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.yml;
+  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.nixos.yml;
 
   home.sessionVariables = {
     # https://github.com/NixOS/nixpkgs/issues/91218#issuecomment-822142127

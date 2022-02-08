@@ -9,18 +9,16 @@ in
   ];
 
   home.packages = with pkgs; [
+    alacritty
+    (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
   ];
 
-  programs.zsh.plugins = [
-    {
-      name = "zsh-notify";
-      file = "notify.plugin.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/marzocchi/zsh-notify";
-        rev = "eb389765cb1bd3358e88ac31939ef2edfd539825";
-      };
-    }
-  ];
+  fonts.fontconfig.enable = true;
+  xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
+
+  programs.alacritty.enable = true;
+  programs.alacritty.package = pkgs.alacritty;
+  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.mac.yml;
 
   home.file.".zprofile".source = ln ../config/.zprofile;
 }

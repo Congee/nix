@@ -2,9 +2,6 @@ filetype plugin on
 se nu
 " ugly fix. searching python interpreters makes long startup time
 let g:loaded_python_provider = 1
-if has('macunix')
-  let g:python3_host_prog = '/usr/local/bin/python3'
-endif
 
 let g:vimsyn_embed = 'l'
 

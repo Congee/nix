@@ -7,7 +7,7 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "cwu";
-  home.homeDirectory = "/home/cwu";
+  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/cwu" else "/home/cwu";
   # xdg.configFile."nixpkgs/home.nix".source = ln ./home.nix;
 
   # This value determines the Home Manager release that your
@@ -26,12 +26,9 @@ in
     leetcode-cli
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
-    nixUnstable
 
     expect
     man-pages
-    tlaplus
-    tlaplusToolbox
     pandoc
     gnumake
     moreutils # sponge
@@ -51,10 +48,8 @@ in
     bind  # dig
     racket-minimal
     python3
-    onedrive
     nodejs
     yarn
-    slurm
     duf
     ncdu
     gitstatus
@@ -71,11 +66,9 @@ in
     zip
     p7zip
     rnix-lsp
-    lshw
     nix-index
     nix-tree
     patchelf
-    ltrace
     lsof
     xh
     exercism
@@ -83,11 +76,9 @@ in
     nmap
     # fx  # json viewer. I don't like cli written in js tho
     mkcert  # https on localhost
-    weechat
     cargo  # for shell completion
     cargo-edit
     gdb
-    mold
     scc
     navi # cheat sheet
     haskellPackages.stack
@@ -131,16 +122,6 @@ in
   # programs.tmux.tmuxinator.enable = true;
   home.file.".tmux.conf".source = ln ../config/.tmux.conf;
   home.file.".tmuxinator.yml".source = ln ../config/.tmuxinator.yml;
-
-  home.file.".cargo/config.toml".text = ''
-    [target.x86_64-unknown-linux-gnu]
-    linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
-    rustflags = [
-      "-C", "link-arg=-fuse-ld=${pkgs.mold.outPath}/bin/mold"
-      "-C", "link-arg=-fuse-ld=${pkgs.llvmPackages_latest.lld.outPath}/bin/lld"
-      "-C", "link-arg=-fuse-ld=gold"
-    ]
-  '';
 
   programs.zsh.enable = true;
   programs.zsh.plugins = [

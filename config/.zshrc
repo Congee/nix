@@ -22,10 +22,7 @@
 # At least, in iTerm, `Comamnd: /usr/local/bin/zsh --login' is fast enough
 
 typeset -U PATH MANPATH
-# local LLVM_PATH=/usr/local/opt/llvm/bin
-local LLVM_PATH=/bin
 export GOPATH=$HOME/.go
-# export PATH=$LLVM_PATH:/usr/local/opt/ccache/libexec:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:$HOME/.local/bin:/usr/games
 export PATH=$PATH:$HOME/.cargo/bin:$GOPATH/bin
 # export MANPATH=$MANPATH:/Library/Developer/CommandLineTools/usr/share/man:/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/share/man
 
@@ -44,19 +41,12 @@ export UA_SAFARI='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/60
 export DEFAULT_DNS=1.1.1.1
 
 if [[ $OSTYPE =~ 'darwin*' ]]; then
-  export EDITOR="/usr/local/bin/nvim"
+  export EDITOR=nvim
   stty -ixon  # for some vim mappings (ctrl-s) to wrok
 
-  eval `/usr/libexec/path_helper -s`
   PATH=$(zsh -fc "typeset -TU P=$PATH p; echo \$P")
   export PATH=$PATH:$(xcode-select -p)/usr/bin
-  export MANPATH=$MANPATH:$XCODE_PATH/usr/share/man # FIXME: xcode man path
-  export SLIMERJSLAUNCHER=$HOME/Applications/Firefox.app/Contents/MacOS/firefox
-  export JAVA_HOME=$(/usr/libexec/java_home)
-  export ECLIPSE_HOME=~/Applications/Eclipse.app/Contents/Eclipse
 
-  . /usr/local/opt/fzf/shell/completion.zsh
-  . /usr/local/opt/fzf/shell/key-bindings.zsh
 elif [[ $OSTYPE =~ 'linux*' ]]; then
   export EDITOR=nvim
 
@@ -73,10 +63,6 @@ fi
 
 typeset -U fpath
 fpath=(
-  /usr/local/opt/git/share/zsh/site-functions
-  /usr/local/share/zsh-completions
-  $HOME/.zsh/zsh-completions/src
-  $HOME/.zfunc
   $fpath  # placed at last to be overridden
 )
 
@@ -135,8 +121,6 @@ case $OSTYPE in
   darwin*)
     alias t=trash
     alias ls='ls -G'
-    alias rm=safe-rm
-    alias ical='icalbuddy -f'
     alias eject='diskutil eject'
     alias grep='grep --color=auto'
     alias egrep='egrep --color=auto'
@@ -455,7 +439,6 @@ esac
 # access online help
 unalias run-help 2>/dev/null
 autoload run-help
-export HELPDIR=/usr/local/share/zsh/help
 
 setopt interactivecomments
 setopt AUTO_PUSHD
@@ -554,8 +537,6 @@ add-zsh-hook precmd my_prompt
 
 case $OSTYPE in
   darwin*)
-    . /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-    # . /usr/local/opt/zsh-history-substring-search/zsh-history-substring-search.zsh
     # bindkey '^[[A' history-substring-search-up
     # bindkey '^[[B' history-substring-search-down
     ;;

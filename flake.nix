@@ -8,28 +8,31 @@
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     leetcode-cli.url                    = "path:./packages/leetcode-cli";
     home-manager.url                    = "github:nix-community/home-manager";
+    # home-manager.url                    = "github:Congee/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    darwin.url                          = "github:lnl7/nix-darwin";
+    darwin.inputs.nixpkgs.follows       = "nixpkgs";
   };
 
-  outputs = { self, home-manager, nixpkgs, ... } @ inputs: {
+  outputs = { self, home-manager, darwin, nixpkgs, ... } @ inputs: {
     homeConfigurations = let
       common = {
-        system = "x86_64-linux";
         stateVersion = "21.11";
         username = "cwu";
-        homeDirectory = "/home/cwu";
         extraSpecialArgs = { inherit inputs; };
       };
     in
       {
         desktop = home-manager.lib.homeManagerConfiguration (common // {
+          system = "x86_64-linux";
+	  homeDirectory = "/home/cwu";
           configuration = { pkgs, config, lib, ... }: {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
               inputs.wayland.overlay
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-              inputs.leetcode-cli.overlay.${common.system}
+              inputs.leetcode-cli.overlay."x86_64-linux"
             ];
             imports = [
               ./homes/common.nix
@@ -38,11 +41,13 @@
           };
         });
         wsl = home-manager.lib.homeManagerConfiguration (common // {
+          system = "x86_64-linux";
+	  homeDirectory = "/home/cwu";
           configuration = { pkgs, config, lib, ... }: {
             nixpkgs.overlays = [
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-              inputs.leetcode-cli.overlay.${common.system}
+              inputs.leetcode-cli.overlay."x86_64-linux"
             ];
             imports = [
               ./homes/common.nix
@@ -50,8 +55,30 @@
             ];
           };
         });
+        mac = home-manager.lib.homeManagerConfiguration (common // {
+          system = "aarch64-darwin";
+	  homeDirectory = "/Users/cwu";
+          configuration = { pkgs, config, lib, ... }: {
+            nixpkgs.overlays = [
+              inputs.neovim-nightly.overlay
+              (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+              inputs.leetcode-cli.overlay."aarch64-darwin"
+            ];
+            imports = [
+              ./homes/common.nix
+              ./homes/darwin.nix
+            ];
+          };
+        });
+
       };
     desktop = self.homeConfigurations.desktop.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
+
+    darwinConfigurations.mac = darwin.lib.darwinSystem {
+	system = "aarch64-darwin";
+	modules = [ ./hosts/mac.nix darwin.darwinModules.simple ];
+    };
+    mac = self.darwinConfigurations.mac;
   };
 }
