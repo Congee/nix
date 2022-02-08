@@ -87,7 +87,6 @@ in
     postman
     insomnia
     charles
-    ungoogled-chromium
     dbeaver
     zoom-us
     mpv
@@ -168,6 +167,13 @@ in
     XDG_CURRENT_DESKTOP = "Wayfire";
     XDG_SESSION_TYPE = "wayland";
   };
+
+  programs.chromium.enable = true;
+  programs.chromium.package = pkgs.chromium;
+  programs.chromium.extensions = [
+    { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+    { id = "laankejkbhbdhmipfmgcngdelahlfoji"; }  # stayfocused
+  ];
 
   programs.firefox.enable = true;
   programs.firefox.package = pkgs.firefox-wayland;
