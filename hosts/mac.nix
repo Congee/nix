@@ -8,7 +8,6 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [
-    pkgs.vim
     pkgs.home-manager
   ];
 
@@ -26,6 +25,14 @@
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
+
+  system.keyboard.enableKeyMapping = true;
+  system.keyboard.remapCapsLockToControl = true;
+  system.defaults.dock.autohide = true;
+  system.defaults.dock.show-recents = false;
+  system.defaults.trackpad.TrackpadThreeFingerDrag = true;
+  system.defaults.NSGlobalDomain.InitialKeyRepeat = 25;
+  system.defaults.NSGlobalDomain.KeyRepeat = 2;
 
   # Binary Cache for Haskell.nix
   nix.binaryCachePublicKeys = [

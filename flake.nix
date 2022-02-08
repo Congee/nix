@@ -15,6 +15,7 @@
   };
 
   outputs = { self, home-manager, darwin, nixpkgs, ... } @ inputs: {
+    # home-manager
     homeConfigurations = let
       common = {
         stateVersion = "21.11";
@@ -25,7 +26,7 @@
       {
         desktop = home-manager.lib.homeManagerConfiguration (common // {
           system = "x86_64-linux";
-	  homeDirectory = "/home/cwu";
+          homeDirectory = "/home/cwu";
           configuration = { pkgs, config, lib, ... }: {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
@@ -42,7 +43,7 @@
         });
         wsl = home-manager.lib.homeManagerConfiguration (common // {
           system = "x86_64-linux";
-	  homeDirectory = "/home/cwu";
+          homeDirectory = "/home/cwu";
           configuration = { pkgs, config, lib, ... }: {
             nixpkgs.overlays = [
               inputs.neovim-nightly.overlay
@@ -57,7 +58,7 @@
         });
         mac = home-manager.lib.homeManagerConfiguration (common // {
           system = "aarch64-darwin";
-	  homeDirectory = "/Users/cwu";
+          homeDirectory = "/Users/cwu";
           configuration = { pkgs, config, lib, ... }: {
             nixpkgs.overlays = [
               inputs.neovim-nightly.overlay
@@ -76,8 +77,8 @@
     wsl = self.homeConfigurations.wsl.activationPackage;
 
     darwinConfigurations.mac = darwin.lib.darwinSystem {
-	system = "aarch64-darwin";
-	modules = [ ./hosts/mac.nix darwin.darwinModules.simple ];
+      system = "aarch64-darwin";
+      modules = [ ./hosts/mac.nix ];
     };
     mac = self.darwinConfigurations.mac;
   };
