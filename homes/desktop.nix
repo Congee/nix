@@ -16,6 +16,10 @@ in
 {
   home.enableNixpkgsReleaseCheck = false;
   home.packages = with pkgs; [
+    # NixOS has been pinned to 21.11 which has nix of 2.3.16. That version has
+    # an issue with zsh-completion
+    nix
+
     # wayland
     waybar
     wayfire
