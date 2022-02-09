@@ -9,6 +9,7 @@
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [
     pkgs.home-manager
+    pkgs.mpv
   ];
 
   # Use a custom configuration.nix location.

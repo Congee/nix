@@ -46,6 +46,7 @@ if [[ $OSTYPE =~ 'darwin*' ]]; then
 
   PATH=$(zsh -fc "typeset -TU P=$PATH p; echo \$P")
   export PATH=$PATH:$(xcode-select -p)/usr/bin
+  eval "$(/opt/homebrew/bin/brew shellenv)"
 
 elif [[ $OSTYPE =~ 'linux*' ]]; then
   export EDITOR=nvim
@@ -533,17 +534,6 @@ my_prompt() {
 
 # $GITSTATUS_PROMPT is set by gitstatus prior to my_prompt
 add-zsh-hook precmd my_prompt
-
-
-case $OSTYPE in
-  darwin*)
-    # bindkey '^[[A' history-substring-search-up
-    # bindkey '^[[B' history-substring-search-down
-    ;;
-  *)
-    ;;
-esac
-# }}}
 
 # {{{ profiling
 # turn off tracing

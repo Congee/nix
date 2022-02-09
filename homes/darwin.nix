@@ -11,6 +11,7 @@ in
   home.packages = with pkgs; [
     alacritty
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
+    mtr
   ];
 
   fonts.fontconfig.enable = true;
