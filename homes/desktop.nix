@@ -131,9 +131,9 @@ in
     [target.x86_64-unknown-linux-gnu]
     linker = "${pkgs.llvmPackages_latest.clang.outPath}/bin/clang"
     rustflags = [
-      "-C", "link-arg=-fuse-ld=${pkgs.mold.outPath}/bin/mold"
-      "-C", "link-arg=-fuse-ld=${pkgs.llvmPackages_latest.lld.outPath}/bin/lld"
-      "-C", "link-arg=-fuse-ld=gold"
+      "-C", "link-arg=-fuse-ld=${pkgs.mold.outPath}/bin/mold",
+      # "-C", "link-arg=-fuse-ld=${pkgs.llvmPackages_latest.lld.outPath}/bin/lld",
+      # "-C", "link-arg=-fuse-ld=gold",
     ]
   '';
 
