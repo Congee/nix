@@ -22,4 +22,5 @@ in
   home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.mac.yml;
 
   home.file.".zprofile".source = ln ../config/.zprofile;
+  home.file.".zshrc.mac".source = ln ../config/.zshrc.mac;
 }

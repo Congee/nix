@@ -47,6 +47,8 @@ if [[ $OSTYPE =~ 'darwin*' ]]; then
   PATH=$(zsh -fc "typeset -TU P=$PATH p; echo \$P")
   export PATH=$PATH:$(xcode-select -p)/usr/bin
   eval "$(/opt/homebrew/bin/brew shellenv)"
+  # TODO: split this .zshrc into multiple ones by platform
+  [ -f $HOME/.zshrc.mac ] && source $HOME/.zshrc.mac
 
 elif [[ $OSTYPE =~ 'linux*' ]]; then
   export EDITOR=nvim

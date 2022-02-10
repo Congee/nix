@@ -96,12 +96,17 @@ in
     clang-tools
     stylua
 
-    docker-compose
+    rancher
+    # -- Already provided by Rancher Desktop
+    # lima
+    # kubernetes
+    kubernetes-helm  # kept for zsh-completion
     kubectl
-    kubernetes
-    kubernetes-helm
-    k3s
-    kube3d
+    kubectl-tree
+    # docker
+    # docker-compose
+
+    earthly
     pulumi-bin
 
     tmate
