@@ -20,6 +20,14 @@
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
+  nix = {
+     extraOptions = ''
+       experimental-features = nix-command flakes
+       keep-outputs = true
+       keep-derivations = true
+     '';
+  };
+
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina
 
