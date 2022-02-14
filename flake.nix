@@ -6,7 +6,6 @@
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
-    leetcode-cli.url                    = "path:./packages/leetcode-cli";
     home-manager.url                    = "github:nix-community/home-manager";
     # home-manager.url                    = "github:Congee/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -33,7 +32,6 @@
               inputs.wayland.overlay
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-              inputs.leetcode-cli.overlay."x86_64-linux"
             ];
             imports = [
               ./homes/common.nix
@@ -48,7 +46,6 @@
             nixpkgs.overlays = [
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-              inputs.leetcode-cli.overlay."x86_64-linux"
             ];
             imports = [
               ./homes/common.nix
@@ -63,7 +60,6 @@
             nixpkgs.overlays = [
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-              inputs.leetcode-cli.overlay."aarch64-darwin"
             ];
             imports = [
               ./homes/common.nix
