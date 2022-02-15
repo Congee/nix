@@ -95,6 +95,7 @@ local plugins = function(use, use_rocks)
     use {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
+            require('indent_blankline').setup { use_treesitter = true };
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
             vim.g.indent_blankline_char = '│';
 
@@ -582,6 +583,7 @@ local plugins = function(use, use_rocks)
                 textobjects = {
                     select = {
                         enable = true,
+                        lookahead = true,
                         keymaps = {
                             ["af"] = "@function.outer",
                             ["if"] = "@function.inner",
