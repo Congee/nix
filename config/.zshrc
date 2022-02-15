@@ -62,6 +62,9 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
   export AWS_VAULT_BACKEND=pass
   alias vault=aws-vault
 
+  alias patchld="cat $NIX_CC/nix-support/dynamic-linker"
+  # nix build --impure --expr 'with import (builtins.getFlake "nixpkgs") { }; callPackage ./default.nix { inherit (pkgs) Security; }'
+
 fi
 
 typeset -U fpath
