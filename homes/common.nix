@@ -106,6 +106,10 @@ in
     # docker
     # docker-compose
 
+    flac
+    shntool
+    cuetools
+
     earthly
     pulumi-bin
 
