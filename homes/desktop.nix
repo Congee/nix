@@ -62,6 +62,7 @@ in
     ltrace
     weechat
     mold
+    gcc
 
     wavemon  # wifi signal strength
     pciutils  # lspci

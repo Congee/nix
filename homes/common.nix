@@ -37,7 +37,6 @@ in
     fd
     ripgrep
     croc
-    gcc
     unzip
     binutils  # ar for libluajit.a
     sumneko-lua-language-server

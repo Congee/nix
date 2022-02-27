@@ -10,6 +10,7 @@ in
 
   home.packages = with pkgs; [
     xvfb-run
+    gcc
   ];
 
   home.file.".zprofile".source = ln ../config/.zprofile;
