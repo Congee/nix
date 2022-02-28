@@ -45,7 +45,7 @@ in
     socat
     ccache
     bind  # dig
-    racket-minimal
+    racket
     python3
     nodejs
     yarn
