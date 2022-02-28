@@ -12,6 +12,7 @@ in
     alacritty
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     mtr
+    mas
   ];
 
   fonts.fontconfig.enable = true;
