@@ -437,6 +437,7 @@ local plugins = function(use, use_rocks)
                 'coc-pyright',
                 'coc-metals',
                 'coc-json',
+                'coc-syntax',
                 'coc-clangd',
                 'coc-sh',
                 'coc-html',
