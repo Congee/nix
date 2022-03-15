@@ -5,7 +5,9 @@
 { config, pkgs, ... }:
 
 let
-  linuxPackages = pkgs.linuxPackages_xanmod;
+  # xanmod has a problem with CGROUP_SCHED for k3s. Will switch back to xanmod
+  # in 21.11
+  linuxPackages = pkgs.linuxPackages_latest;
 in
 {
   imports =
@@ -143,10 +145,16 @@ in
 
   networking.firewall.enable = true;
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 5900 ];  # vnc. why doesn't it work?
+  networking.firewall.allowedTCPPorts = [
+    5900  # vnc. why doesn't it work?
+    6443  # k3s
+  ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
 
+  services.k3s.enable = true;
+  # services.k3s.extraFlags = "--kubelet-arg=cgroup-driver=none";
+  # systemd.enableUnifiedCgroupHierarchy = true;
   virtualisation.docker.enable = true;
   virtualisation.waydroid.enable = true;
 }

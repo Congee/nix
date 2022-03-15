@@ -72,6 +72,8 @@ in
     tlaplus
     tlaplusToolbox
 
+    nerdctl
+
     wl-clipboard
     goldendict
     evolution

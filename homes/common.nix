@@ -102,8 +102,6 @@ in
     kubernetes-helm  # kept for zsh-completion
     kubectl
     kubectl-tree
-    # docker
-    # docker-compose
 
     flac
     shntool
