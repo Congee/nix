@@ -108,6 +108,7 @@ local plugins = function(use, use_rocks)
             vim.cmd('hi! link IndentBlanklineSpaceChar Normal')
         end,
     }
+    use "fladson/vim-kitty"  -- syntax highlighting for kitty cnofig
     use {
         'olimorris/onedarkpro.nvim',
         config = function()
