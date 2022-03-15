@@ -146,7 +146,7 @@ in
       file = "zsh-completions.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/zsh-users/zsh-completions";
-        rev = "9dfd5c667072a9aef13a237fe3c3cc857ca9917f";
+        rev = "55d07cc57750eb90f8b02be3ddf42c206ecf17b1";
       };
     }
     {
@@ -154,7 +154,7 @@ in
       file = "forgit.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/wfxr/forgit";
-        rev = "2db37aa4ecc94e41247a0eecb1b11896fa25cded";
+        rev = "e0d3552d4597f42c5c965daa5abd79845990f63a";
       };
     }
     {
@@ -162,7 +162,7 @@ in
       file = "gitstatus.prompt.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/romkatv/gitstatus";
-        rev = "96b520b248ca872646e27b3df4535898356e4637";
+        rev = "6dc0738c0e5199b0ae47d9693874e7d43c7f8f29";
       };
     }
     {
