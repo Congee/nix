@@ -65,6 +65,7 @@ elif [[ $OSTYPE =~ 'linux*' ]]; then
   alias patchld="cat $NIX_CC/nix-support/dynamic-linker"
   # nix build --impure --expr 'with import (builtins.getFlake "nixpkgs") { }; callPackage ./default.nix { inherit (pkgs) Security; }'
 
+  [ -f $HOME/.zshrc.linux ] && source $HOME/.zshrc.linux
 fi
 
 typeset -U fpath
