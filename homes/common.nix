@@ -78,6 +78,7 @@ in
     cargo  # for shell completion
     cargo-edit
     cargo-download  # download .crate files
+    rust-analyzer
     gdb
     scc
     navi # cheat sheet

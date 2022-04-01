@@ -458,6 +458,10 @@ local plugins = function(use, use_rocks)
             -- need to dynamically evaluate $JAVA_HOME:
             -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
             vim.fn["coc#config"]('ltex.java.path', vim.env.JAVA_HOME);
+            vim.fn["coc#config"](
+                'rust-analyzer.server.path',
+                vim.env.HOME .. '/.nix-profile/bin/rust-analyzer'
+            );
         end,
     }
     use {
