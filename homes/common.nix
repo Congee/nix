@@ -129,6 +129,7 @@ in
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+  programs.direnv.enableZshIntegration = true;
 
   home.file.".snclirc".source = ln ../config/.snclirc;
 
