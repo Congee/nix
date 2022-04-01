@@ -13,6 +13,7 @@ in
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     mtr
     mas
+    buildkit
   ];
 
   fonts.fontconfig.enable = true;
