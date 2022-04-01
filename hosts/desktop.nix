@@ -89,6 +89,7 @@ in
   environment.systemPackages = with pkgs; [
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
+    nixos-option
   ];
   programs.adb.enable = true;
 
