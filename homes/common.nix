@@ -33,6 +33,7 @@ in
     gnumake
     moreutils # sponge
     jq
+    yq
     tree
     fd
     ripgrep
@@ -100,9 +101,11 @@ in
     # -- Already provided by Rancher Desktop
     # lima
     # kubernetes
+    # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
     kubectl
     kubectl-tree
+    sops age rage ssh-to-age
 
     flac
     shntool

@@ -423,6 +423,7 @@ local plugins = function(use, use_rocks)
         requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
     }
 
+    use { 'towolf/vim-helm' }
     use {
         'neoclide/coc.nvim',
         run = 'yarn install --frozen-lockfile',
@@ -544,7 +545,7 @@ local plugins = function(use, use_rocks)
                 },
                 highlight = {
                     enable = true,
-                    disable = {"cpp", "bash", "python", "typescript", "go"}
+                    disable = {"cpp", "bash", "python", "typescript", "go", "yaml"}
                 },
                 indent = {
                     enable = false,

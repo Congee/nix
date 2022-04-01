@@ -48,6 +48,9 @@
                 "scheme",
                 "racket"
             ]
+        },
+        "yaml.schemas": {
+            "filetypes": ["yaml"]
         }
     },
     "rust-analyzer.updates.channel": "stable",
