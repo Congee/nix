@@ -27,6 +27,8 @@ in
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
 
+    difftastic
+    delta
     expect
     man-pages
     pandoc
@@ -68,6 +70,7 @@ in
     rnix-lsp
     nix-index
     nix-tree
+    nix-diff  # diff .drv files
     patchelf
     lsof
     xh
@@ -228,7 +231,7 @@ in
 
   programs.bat.enable = true;
   programs.bat.config = {
-    theme = "TwoDark";
+    theme = "DarkNeon";
     style = "plain";
   };
 
