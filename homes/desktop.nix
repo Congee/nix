@@ -99,7 +99,15 @@ in
     mpv
 
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
-    openvpn  # depends on services.resolved.enable = true
+    # depends on services.resolved.enable = true
+    (openvpn.overrideAttrs (_: rec {
+      patches = [
+        (fetchpatch {
+          url = "https://raw.githubusercontent.com/samm-git/aws-vpn-client/master/openvpn-v2.5.1-aws.patch";
+          sha256 = "sha256-9ijhANqqWXVPa00RBCRACtMIsjiBqYVa91V62L4mNas=";
+        })
+      ];
+    }))
 
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
     droidcam
