@@ -100,16 +100,15 @@ alias cp='cp -i'
 alias ll='ls -l'
 alias mv='mv -i'
 alias vi=nvim
+alias k=kubectl
 alias sudo='sudo '
 alias mux=tmuxinator
 alias tree='tree -C'
 alias less='less -R'
 alias more='more -R'
-alias cask='brew cask'
 alias gdb="gdb --silent"
 alias curl='noglob curl'
 alias pip3='noglob python3 -m pip'
-alias pip2='noglob python -m pip'
 alias youtube-dl='noglob youtube-dl'
 alias p4="ping $DEFAULT_DNS"
 alias man='LANG=en_US.UTF-8 man'
@@ -119,7 +118,6 @@ alias ipython='ipython --profile=common'
 alias hp='http_proxy=http://127.0.0.1:8123'
 alias pyinstrument='python3 -m pyinstrument'
 alias pylab='ipython --profile=common --pylab'
-alias smc=/Applications/smcFanControl.app/Contents/Resources/smc
 alias highlight='highlight --out-format=xterm256 --style=molokai --tab=2'
 alias urlquote='python -c "import urllib, sys; print urllib.quote(sys.argv[1])"'
 alias urlunquote='python -c "import urllib, sys; print urllib.unquote(sys.argv[1])"'
@@ -137,6 +135,7 @@ case $OSTYPE in
     alias tempmonitor='tempmonitor -c -a -l'
     alias lsusb='system_profiler SPUSBDataType'
     alias shuf="perl -MList::Util=shuffle -e 'print shuffle <>'"
+    alias smc=/Applications/smcFanControl.app/Contents/Resources/smc
     alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
     alias airport=/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport
     alias debugserver=/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources/debugserver
