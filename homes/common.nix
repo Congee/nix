@@ -108,6 +108,7 @@ in
     kubernetes-helm  # kept for zsh-completion
     kubectl
     kubectl-tree
+    kompose
     sops age rage ssh-to-age
 
     flac

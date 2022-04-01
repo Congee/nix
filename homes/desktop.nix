@@ -73,6 +73,7 @@ in
     tlaplusToolbox
 
     nerdctl
+    buildkit
 
     wl-clipboard
     goldendict
