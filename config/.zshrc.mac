@@ -10,4 +10,11 @@ function nerdctl() {
 
     "${__nerdctl}" "$@"
 }
+
+wifi-password() {
+    local ssid=$(airport -I | grep -w SSID | awk '{print $2}')
+    local password=$(security find-generic-password -ga "${ssid}" 2>&1 1>/dev/null | cut -d'"' -f2)
+    echo $password
+}
+
 # vi: ft=zsh
