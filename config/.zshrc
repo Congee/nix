@@ -323,6 +323,11 @@ title() {
   echo -n -e "\033]0;$title\007"
 }
 
+fzf-store() {
+  fd . /nix/store --max-depth=1 --min-depth=1 --type=directory | \
+    fzf -m --preview-window right:50% --preview 'nix-store -q --tree {}'
+}
+
 ptpython() {
   command ptpython $@;
   local ret=$?
@@ -342,7 +347,7 @@ undozip() {
 }
 
 taobao_ip () {
-  #INTERNEL_IP=$(ifconfig en0 inet | fgrep inet | cut -d' ' -f2) 
+  #INTERNEL_IP=$(ifconfig en0 inet | fgrep inet | cut -d' ' -f2)
   INTERNEL_IP=$(ipconfig getifaddr en0)
   echo INTERNEL_IP="${INTERNEL_IP}"
   EXTERNEL_IP_INFO=$(
