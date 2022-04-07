@@ -272,11 +272,7 @@ local plugins = function(use, use_rocks)
             vim.g.mkdp_open_ip = 'localhost'
 
             -- wsl2
-            local file = io.open('/proc/sys/kernel/osrelease', 'r')
-            local is_wsl2 = file:read():find('microsoft')
-            file:close()
-
-            if is_wsl2 then
+            if vim.fn.has('wsl') then
               vim.cmd([[
                 function! g:OpenBrowser(url)
                   silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
