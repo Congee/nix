@@ -2,6 +2,7 @@
   description = "home-mamager";
 
   inputs = {
+    nur.url                             = "github:nix-community/NUR";
     utils.url                           = "github:numtide/flake-utils";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
@@ -29,6 +30,7 @@
           configuration = { pkgs, config, lib, ... }: {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
+              inputs.nur.overlay
               inputs.wayland.overlay
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
@@ -44,6 +46,7 @@
           homeDirectory = "/home/cwu";
           configuration = { pkgs, config, lib, ... }: {
             nixpkgs.overlays = [
+              inputs.nur.overlay
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
@@ -58,6 +61,7 @@
           homeDirectory = "/Users/cwu";
           configuration = { pkgs, config, lib, ... }: {
             nixpkgs.overlays = [
+              inputs.nur.overlay
               inputs.neovim-nightly.overlay
               (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];

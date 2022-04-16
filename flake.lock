@@ -195,12 +195,28 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1650133543,
+        "narHash": "sha256-R2pv+bT/KUx4lOiFPNMZcvJ7RjQx/kdeCblXTmWgklA=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "6c0e830c84b46f75028b3dfeaeb0eff469928a55",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
         "neovim-nightly": "neovim-nightly",
         "nixpkgs": "nixpkgs_2",
+        "nur": "nur",
         "utils": "utils",
         "wayland": "wayland"
       }

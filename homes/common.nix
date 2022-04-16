@@ -27,6 +27,9 @@ in
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
 
+    nur.repos.congee.devspace
+    nur.repos.congee.kim
+
     difftastic
     delta
     expect
