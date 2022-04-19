@@ -63,6 +63,7 @@ in
     weechat
     mold
     gcc
+    bind  # dig
 
     wavemon  # wifi signal strength
     pciutils  # lspci

@@ -16,6 +16,7 @@ in
     buildkit
     pinentry_mac nur.pinentry-touchid
     nur.pam-reattach
+    (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
   ];
 
   fonts.fontconfig.enable = true;

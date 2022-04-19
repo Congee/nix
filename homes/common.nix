@@ -51,7 +51,6 @@ in
     luajitPackages.luarocks
     socat
     ccache
-    bind  # dig
     racket
     python3
     nodejs
@@ -67,6 +66,8 @@ in
     gti
     cmatrix
     cowsay
+    lolcat
+    doge
     fortune
     file
     zip
@@ -104,6 +105,7 @@ in
     clang-tools
     stylua
 
+    hadolint  # lint Dockerfile
     rancher
     # -- Already provided by Rancher Desktop
     # lima

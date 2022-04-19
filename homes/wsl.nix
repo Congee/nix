@@ -11,6 +11,7 @@ in
   home.packages = with pkgs; [
     xvfb-run
     gcc
+    bind  # dig
   ];
 
   home.file.".zprofile".source = ln ../config/.zprofile;
