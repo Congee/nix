@@ -425,10 +425,6 @@ case $OSTYPE in
 
   anybar() { echo -n $1 | nc -4u -w0 localhost ${2:-1738}; }
 
-  show_active_interface() {
-    scutil --nwi | sed -n 3p
-  }
-
   openedfiles() {
     sudo dtrace -n 'syscall::open*:entry { printf("%s %s",execname,copyinstr(arg0)); }'
   }

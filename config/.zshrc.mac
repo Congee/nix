@@ -17,8 +17,11 @@ wifi-password() {
     echo $password
 }
 
-show_user_uuid() {
-    dscl . -read $HOME GeneratedUID | cut -d' ' -f2
+show-user-uuid() {
+    dscl . read $HOME GeneratedUID | cut -d' ' -f2
 }
 
+show-active-interface() {
+    scutil --nwi | rg '^Network interfaces' | cut -d' ' -f3
+}
 # vi: ft=zsh
