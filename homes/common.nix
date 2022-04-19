@@ -2,6 +2,7 @@
 
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
+  nur = pkgs.nur.repos.congee;
 in
 {
   # Home Manager needs a bit of information about you and the
@@ -27,8 +28,8 @@ in
     (callPackage ../packages/sncli {})
     (callPackage ../packages/hydra {})
 
-    nur.repos.congee.devspace
-    nur.repos.congee.kim
+    nur.devspace
+    nur.kim
 
     difftastic
     delta
@@ -139,7 +140,13 @@ in
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;
   # programs.tmux.tmuxinator.enable = true;
-  home.file.".tmux.conf".source = ln ../config/.tmux.conf;
+  home.file.".tmux.conf".text = with pkgs;
+  (builtins.readFile ../config/.tmux.conf) + lib.optionalString stdenv.isDarwin
+  ''
+    # Make pam_tid.so work in tmux
+    __helper="${nur.pam-reattach}/bin/reattach-to-session-namespace";
+    set-option -g default-command "$__helper zsh"
+  '';
   home.file.".tmuxinator.yml".source = ln ../config/.tmuxinator.yml;
 
   programs.zsh.enable = true;

@@ -2,6 +2,7 @@
 
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
+  nur = pkgs.nur.repos.congee;
 in
 {
   imports = [
@@ -9,11 +10,12 @@ in
   ];
 
   home.packages = with pkgs; [
-    alacritty
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     mtr
     mas
     buildkit
+    pinentry_mac nur.pinentry-touchid
+    nur.pam-reattach
   ];
 
   fonts.fontconfig.enable = true;
@@ -26,10 +28,6 @@ in
     include ${ln ../config/kitty.conf}
   '';
   # home.file.".config/kitty/kitty.conf".source = ln "${config.home.homeDirectory}/.nix/config/kitty.conf";
-
-  programs.alacritty.enable = true;
-  programs.alacritty.package = pkgs.alacritty;
-  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.mac.yml;
 
   home.file.".zprofile".source = ln ../config/.zprofile;
   home.file.".zshrc.mac".source = ln ../config/.zshrc.mac;
