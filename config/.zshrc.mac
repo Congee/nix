@@ -17,4 +17,8 @@ wifi-password() {
     echo $password
 }
 
+show_user_uuid() {
+    dscl . -read $HOME GeneratedUID | cut -d' ' -f2
+}
+
 # vi: ft=zsh
