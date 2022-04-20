@@ -19,6 +19,11 @@ in
     (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
   ];
 
+  home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    # The system ncurses 5.7 is too old to have terminfo of tmux-256color
+    zsh -c '/usr/bin/tic -x =("${pkgs.ncurses}/bin/infocmp" -x tmux-256color)'
+  '';
+
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
 
