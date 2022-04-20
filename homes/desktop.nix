@@ -99,6 +99,7 @@ in
     dbeaver
     zoom-us
     mpv
+    (writeScriptBin "whereami" ''${geoclue2}/libexec/geoclue-2.0/demos/where-am-i "$@"'')
 
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     # depends on services.resolved.enable = true

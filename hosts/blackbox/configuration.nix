@@ -111,13 +111,13 @@ in
   services.avahi.publish.addresses = true;
   services.avahi.publish.userServices = true;
   services.geoclue2.enable = true;
-  # services.geoclue2.appConfig = {
-  #   "yo.congee.me" = {
-  #     isAllowed = true;
-  #     isSystem = false;
-  #     users = [ "1000" ];
-  #   };
-  # };
+  services.geoclue2.appConfig = {
+    "geoclue-where-am-i" = {
+      isAllowed = true;
+      isSystem = false;
+      users = [ "1000" ];
+    };
+  };
 
   services.greetd.enable = true;
   services.greetd.settings = {
