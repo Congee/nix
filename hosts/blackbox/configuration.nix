@@ -135,6 +135,9 @@ in
   security.pam.services.greetd.sshAgentAuth = true;
   security.pam.enableSSHAgentAuth = true;
 
+  security.tpm2.enable = true;
+  security.tpm2.abrmd.enable = true;
+
   # List services that you want to enable:
   security.rtkit.enable = true;
   services.pipewire.enable = true;

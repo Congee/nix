@@ -80,6 +80,11 @@
     nixosConfigurations.blackbox = nixos.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
+        {
+          nixpkgs.overlays = [
+            (_: prev: { gnupg = nixpkgs.legacyPackages.${prev.system}.gnupg; })
+          ];
+        }
         ./hosts/blackbox/configuration.nix
       ];
       specialArgs = { inherit inputs; };
