@@ -35,6 +35,40 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  homebrew.enable = true;  # still have to manually install homebrew
+  homebrew.casks = [
+    "adobe-acrobat-reader"
+    "aldente"
+    "aws-vpn-client"
+    "dbeaver-community"
+    "dozer"
+    "firefox"
+    "itsycal"
+    "lx-music"
+    "musicbrainz-picard"
+    "rancher"
+    "rectangle"
+    "secretive"
+    "sekey"
+    "spotify"
+    "stats"
+    "tunnelblick"
+    "zoom"
+  ];
+  # This is painfully slow
+  homebrew.masApps = (if true then { } else {
+    "Bible Study" = 472790630;
+    Bitwarden     = 1352778147;
+    EuDic         = 434350458;
+    GIF           = 1081413713;
+    GarageBand    = 682658836;
+    Gifski        = 1351639930;
+    OneDrive      = 823766827;
+    QQ            = 451108668;
+    Telegram      = 747648890;
+    WeChat        = 836500024;
+  });
+
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
   system.defaults.dock.autohide = true;
