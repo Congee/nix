@@ -5,6 +5,7 @@
     nur.url                             = "github:nix-community/NUR";
     utils.url                           = "github:numtide/flake-utils";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-21.11";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
@@ -14,7 +15,7 @@
     darwin.inputs.nixpkgs.follows       = "nixpkgs";
   };
 
-  outputs = { self, home-manager, darwin, nixpkgs, ... } @ inputs: {
+  outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
     # home-manager
     homeConfigurations = let
       common = {
@@ -75,6 +76,14 @@
       };
     desktop = self.homeConfigurations.desktop.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
+
+    nixosConfigurations.blackbox = nixos.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./hosts/blackbox/configuration.nix
+      ];
+      specialArgs = { inherit inputs; };
+    };
 
     darwinConfigurations.mac = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
