@@ -25,9 +25,8 @@ in
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     leetcode-cli
-    (callPackage ../packages/sncli {})
-    (callPackage ../packages/hydra {})
 
+    nur.sncli
     nur.devspace
     nur.kim
 
