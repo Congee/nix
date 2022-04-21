@@ -15,7 +15,7 @@
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --boundary
     co = checkout
     meh = commit --amend --no-edit
-    frebase = !"git rebase --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
+    frebase = !"git rebase --committer-date-is-author-date --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
     lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
     cmp = log --left-right --graph --oneline --cherry
     cp = cherry-pick
