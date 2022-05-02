@@ -13,8 +13,8 @@ function nerdctl() {
 
 wifi-password() {
     local ssid=$(airport -I | grep -w SSID | awk '{print $2}')
-    local password=$(security find-generic-password -ga "${ssid}" 2>&1 1>/dev/null | cut -d'"' -f2)
-    echo $password
+    local password=$(security find-generic-password -ga "${ssid}" 2>&1 1>/dev/null | grep "^password:" | cut -d'"' -f2)
+    printf '{"ssid": "%s", "password": "%s}\n' "$ssid" "$password"
 }
 
 show-user-uuid() {
