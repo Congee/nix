@@ -71,10 +71,12 @@ in
     file
     zip
     p7zip
+    nixfmt
     rnix-lsp
     nix-index
     nix-tree
     nix-diff  # diff .drv files
+    statix  # nix linter
     patchelf
     lsof
     xh
