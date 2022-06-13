@@ -5,8 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  # xanmod has a problem with CGROUP_SCHED for k3s. Will switch back to xanmod
-  # in 21.11
+  # xanmod has a problem with cgroups for k3s
   linuxPackages = pkgs.linuxPackages_latest;
 in
 {
@@ -138,6 +137,8 @@ in
   security.tpm2.enable = true;
   security.tpm2.abrmd.enable = true;
 
+  services.pcscd.enable = true;  # smart card
+
   # List services that you want to enable:
   security.rtkit.enable = true;
   services.pipewire.enable = true;
@@ -157,8 +158,8 @@ in
   # Or disable the firewall altogether.
 
   services.k3s.enable = true;
-  # services.k3s.extraFlags = "--kubelet-arg=cgroup-driver=none";
-  # systemd.enableUnifiedCgroupHierarchy = true;
   virtualisation.docker.enable = true;
+  virtualisation.docker.rootless.enable = true;
+  virtualisation.docker.rootless.setSocketVariable = true;
   virtualisation.waydroid.enable = true;
 }
