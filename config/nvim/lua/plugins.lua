@@ -520,10 +520,23 @@ local plugins = function(use, use_rocks)
     }
     use {'voldikss/vim-floaterm'}
     use {
-        "rcarriga/vim-ultest",
-        requires = {"vim-test/vim-test", 'mfussenegger/nvim-dap'},
-        run = ":UpdateRemotePlugins",
-        config = function() vim.g['test#strategy'] = 'floaterm' end
+        "nvim-neotest/neotest",
+        requires = {
+            "nvim-neotest/neotest-python",
+            "nvim-neotest/neotest-vim-test",
+            "nvim-treesitter/nvim-treesitter",
+            "antoinemadec/FixCursorHold.nvim"
+        },
+        config = function()
+            require('neotest').setup({
+                adapters = {
+                    require('neotest-python')({}),
+                    require('neotest-vim-test')({
+                        ignore_file_types = {"python", "vim"}
+                    }),
+                }
+            });
+        end
     }
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     use {'numirias/semshi', run = ':UpdateRemotePlugins'}
