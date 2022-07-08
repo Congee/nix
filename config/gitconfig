@@ -5,9 +5,6 @@
     email = ***REMOVED***
     # signingkey = 3748BEAEB1F5375071D02C32CB1B653DBEB49C43
     signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPBv281aUV+Wzc5ITvWERgzT2830xLNP7tZXIsP1D1aR"
-[color]
-    diff = auto
-    ui = false
 [alias]
     push = push --follow-tags
     authors = shortlog -sn
@@ -29,10 +26,17 @@
     prompt = true
 [mergetool "vimdiff"]
     cmd = nvim -d $BASE $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+[color]
+    diff = auto
+    ui = false
 [difftool]
     prompt = true
 [diff]
     tool = vimdiff
+[delta]
+    features = villsau  # theme of unified view. use "chameleon" for split view
+[include]
+    path = ./themes.gitconfig  # delta diff tool themes
 [core]
     trustctime = false
     ; attributesfile = ~/.gitattributes

@@ -262,8 +262,11 @@ in
 
   programs.git = {
     enable = true;
+    difftastic.enable = true;
+    difftastic.background = "dark";
     includes = [
       { path = ../config/gitconfig; }
+      { path = builtins.toString (builtins.fetchGit https://github.com/dandavison/delta) + "/themes.gitconfig"; }
     ];
     attributes = lib.splitString "\n" (builtins.readFile ../config/gitattributes);
   };
