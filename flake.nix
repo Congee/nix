@@ -17,63 +17,53 @@
 
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
     # home-manager
-    homeConfigurations = let
-      common = {
-        stateVersion = "21.11";
-        username = "cwu";
-        extraSpecialArgs = { inherit inputs; };
-      };
-    in
-      {
-        desktop = home-manager.lib.homeManagerConfiguration (common // {
-          system = "x86_64-linux";
-          homeDirectory = "/home/cwu";
-          configuration = { pkgs, config, lib, ... }: {
+    homeConfigurations = {
+      desktop = home-manager.lib.homeManagerConfiguration ({
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          ./homes/common.nix
+          ./homes/desktop.nix
+          {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
               inputs.nur.overlay
               inputs.wayland.overlay
               inputs.neovim-nightly.overlay
-              (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
-            imports = [
-              ./homes/common.nix
-              ./homes/desktop.nix
-            ];
-          };
-        });
-        wsl = home-manager.lib.homeManagerConfiguration (common // {
-          system = "x86_64-linux";
-          homeDirectory = "/home/cwu";
-          configuration = { pkgs, config, lib, ... }: {
-            nixpkgs.overlays = [
-              inputs.nur.overlay
-              inputs.neovim-nightly.overlay
-              (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-            ];
-            imports = [
-              ./homes/common.nix
-              ./homes/wsl.nix
-            ];
-          };
-        });
-        mac = home-manager.lib.homeManagerConfiguration (common // {
-          system = "aarch64-darwin";
-          homeDirectory = "/Users/cwu";
-          configuration = { pkgs, config, lib, ... }: {
-            nixpkgs.overlays = [
-              inputs.nur.overlay
-              inputs.neovim-nightly.overlay
-              (final: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
-            ];
-            imports = [
-              ./homes/common.nix
-              ./homes/darwin.nix
-            ];
-          };
-        });
+          }
+        ];
 
-      };
+      });
+      wsl = home-manager.lib.homeManagerConfiguration ({
+        pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        modules = [
+          ./homes/common.nix
+          ./homes/wsl.nix
+          {
+            nixpkgs.overlays = [
+              inputs.nur.overlay
+              inputs.neovim-nightly.overlay
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+            ];
+          }
+        ];
+      });
+      mac = home-manager.lib.homeManagerConfiguration ({
+        pkgs = nixpkgs.legacyPackages."aarch64-darwin";
+        modules = [
+          ./homes/common.nix
+          ./homes/darwin.nix
+          {
+            nixpkgs.overlays = [
+              inputs.nur.overlay
+              inputs.neovim-nightly.overlay
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+            ];
+          }
+        ];
+      });
+    };
     desktop = self.homeConfigurations.desktop.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
 
