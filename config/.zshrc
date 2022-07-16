@@ -9,6 +9,7 @@
 #
 # {{{ profiling
 # zmodload zsh/datetime
+# zmodload zsh/zprof
 # PS4='+$EPOCHREALTIME %N:%i> '
 # exec 3>&2 2>/tmp/zsh_profiling-$$.log
 # setopt xtrace promptsubst
@@ -542,6 +543,7 @@ my_prompt() {
 add-zsh-hook precmd my_prompt
 
 # {{{ profiling
+# zprof
 # turn off tracing
 #unsetopt xtrace
 # restore stderr to the value saved in FD 3
