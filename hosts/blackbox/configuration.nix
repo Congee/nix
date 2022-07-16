@@ -153,6 +153,7 @@ in
   networking.firewall.allowedTCPPorts = [
     5900  # vnc. why doesn't it work?
     6443  # k3s
+    10250 # k3s metrics-server
   ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
