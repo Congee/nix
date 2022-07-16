@@ -416,6 +416,7 @@ local plugins = function(use, use_rocks)
         config = function() require('eviline') end,
         requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
     }
+    use 'vimpostor/vim-tpipeline'  -- move vim statusline into tmux statsline
 
     use { 'towolf/vim-helm' }
     use {

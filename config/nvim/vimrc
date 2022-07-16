@@ -16,6 +16,7 @@ set colorcolumn=80
 highlight CursorLine guibg=#303030
 highlight VertSplit  guibg=#303030
 if has("mac") | hi Normal guibg=None | endif  " background transparency
+set cmdheight=0
 set shiftwidth=4
 set softtabstop=4
 set expandtab
