@@ -1,5 +1,5 @@
 function nerdctl() {
-    local __nerdctl='/Applications/Rancher Desktop.app/Contents/Resources/resources/darwin/bin/nerdctl'
+    local __nerdctl="$HOME/.rd/bin/nerdctl"
 
     # XXX: should I put it in ~/.zsh/functions of $fpath?
     if ! typeset -f _nerdctl > /dev/null; then
