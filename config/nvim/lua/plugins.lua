@@ -447,6 +447,7 @@ local plugins = function(use, use_rocks)
                 'coc-cmake',
                 'coc-tailwindcss',
                 'coc-xml',
+                'coc-go',
             }
             vim.g.coc_default_semantic_highlight_groups = 1
             -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we

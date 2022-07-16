@@ -63,6 +63,7 @@
     "coc.preferences.extensionUpdateCheck": "weekly",
     "markdown-preview-enhanced.usePandocParser": true,
     "Lua.diagnostics.globals": ["vim"],
+    "Lua.telemetry.enable": true,
     "suggest.removeDuplicateItems": true,
     "explorer.icon.enableNerdfont": true,
     "explorer.icon.source": "nvim-web-devicons",
