@@ -229,10 +229,8 @@ local plugins = function(use, use_rocks)
         end,
     }
     use {
-        'blackCauldron7/surround.nvim',
-        config = function()
-            require"surround".setup {mappings_style = "surround"}
-        end
+        'kylechui/nvim-surround',
+        config = function() require('nvim-surround').setup({}) end
     }
     use 'junegunn/vim-easy-align'
     use 'junegunn/vim-peekaboo'
