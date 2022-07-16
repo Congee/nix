@@ -140,4 +140,5 @@ Host replica_proxy
 #   UserKnownHostsFile ~/.ssh/known_hosts,~/.ssh/known_hosts2
 #   VerifyHostKeyDNS no
 #   VisualHostKey no
-#   XAuthLocationi xauth
+#   XAuthLocation xauth
+# vi: ft=sshconfig
