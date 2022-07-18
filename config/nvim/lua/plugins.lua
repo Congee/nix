@@ -411,11 +411,17 @@ local plugins = function(use, use_rocks)
     }
     -- use {'nvim-lua/lsp-status.nvim'}
     use 'kyazdani42/nvim-web-devicons'
+    -- use {
+    --     'glepnir/galaxyline.nvim',
+    --     config = function() require('eviline') end,
+    --     requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
+    -- }
     use {
-        'glepnir/galaxyline.nvim',
-        config = function() require('eviline') end,
-        requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+        config = function() require('evil_lualine') end,
     }
+
     use 'vimpostor/vim-tpipeline'  -- move vim statusline into tmux statsline
 
     use { 'towolf/vim-helm' }
