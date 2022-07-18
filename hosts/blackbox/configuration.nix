@@ -158,6 +158,24 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
 
+  # rootless k3s isn't ready yet.
+  # rootlesskit --net=slirp4netns --copy-up=/etc --disable-host-loopback buildkitd --addr unix://$XDG_RUNTIME_DIR/buildkit/rootless --containerd-worker-addr /run/k3s/containerd/containerd.sock
+  systemd.sockets.buildkit = {
+    socketConfig = {
+      ListenStream = "%t/buildkit/buildkitd.sock";
+      SocketMode = "0660";
+    };
+    wantedBy = [ "sockets.target" ];
+  };
+
+  systemd.services.buildkit = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "notify";
+      ExecStart = "${pkgs.buildkit}/bin/buildkitd --addr unix://%t/buildkit/buildkitd.sock --containerd-worker-addr %t/k3s/containerd/containerd.sock";
+    };
+  };
+
   services.k3s.enable = true;
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless.enable = true;
