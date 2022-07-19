@@ -56,7 +56,7 @@ in
     yarn
     duf
     ncdu
-    gitstatus
+    (gitstatus.overrideAttrs (_: _: { doInstallCheck = false;}))  # fails on mac
     gh
     git-branchless
     awscli2
