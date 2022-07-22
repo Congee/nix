@@ -72,6 +72,7 @@
       modules = [
         {
           nixpkgs.overlays = [
+            (_: prev: { nix = nixpkgs.legacyPackages.${prev.system}.nix; })
             (_: prev: { gnupg = nixpkgs.legacyPackages.${prev.system}.gnupg; })
           ];
         }

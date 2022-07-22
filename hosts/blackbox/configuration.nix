@@ -13,6 +13,7 @@ in
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./common.nix
+      ../nixcmd.nix
     ];
 
   hardware.bluetooth.enable = true;

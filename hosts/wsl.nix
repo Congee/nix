@@ -8,7 +8,7 @@ in
 {
   imports = [
     "${modulesPath}/profiles/minimal.nix"
-    ./common.nix
+    ./nixcmd.nix
   ];
 
   # WSL is closer to a container than anything else

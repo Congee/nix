@@ -3,7 +3,7 @@
 {
 
   imports = [
-    # ./common.nix
+    ./nixcmd.nix
   ];
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
@@ -19,22 +19,6 @@
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
-
-  nix = {
-     extraOptions = ''
-       experimental-features = nix-command flakes
-       keep-outputs = true
-       keep-derivations = true
-     '';
-     # Make `nix search nixpkgs#hello` use caches. `nix registry list` shows
-     # by default `global flake:nixpkgs github:NixOS/nixpkgs/nixpkgs-unstable`
-     # in which the `nixpkgs` is frequently pulled. It results in more bandwidth
-     # and cache misses.
-     #
-     # See https://github.com/NixOS/nixpkgs/issues/151533#issuecomment-999894356
-     registry.nixpkgs.flake = inputs.nixpkgs;
-     nixPath = { nixpkgs = "${inputs.nixpkgs}"; };
-  };
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina
@@ -88,14 +72,4 @@
   system.defaults.trackpad.TrackpadThreeFingerDrag = true;
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 25;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
-
-  # Binary Cache for Haskell.nix
-  nix.binaryCachePublicKeys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-  ];
-  nix.binaryCaches = [
-    "https://hydra.iohk.io"
-    "https://nixpkgs-wayland.cachix.org"
-  ];
 }

@@ -17,22 +17,15 @@
     vim
   ];
 
-  nix = {
-     package = pkgs.nixUnstable;
-     autoOptimiseStore = true;  # Replace identical files in the store by hard links.
-     extraOptions = ''
-       experimental-features = nix-command flakes
-       keep-outputs = true
-       keep-derivations = true
-     '';
-  };
-
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
   programs.gnupg.agent = {
     enable = true;
+    enableExtraSocket = true;
     enableSSHSupport = true;  # implies: programs.ssh.startAgent = true;
+    pinentryFlavor = "tty";
+    # TODO: ~/.gnupg/scdaemon.conf
   };
 
   # This value determines the NixOS release from which the default
@@ -42,14 +35,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.09"; # Did you read the comment?
-
-  # Binary Cache for Haskell.nix
-  nix.binaryCachePublicKeys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-    "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
-  ];
-  nix.binaryCaches = [
-    "https://hydra.iohk.io"
-    "https://nixpkgs-wayland.cachix.org"
-  ];
 }
