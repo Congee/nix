@@ -26,6 +26,14 @@
        keep-outputs = true
        keep-derivations = true
      '';
+     # Make `nix search nixpkgs#hello` use caches. `nix registry list` shows
+     # by default `global flake:nixpkgs github:NixOS/nixpkgs/nixpkgs-unstable`
+     # in which the `nixpkgs` is frequently pulled. It results in more bandwidth
+     # and cache misses.
+     #
+     # See https://github.com/NixOS/nixpkgs/issues/151533#issuecomment-999894356
+     registry.nixpkgs.flake = inputs.nixpkgs;
+     nixPath = { nixpkgs = "${inputs.nixpkgs}"; };
   };
 
   # Create /etc/bashrc that loads the nix-darwin environment.

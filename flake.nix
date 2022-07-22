@@ -83,6 +83,7 @@
     darwinConfigurations.mac = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [ ./hosts/mac.nix ];
+      specialArgs = { inherit inputs; };
     };
     mac = self.darwinConfigurations.mac;
   };
