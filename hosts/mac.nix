@@ -1,4 +1,4 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 
 {
 
@@ -30,6 +30,7 @@
   system.stateVersion = 4;
 
   homebrew.enable = true;  # still have to manually install homebrew
+  homebrew.global.brewfile = true;
   homebrew.casks = [
     "adobe-acrobat-reader"
     "aldente"
@@ -45,11 +46,13 @@
     "rectangle"
     "secretive"
     "sekey"
-    "spotify"
     "stats"
     "tunnelblick"
-    "zoom"
   ];
+  homebrew.extraConfig = ''
+    cask "zoom", greedy: true
+    cask "spotify", greedy: true
+  '';
   # This is painfully slow
   homebrew.masApps = (if true then { } else {
     "Bible Study" = 472790630;
