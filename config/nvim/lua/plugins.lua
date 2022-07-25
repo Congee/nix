@@ -326,6 +326,14 @@ local plugins = function(use, use_rocks)
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
         config = function() require('gitsigns').setup({
+            -- I dont like the index `Hunk 1 of 2`, maybe I can patch a plugin
+            -- https://github.com/wbthomason/packer.nvim/issues/882
+            preview_config = {
+                -- Options passed to nvim_open_win
+                border = 'none',
+                style = 'minimal',
+                relative = 'cursor',
+            },
             on_attach = function(bufnr)
                 local gs = package.loaded.gitsigns
 
@@ -336,8 +344,16 @@ local plugins = function(use, use_rocks)
                 end
 
                 -- Navigation
-                map('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
-                map('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})
+                map('n', ']c', function()
+                    if vim.wo.diff then return ']c' end
+                    vim.schedule(gs.next_hunk)
+                    return '<Ignore>'
+                end, {expr=true})
+                map('n', '[c', function()
+                    if vim.wo.diff then return '[c' end
+                    vim.schedule(gs.prev_hunk)
+                    return '<Ignore>'
+                end, {expr=true})
 
                 -- Actions
                 map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
