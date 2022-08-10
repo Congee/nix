@@ -186,10 +186,7 @@ in
   };
 
   programs.chromium.enable = true;
-  programs.chromium.commandLineArgs = [
-    "--enable-features=UseOzonePlatform"
-    "--ozone-platform=wayland"
-  ];
+  programs.chromium.commandLineArgs = [ "--ozone-platform-hint=auto" ];
   programs.chromium.extensions = [
     { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
     { id = "laankejkbhbdhmipfmgcngdelahlfoji"; }  # stayfocused
