@@ -249,6 +249,7 @@ in
     theme = "DarkNeon";
     style = "plain";
   };
+  home.file.".clang-format".source = ln ../config/.clang-format;
 
   # pass
   programs.password-store.enable = true;
