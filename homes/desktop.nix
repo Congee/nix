@@ -19,7 +19,7 @@ in
 
     # wayland
     waybar
-    wayfire
+    wayfire-unstable
     unstable.wcm  # wayfire config manager
     # XXX: wofi does not pick up envs from ~/.pam_environment 😠
     (symlinkJoin {
@@ -77,7 +77,6 @@ in
     goldendict
     evolution
     element-desktop
-    nheko
 
     xorg.xhost
     wsudo
@@ -93,7 +92,6 @@ in
     postman
     insomnia
     charles
-    dbeaver
     zoom-us
     mpv
     (writeScriptBin "whereami" ''${geoclue2}/libexec/geoclue-2.0/demos/where-am-i "$@"'')

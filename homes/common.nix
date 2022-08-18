@@ -37,11 +37,13 @@ in
     pandoc
     gnumake
     moreutils # sponge
+    jo
     jq
     yq
     tree
     fd
     ripgrep
+    semgrep
     croc
     unzip
     binutils  # ar for libluajit.a
@@ -128,8 +130,6 @@ in
     tmate
     tmux
     tmuxinator
-
-    vimPlugins.packer-nvim
   ];
 
   xdg.enable = true;
