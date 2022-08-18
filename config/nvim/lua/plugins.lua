@@ -72,12 +72,23 @@ local plugins = function(use, use_rocks)
         'glacambre/firenvim',
         config = function()
             vim.g.firenvim_config = {
+                globalSettings = {
+                    alt = 'all',
+                },
                 localSettings = {
                     ['.*'] = {
-                        selector = 'textarea'
+                        takeover = 'never',
+                        priority = 0,
+                    },
+                    ['https?:..leetcode.com.*'] = {
+                        selector = 'div.ReactCodeMirror div.CodeMirror textarea:not([readonly])',
+                        filename = '/tmp/{hostname}_{pathname%32}.{extension}',
+                        takeover = 'always',
+                        priority = 1,
                     }
                 }
             }
+            vim.cmd[[au BufEnter leetcode.com_* set guifont=monospace:h16]] -- no longer italic
         end,
         run = function() vim.fn['firenvim#install'](0) end
     }
