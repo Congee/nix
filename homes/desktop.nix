@@ -150,11 +150,11 @@ in
     ]
   '';
 
-
   xdg.configFile."kanshi/config".source = ln ../config/kanshi.conf;
   # services.kanshi.enable = true;
   # services.kanshi.systemdTarget = "graphical.target";
 
+  # pdf
   programs.zathura.enable = true;
   programs.zathura.package = pkgs.zathura;
 
@@ -203,10 +203,11 @@ in
     # Safe!
     settings = {
       # FIXME: not working, why?
-      # "ui.key.accelKey" = 91;  # 91 -> Super, 17 -> Control
+      "ui.key.accelKey" = 17;  # 91 -> Super, 17 -> Control
       "layout.css.devPixelsPerPx" = "1.25";  # HiDPI scaling factor
       # A NixOS issue. It always asks if it's the default browser
       "browser.shell.checkDefaultBrowser" = false;
+      "media.ffmpeg.vaapi.enabled" = true;
     };
   };
 
