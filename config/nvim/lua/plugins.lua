@@ -1,40 +1,42 @@
 local util = require('packer.util')
+--
+-- capturing upvalues
+-- https://github.com/wbthomason/packer.nvim/issues/1001#issuecomment-1206609769
 
-M = {}
 --- @param id string
 --- @param what "'fg'" | "'bg'"
 --- @param mode "'gui'" | "'cterm'" | "'term'"
 --- @return string
-M.hiof = function(id, what, mode)
+_G.hiof = function(id, what, mode)
     return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode)
 end
 
 --- @generic K, V
 --- @param tbl table<K, V>
 --- @return K[]
-table.keys = function(tbl)
-    local keys = {}
+_G.keys = function(tbl)
+    local ks = {}
     for k, _ in pairs(tbl) do
-        keys[#keys+1] = k
+        ks[#ks+1] = k
     end
-    return keys;
+    return ks;
 end
 
 --- @generic K, V
 --- @param tbl table<K, V>
 --- @return V[]
-table.values = function(tbl)
-    local values = {}
+_G.values = function(tbl)
+    local vals = {}
     for _, v in pairs(tbl) do
-        values[#values+1] = v;
+        vals[#vals+1] = v;
     end
-    return values
+    return vals
 end
 
 --- @generic T
 --- @param object T
 --- @return T
-M.trace = function(object)
+_G.trace = function(object)
     local inspect = require('inspect')
     print(inspect(object));
     return object
@@ -42,7 +44,7 @@ end
 
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
-M.treesitter_ft_mod = {
+_G.treesitter_ft_mod = {
     bibtex          = 'bibtex',
     cmake           = 'cmake',
     comment         = 'comment',
@@ -89,7 +91,7 @@ local plugins = function(use, use_rocks)
             vim.g.polyglot_disabled = {'python', 'sensible'}
         end,
         cond = function()
-            return vim.bo.filetype ~= '' and not M.treesitter_ft_mod[vim.bo.filetype];
+            return vim.bo.filetype ~= '' and not _G.treesitter_ft_mod[vim.bo.filetype];
         end,
     }
     use {
@@ -99,8 +101,8 @@ local plugins = function(use, use_rocks)
             vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
             vim.g.indent_blankline_char = '│';
 
-            local guifg = M.hiof('Normal', 'fg', 'gui');
-            local ctermfg = M.hiof('Normal', 'fg', 'cterm');
+            local guifg = _G.hiof('Normal', 'fg', 'gui');
+            local ctermfg = _G.hiof('Normal', 'fg', 'cterm');
             -- local guifg = vim.api.nvim_eval("synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')")
 
             -- Actually need something like the freground color of the text
@@ -111,6 +113,7 @@ local plugins = function(use, use_rocks)
     use "fladson/vim-kitty"  -- syntax highlighting for kitty cnofig
     use {
         'olimorris/onedarkpro.nvim',
+        commit = "2c439754e1a60d42197e79461bf04e358213a654",
         config = function()
             local onedarkpro = require('onedarkpro')
             local colors = onedarkpro.get_colors('onedark')
@@ -436,6 +439,7 @@ local plugins = function(use, use_rocks)
         'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true },
         config = function() require('evil_lualine') end,
+        commit = "5f68f070",
     }
 
     use 'vimpostor/vim-tpipeline'  -- move vim statusline into tmux statsline
@@ -444,6 +448,7 @@ local plugins = function(use, use_rocks)
     use {
         'neoclide/coc.nvim',
         run = 'yarn install --frozen-lockfile',
+        commit = '344002147beffd48b9de1adedb2502fd6db4a0bb',
         requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
         config = function()
             vim.g.coc_global_extensions = {
@@ -569,7 +574,7 @@ local plugins = function(use, use_rocks)
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
-                ensure_installed = table.values(M.treesitter_ft_mod);
+                ensure_installed = _G.values(_G.treesitter_ft_mod);
                 context_commentstring = {
                     enable = true,
                     enable_autocmd = false,
