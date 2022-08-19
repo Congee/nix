@@ -282,15 +282,18 @@ local plugins = function(use, use_rocks)
         cmd = 'MarkdownPreview',
         config = function()
             vim.g.mkdp_open_ip = 'localhost'
+            -- To debug
+            -- vim.env.NVIM_MKDP_LOG_FILE = '/tmp/mkdp.log'
+            -- vim.env.NVIM_MKDP_LOG_LEVEL = 'debug'
 
             -- wsl2
-            if vim.fn.has('wsl') then
-              vim.cmd([[
-                function! g:OpenBrowser(url)
-                  silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
-                endfunction
-              ]]);
-              vim.g.mkdp_browserfunc = 'g:OpenBrowser'
+            if vim.fn.has('wsl') == 1 then
+                vim.cmd([[
+                    function! g:OpenBrowser(url)
+                        silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
+                    endfunction
+                ]]);
+                vim.g.mkdp_browserfunc = 'g:OpenBrowser'
             end
         end
     }
@@ -326,12 +329,14 @@ local plugins = function(use, use_rocks)
         'tyru/open-browser.vim',
         config = function()
             vim.g.netrw_nogx = 1
-            vim.g.openbrowser_browser_commands = {
-                {name = "firefox",       args = {"{browser}", "{uri}"}},
-                {name = "xdg-open",      args = {"{browser}", "{uri}"}},
-                {name = "x-www-browser", args = {"{browser}", "{uri}"}},
-                {name = "w3m",           args = {"{browser}", "{uri}"}},
-            }
+            if vim.fn.has('linux') == 1 then
+                vim.g.openbrowser_browser_commands = {
+                    {name = "firefox",       args = {"{browser}", "{uri}"}},
+                    {name = "xdg-open",      args = {"{browser}", "{uri}"}},
+                    {name = "x-www-browser", args = {"{browser}", "{uri}"}},
+                    {name = "w3m",           args = {"{browser}", "{uri}"}},
+                }
+            end
             vim.cmd [[ nmap gx <Plug>(openbrowser-smart-search) ]]
             vim.cmd [[ vmap gx <Plug>(openbrowser-smart-search) ]]
         end,
@@ -423,10 +428,7 @@ local plugins = function(use, use_rocks)
     use {
         'norcalli/nvim-colorizer.lua',
         ft = {'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact'},
-        config = function()
-            -- if vim.fn.has("mac") then require'colorizer'.setup() end
-            require'colorizer'.setup()
-        end,
+        config = function() require'colorizer'.setup() end,
 
     }
     use {
