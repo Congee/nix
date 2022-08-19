@@ -95,9 +95,7 @@ nnoremap <silent><space> :call CocActionAsync('doHover')<cr>
 command! -nargs=0 Format :call CocAction('format')  " format the whole buffer
 
 nnoremap <unique> <silent> <LocalLeader>c <cmd>Telescope coc commands<CR>
-nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope coc diagnostics --current-buf<CR>
-nnoremap <unique> <silent> <LocalLeader>o <cmd>Telescope coc outline<CR>
-nnoremap <unique> <silent> <LocalLeader>s <cmd>Telescope coc symbols<CR>
+nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope coc diagnostics<CR>
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
