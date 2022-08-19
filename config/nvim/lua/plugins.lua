@@ -490,6 +490,17 @@ local plugins = function(use, use_rocks)
                 'coc-xml',
                 'coc-go',
             }
+
+            -- switch between .h & .c. The good ol' a.vim
+            local thunk = function() vim.api.nvim_create_user_command(
+                'A',
+                function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
+                { nargs = 0 }
+            ) end;
+            vim.api.nvim_create_autocmd(
+                'FileType', {pattern = {'c', 'cpp'}, callback = thunk}
+            )
+
             vim.g.coc_default_semantic_highlight_groups = 1
             -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
             -- need to dynamically evaluate $JAVA_HOME:
