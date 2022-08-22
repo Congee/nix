@@ -43,7 +43,6 @@ in
     tree
     fd
     ripgrep
-    semgrep
     croc
     unzip
     binutils  # ar for libluajit.a
