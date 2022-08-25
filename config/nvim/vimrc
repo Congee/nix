@@ -141,7 +141,7 @@ augroup file_type
   au FileType haskell hi Type      guifg=#61afef
   au FileType nasm,applescript,cmake,make set omnifunc=syntaxcomplete#Complete
   au FileType cpp set makeprg="cmake --build build"
-  au FileType markdown set textwidth=78
+  au FileType markdown set textwidth=78 spell
   au FileType scheme inoreabbrev lambda λ
 
   au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix setlocal shiftwidth=2 tabstop=2

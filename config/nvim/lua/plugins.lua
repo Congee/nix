@@ -483,6 +483,7 @@ local plugins = function(use, use_rocks)
                 'coc-ltex',
                 'coc-emmet',
                 'coc-markdown-preview-enhanced', 'coc-webview',
+                'coc-markdownlint',
                 'coc-prettier',
                 'coc-docker',
                 'coc-cmake',
