@@ -29,6 +29,9 @@
   # $ darwin-rebuild changelog
   system.stateVersion = 4;
 
+  # Homebrew looks for `git` only from a few places. We have to make sure our
+  # `git` is used.
+  # ln -s /Users/cwu/.nix-profile/bin/git $HOMEBREW_PREFIX/bin/
   homebrew.enable = true;  # still have to manually install homebrew
   homebrew.global.brewfile = true;
   homebrew.casks = [
@@ -40,7 +43,6 @@
     "dozer"
     "firefox"
     "itsycal"
-    "karabiner-elements"
     "musicbrainz-picard"
     "rancher"
     "rectangle"
