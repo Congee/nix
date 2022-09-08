@@ -215,6 +215,13 @@ local plugins = function(use, use_rocks)
         config = function()
             local cms_internal = require('ts_context_commentstring.internal');
             local cms_utils = require('ts_context_commentstring.utils');
+            require'nvim-treesitter.configs'.setup {
+                context_commentstring = {
+                    enable = true,
+                    enable_autocmd = false,
+                },
+            }
+
             require('Comment').setup {
                 pre_hook = function(ctx)
                     local U = require('Comment.utils')
@@ -464,6 +471,7 @@ local plugins = function(use, use_rocks)
         commit = '344002147beffd48b9de1adedb2502fd6db4a0bb',
         requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
         config = function()
+            -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
             vim.g.coc_global_extensions = {
                 'coc-sumneko-lua',
                 'coc-rust-analyzer',
@@ -600,10 +608,6 @@ local plugins = function(use, use_rocks)
         config = function()
             require'nvim-treesitter.configs'.setup {
                 ensure_installed = _G.values(_G.treesitter_ft_mod);
-                context_commentstring = {
-                    enable = true,
-                    enable_autocmd = false,
-                },
                 highlight = {
                     enable = true,
                     disable = {"cpp", "bash", "python", "typescript", "go", "yaml"}
@@ -613,16 +617,6 @@ local plugins = function(use, use_rocks)
                     disable = {"python"},
                 },
                 incremental_selection = { enable = true },
-                refactor = {
-                    highlight_current_scope = { enable = false },
-                    highlight_definitions = { enable = true },
-                    smart_rename = {
-                        enable = true,
-                        keymaps = {
-                            smart_rename = "<LocalLeader>rn",
-                        },
-                    },
-                },
             }
         end
     }
@@ -667,6 +661,39 @@ local plugins = function(use, use_rocks)
                 },
             }
         end,
+    }
+
+    use {
+        'nvim-treesitter/nvim-treesitter-refactor',
+        requires = 'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+                refactor = {
+                    highlight_current_scope = { enable = false },
+                    highlight_definitions = { enable = true },
+                    smart_rename = {
+                        enable = true,
+                        keymaps = {
+                            smart_rename = "<LocalLeader>rn",
+                        },
+                    },
+                },
+            }
+        end,
+    }
+
+    use {
+        'andymass/vim-matchup',
+        requires = 'nvim-treesitter/nvim-treesitter',
+        config = function()
+            require'nvim-treesitter.configs'.setup {
+                matchup = {
+                    enable = true,              -- mandatory, false will disable the whole extension
+                    disable = {},  -- optional, list of language that will be disabled
+                    -- [options]
+                },
+            }
+        end
     }
 
     -- vim.fn.synstack(...) no longer works under treesitter
