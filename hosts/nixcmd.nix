@@ -17,11 +17,11 @@
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
     # Binary Cache for Haskell.nix
-    binaryCachePublicKeys = [
+    settings.trusted-public-keys = [
       "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
       "nixpkgs-wayland.cachix.org-1:3lwxaILxMRkVhehr5StQprHdEo4IrE8sRho9R9HOLYA="
     ];
-    binaryCaches = [
+    settings.substituters = [
       "https://hydra.iohk.io"
       "https://nixpkgs-wayland.cachix.org"
     ];
