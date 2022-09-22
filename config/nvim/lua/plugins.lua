@@ -468,7 +468,7 @@ local plugins = function(use, use_rocks)
     use {
         'neoclide/coc.nvim',
         run = 'yarn install --frozen-lockfile',
-        commit = '344002147beffd48b9de1adedb2502fd6db4a0bb',
+        branch = 'release',
         requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
         config = function()
             -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
@@ -477,6 +477,7 @@ local plugins = function(use, use_rocks)
                 'coc-rust-analyzer',
                 'coc-git',
                 'coc-yaml',
+                'coc-diagnostic',
                 'coc-explorer',
                 'coc-tsserver',
                 'coc-pyright',

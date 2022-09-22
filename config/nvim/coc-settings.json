@@ -55,7 +55,6 @@
     },
     "rust-analyzer.updates.channel": "stable",
     "rust-analyzer.diagnostics.disabled": ["unresolved-proc-macro"],
-    "suggest.autoTrigger": "trigger",
     "python.analysis.typeCheckingMode": "strict",
     "python.analysis.useLibraryCodeForTypes": true,
     "python.linting.flake8Enabled": true,
@@ -64,7 +63,9 @@
     "markdown-preview-enhanced.usePandocParser": true,
     "Lua.diagnostics.globals": ["vim"],
     "Lua.telemetry.enable": true,
-    "suggest.noselet": true,
+    "suggest.noselect": true,
+    "suggest.autoTrigger": "trigger",
+    "suggest.virtualText": true,
     "suggest.removeDuplicateItems": true,
     "explorer.icon.enableNerdfont": true,
     "explorer.icon.source": "nvim-web-devicons",
@@ -76,7 +77,6 @@
     "metals.statusBarEnabled": true,
     "sumneko-lua.enableNvimLuaDev": true,
     "sumneko-lua.checkUpdate": false,
-    "clangd.semanticHighlighting": true,
     "clangd.fallbackFlags": [
         "-std=c++17"
     ],
