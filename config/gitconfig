@@ -54,6 +54,8 @@
     process = git-lfs filter-process
     required = true
     clean = git-lfs clean -- %f
+[filter "remove-trailing-whitespace"]
+    clean = sed -e \"s/ \\+$//\"
 [sequence]
     # editor = interactive-rebase-tool
 [credential]

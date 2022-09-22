@@ -22,3 +22,14 @@
 *.rs    diff=rust
 *.lisp  diff=lisp
 *.el    diff=lisp
+
+*.c     filter=remove-trailing-whitespace
+*.h     filter=remove-trailing-whitespace
+*.c++   filter=remove-trailing-whitespace
+*.h++   filter=remove-trailing-whitespace
+*.cpp   filter=remove-trailing-whitespace
+*.hpp   filter=remove-trailing-whitespace
+*.cc    filter=remove-trailing-whitespace
+*.hh    filter=remove-trailing-whitespace
+*.py    filter=remove-trailing-whitespace
+*.rs    filter=remove-trailing-whitespace
