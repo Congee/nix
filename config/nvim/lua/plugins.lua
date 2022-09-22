@@ -49,18 +49,25 @@ _G.treesitter_ft_mod = {
     cmake           = 'cmake',
     comment         = 'comment',
     fennel          = 'fennel',
+    gitattributes   = 'gitattributes',
     graphql         = 'graphql',
     haskell         = 'haskell',
     hcl             = 'hcl',
+    html            = 'html',
     lua             = 'lua',
     nix             = 'nix',
     ocaml           = 'ocaml',
     ocaml_interface = 'ocaml_interface',
+    proto           = 'proto',
     python          = 'python',
+    regex           = 'regex',
     scala           = 'scala',
+    sql             = 'sql',
     tla             = 'tlaplus',
+    toml            = 'toml',
     typescript      = 'typescript',
     vim             = 'vim',
+    yaml            = 'yaml',
     zig             = 'zig',
 };
 
@@ -608,10 +615,12 @@ local plugins = function(use, use_rocks)
         run = ':TSUpdate',
         config = function()
             require'nvim-treesitter.configs'.setup {
+                compilers = { "clang++", "zig" },
                 ensure_installed = _G.values(_G.treesitter_ft_mod);
                 highlight = {
                     enable = true,
-                    disable = {"cpp", "bash", "python", "typescript", "go", "yaml"}
+                    disable = {"cpp", "bash", "python", "typescript", "go", "yaml"},
+                    additional_vim_regex_highlighting = false,
                 },
                 indent = {
                     enable = false,
