@@ -67,6 +67,18 @@
     desktop = self.homeConfigurations.desktop.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
 
+    # FIXME: https://github.com/nix-community/home-manager/issues/2848
+    apps.x86_64-linux.update-home = {
+      type = "app";
+      program = (nixpkgs.legacyPackages.x86_64-linux.writeScript "update-home" ''
+        set -euo pipefail
+        old_profile=$(nix profile list | grep home-manager-path | head -n1 | awk '{print $4}')
+        echo $old_profile
+        nix profile remove $old_profile
+        ${self.desktop}/activate || (echo "restoring old profile"; ${nixpkgs.legacyPackages.x86_64-linux.nix}/bin/nix profile install $old_profile)
+      '').outPath;
+    };
+
     nixosConfigurations.blackbox = nixos.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
