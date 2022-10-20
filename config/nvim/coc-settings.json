@@ -48,9 +48,6 @@
                 "scheme",
                 "racket"
             ]
-        },
-        "yaml.schemas": {
-            "filetypes": ["yaml"]
         }
     },
     "rust-analyzer.updates.channel": "stable",
@@ -77,6 +74,29 @@
     "metals.statusBarEnabled": true,
     "sumneko-lua.enableNvimLuaDev": true,
     "sumneko-lua.checkUpdate": false,
+    "clangd.compilationDatabasePath": "build",
+    "clangd.trace.server": "verbose",
+    "yaml.schemas": {"filetypes": ["yaml"]},
+    "yaml.customTags": [
+        "!Base64 scalar",
+        "!Cidr scalar",
+        "!And sequence",
+        "!Equals sequence",
+        "!If sequence",
+        "!Not sequence",
+        "!Or sequence",
+        "!Condition scalar",
+        "!FindInMap sequence",
+        "!GetAtt scalar",
+        "!GetAZs scalar",
+        "!ImportValue scalar",
+        "!Join sequence",
+        "!Select sequence",
+        "!Split sequence",
+        "!Sub scalar",
+        "!Transform mapping",
+        "!Ref scalar"
+    ],
     "clangd.fallbackFlags": [
         "-std=c++17"
     ],
