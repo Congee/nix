@@ -88,7 +88,7 @@ in
     mkcert  # https on localhost
     cargo  # for shell completion
     cargo-edit
-    cargo-download  # download .crate files
+    cargo-clone  # download .crate files
     rust-analyzer
     gdb
     scc
