@@ -351,27 +351,11 @@ taobao_ip () {
   #INTERNEL_IP=$(ifconfig en0 inet | fgrep inet | cut -d' ' -f2)
   INTERNEL_IP=$(ipconfig getifaddr en0)
   echo INTERNEL_IP="${INTERNEL_IP}"
-  EXTERNEL_IP_INFO=$(
-  curl --silent\
-    'http://ip.taobao.com/service/getIpInfo2.php' \
-    -H 'Accept: */*' \
-    -H 'Accept-Language: en-us,zh-cn;q=0.5' \
-    -H 'Cache-Control: no-cache' \
-    -H 'charset=UTF-8' \
-    -H 'Host: ip.taobao.com' \
-    -H 'Pragma: no-cache' \
-    -H 'Referer: http://ip.taobao.com/ipSearch.php' \
-    -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:35.0) Gecko/20100101 Firefox/35.0' \
-    -H 'X-Requested-With: XMLHttpRequest' \
-    --data 'ip=myip' \
-    | jq .)
-
-  EXTERNEL_IP=$(echo ${EXTERNEL_IP_INFO} | jq ' .["data"]["ip"]' | tr -d \")
-  echo EXTERNEL_IP=$EXTERNEL_IP
 }
 
 myip () {
-  curl https://api.myip.com 2>/dev/null| jq --raw-output .ip
+  local ua='User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:106.0) Gecko/20100101 Firefox/106.0'
+  curl https://api.myip.com -H "${ua}" 2>/dev/null | jq --raw-output .ip
 }
 
 case $OSTYPE in
@@ -390,10 +374,6 @@ case $OSTYPE in
 
   mans() {
     man "$1" | grep -iC2 --color=always "$2" | less
-  }
-
-  taobaoip() {
-    curl --silent "http://ip.taobao.com/service/getIpInfo.php?ip=${1}" | jq .
   }
 
   wifi() {
