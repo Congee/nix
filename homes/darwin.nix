@@ -21,7 +21,10 @@ in
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     # The system ncurses 5.7 is too old to have terminfo of tmux-256color
-    zsh -c '/usr/bin/tic -x =("${pkgs.ncurses}/bin/infocmp" -x tmux-256color)'
+    # zsh -c '/usr/bin/tic -x =("${pkgs.ncurses}/bin/infocmp" -x tmux-256color)'
+    find $HOME/.terminfo -name tmux-256color -delete 2>/dev/null || true
+    mkdir -p $HOME/.terminfo/74
+    cp -f ${pkgs.ncurses}/share/terminfo/74/tmux-256color $HOME/.terminfo/74/tmux-256color
   '';
 
   fonts.fontconfig.enable = true;
