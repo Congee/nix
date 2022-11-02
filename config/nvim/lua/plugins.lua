@@ -42,6 +42,12 @@ _G.trace = function(object)
     return object
 end
 
+---Pretty print lua table
+function _G.dump(...)
+    local objects = vim.tbl_map(vim.inspect, { ... })
+    print(table.unpack(objects))
+end
+
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
 _G.treesitter_ft_mod = {
