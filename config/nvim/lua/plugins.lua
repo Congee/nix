@@ -607,7 +607,7 @@ local plugins = function(use, use_rocks)
         end
     }
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
-    use {'numirias/semshi', run = ':UpdateRemotePlugins'}
+    use {'wookayin/semshi', run = ':UpdateRemotePlugins'}
     use {'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp'}
 
     use {
