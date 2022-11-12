@@ -80,7 +80,7 @@ module_path=($module_path /usr/local/lib/zpython)
 
 # {{{ History
 export HISTCONTROL=ignorespace
-export SAVEHIST=32768
+export SAVEHIST=65536
 export HISTSIZE=$SAVEHIST
 export HISTFILE=$HOME/.zsh_history
 setopt hist_reduce_blanks
