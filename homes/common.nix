@@ -59,7 +59,6 @@ in
     ncdu
     (gitstatus.overrideAttrs (_: _: { doInstallCheck = false;}))  # fails on mac
     gh
-    git-branchless
     awscli2
     aws-vault
     sl

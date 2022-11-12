@@ -86,7 +86,7 @@ in
     tdesktop  # telegram
     musescore
     thunderbird
-    slack-dark
+    slack
     spotify
     spicetify-cli
     postman
