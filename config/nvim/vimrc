@@ -29,7 +29,6 @@ cnoreabbrev W w
 nnoremap <silent> <C-N> :nohlsearch<cr>
 nnoremap Q <Nop>
 nnoremap vv $v^
-nnoremap / /\v
 " OSC52 yank for WSL2
 vnoremap <Leader>c :OSCYank<CR>
 " Any yank op
