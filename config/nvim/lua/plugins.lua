@@ -479,6 +479,10 @@ local plugins = function(use, use_rocks)
 
     use { 'towolf/vim-helm' }
     use {
+        'williamboman/mason.nvim',
+        config = function() require('mason').setup() end,
+    }
+    use {
         'neoclide/coc.nvim',
         run = 'yarn install --frozen-lockfile',
         branch = 'release',
@@ -494,13 +498,13 @@ local plugins = function(use, use_rocks)
                 'coc-explorer',
                 'coc-tsserver',
                 'coc-pyright',
-                'coc-metals',
-                'coc-json',
+                -- 'coc-metals',  -- scalameta/nvim-metals
+                'coc-json', -- json-lsp
                 'coc-syntax',
-                'coc-clangd',
+                'coc-clangd',  -- clangd
                 'coc-sh',
                 'coc-html',
-                'coc-vimlsp',
+                'coc-vimlsp',  -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
                 'coc-clang-format-style-options',
                 'coc-ltex',
                 'coc-emmet',
