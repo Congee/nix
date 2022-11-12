@@ -1,17 +1,14 @@
 [push]
     default = simple
-[user]
-    name = Congee
-    email = ***REMOVED***
-    # signingkey = 3748BEAEB1F5375071D02C32CB1B653DBEB49C43
-    signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPBv281aUV+Wzc5ITvWERgzT2830xLNP7tZXIsP1D1aR"
 [alias]
+    aliases = config --get-regexp alias
     push = push --follow-tags
     authors = shortlog -sn
     fetch = fetch --all --prune
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --boundary
     co = checkout
     meh = commit --amend --no-edit
+    who = shortlog -sn
     frebase = !"git rebase --committer-date-is-author-date --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
     lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
     cmp = log --left-right --graph --oneline --cherry
@@ -35,8 +32,6 @@
     tool = vimdiff
 [delta]
     features = villsau  # theme of unified view. use "chameleon" for split view
-[include]
-    path = ./themes.gitconfig  # delta diff tool themes
 [core]
     trustctime = false
     ; attributesfile = ~/.gitattributes
@@ -64,5 +59,8 @@
     protocol = ssh
 [init]
     defaultBranch = master
+[include]
+    path = ./themes.gitconfig  # delta diff tool themes
+    path = ~/.config/git/config.user  # name, email, signingkey
 
 # vi: ft=gitconfig
