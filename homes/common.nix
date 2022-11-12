@@ -5,6 +5,7 @@ let
   nur = pkgs.nur.repos.congee;
 in
 {
+  manual.manpages.enable = false;
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = "cwu";
@@ -51,7 +52,7 @@ in
     luajitPackages.luarocks
     socat
     ccache
-    racket
+    # racket
     python3
     nodejs
     yarn
@@ -70,6 +71,7 @@ in
     fortune
     file
     zip
+    zbar  # qrcode
     p7zip
     nixfmt
     rnix-lsp
@@ -92,10 +94,10 @@ in
     gdb
     scc
     navi # cheat sheet
-    haskellPackages.stack
+    # haskellPackages.stack
     haskellPackages.cabal-install
     haskellPackages.ghc
-    haskellPackages.haskell-language-server
+    # haskellPackages.haskell-language-server
     haskellPackages.implicit-hie
     haskellPackages.hoogle
     rbw pinentry
@@ -114,8 +116,8 @@ in
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
     kubectl
-    kubectl-tree
-    kompose
+    # kubectl-tree
+    # kompose
     sops age rage ssh-to-age
 
     flac
@@ -237,7 +239,15 @@ in
   # install it in a random name like nixpacker. Anything inside
   # will be sourced ~/.local/share/nvim/site/pack/*/start
   # https://github.com/nix-community/home-manager/issues/1907#issuecomment-934316296
-  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim}";
+  # xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim}";
+  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim.overrideAttrs (_: _: {
+    src = pkgs.fetchFromGitHub {
+      owner = "wbthomason";
+      repo = "packer.nvim";
+      rev = "4dedd3b08f8c6e3f84afbce0c23b66320cd2a8f2";
+      sha256 = "dGmvrQOscGZ+Qk/RCJKJEOxUOcFrAHBGxpASNKZyWCc=";
+    };
+  })}";
   xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
   xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/lua-language-server".source = ln "${pkgs.sumneko-lua-language-server}/bin/lua-language-server";
   # xdg.configFile."nvim".source = ln ../config/nvim;
@@ -274,5 +284,5 @@ in
   programs.htop.settings.highlight_basename = true;
   programs.htop.settings.hide_userland_threads = true;
   programs.htop.settings.show_program_path = false;
-  programs.htop.settings.tree_view = true;
+  programs.htop.settings.tree_view = false;
 }
