@@ -50,7 +50,10 @@
     required = true
     clean = git-lfs clean -- %f
 [filter "remove-trailing-whitespace"]
-    clean = sed -e \"s/ \\+$//\"
+    ; https://git-scm.com/docs/git-config#Documentation/git-config.txt-filterltdrivergtclean
+    clean = "[[ ( -d $(git rev-parse --git-path rebase-merge) ) || ( -d $(git rev-parse --git-path rebase-apply) ) ]] && cat || sed -e's| \\+$||' "
+    smudge = cat
+    required = true
 [sequence]
     # editor = interactive-rebase-tool
 [credential]
