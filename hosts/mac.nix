@@ -47,6 +47,7 @@
     "firefox"
     "itsycal"
     "musicbrainz-picard"
+    "postman"
     "rancher"
     "rectangle"
     "secretive"
@@ -55,6 +56,8 @@
     "tunnelblick"
   ];
   homebrew.extraConfig = ''
+    tap "conduktor/brew"
+    cask "conduktor", greedy: true
     cask "zoom", greedy: true
     cask "spotify", greedy: true
   '';
