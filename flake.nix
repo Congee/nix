@@ -18,7 +18,7 @@
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
     # home-manager
     homeConfigurations = {
-      desktop = home-manager.lib.homeManagerConfiguration ({
+      desktop = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
           ./homes/common.nix
@@ -34,8 +34,8 @@
           }
         ];
 
-      });
-      wsl = home-manager.lib.homeManagerConfiguration ({
+      };
+      wsl = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
         modules = [
           ./homes/common.nix
@@ -48,8 +48,8 @@
             ];
           }
         ];
-      });
-      mac = home-manager.lib.homeManagerConfiguration ({
+      };
+      mac = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."aarch64-darwin";
         modules = [
           ./homes/common.nix
@@ -62,7 +62,7 @@
             ];
           }
         ];
-      });
+      };
     };
     desktop = self.homeConfigurations.desktop.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
@@ -84,8 +84,8 @@
       modules = [
         {
           nixpkgs.overlays = [
-            (_: prev: { nix = nixpkgs.legacyPackages.${prev.system}.nix; })
-            (_: prev: { gnupg = nixpkgs.legacyPackages.${prev.system}.gnupg; })
+            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) nix; })
+            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
           ];
         }
         ./hosts/blackbox/configuration.nix
@@ -98,6 +98,6 @@
       modules = [ ./hosts/mac.nix ];
       specialArgs = { inherit inputs; };
     };
-    mac = self.darwinConfigurations.mac;
+    inherit (self.darwinConfigurations) mac;
   };
 }

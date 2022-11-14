@@ -74,6 +74,7 @@ in
     zbar  # qrcode
     p7zip
     nixfmt
+    nil
     rnix-lsp
     nix-index
     nix-tree
@@ -275,7 +276,7 @@ in
     difftastic.background = "dark";
     includes = [
       { path = ../config/gitconfig; }
-      { path = builtins.toString (builtins.fetchGit https://github.com/dandavison/delta) + "/themes.gitconfig"; }
+      { path = builtins.toString (builtins.fetchGit "https://github.com/dandavison/delta") + "/themes.gitconfig"; }
     ];
     attributes = lib.splitString "\n" (builtins.readFile ../config/gitattributes);
   };

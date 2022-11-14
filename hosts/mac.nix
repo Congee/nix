@@ -62,7 +62,7 @@
     cask "spotify", greedy: true
   '';
   # This is painfully slow
-  homebrew.masApps = (if true then { } else {
+  homebrew.masApps = if true then { } else {
     "Bible Study" = 472790630;
     Bitwarden     = 1352778147;
     EuDic         = 434350458;
@@ -73,7 +73,7 @@
     QQ            = 451108668;
     Telegram      = 747648890;
     WeChat        = 836500024;
-  });
+  };
 
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;

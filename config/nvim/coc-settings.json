@@ -32,10 +32,9 @@
             ]
         },
         "nix": {
-            "command": "rnix-lsp",
-            "filetypes": [
-                "nix"
-            ]
+            "command": "nil",
+            "filetypes": ["nix"],
+            "rootPatterns": ["flake.nix", ".git"]
         },
         "racket": {
             "command": "xvfb-run",
