@@ -64,7 +64,7 @@
         "code-block-style": false
     },
     "Lua.diagnostics.globals": ["vim"],
-    "Lua.telemetry.enable": true,
+    "Lua.telemetry.enable": false,
     "suggest.noselect": true,
     "suggest.autoTrigger": "trigger",
     "suggest.virtualText": true,
@@ -79,6 +79,7 @@
     "metals.statusBarEnabled": true,
     "sumneko-lua.enableNvimLuaDev": true,
     "sumneko-lua.checkUpdate": false,
+    "sumneko-lua.logPath": "/tmp/sumneko-lua",
     "clangd.compilationDatabasePath": "build",
     "clangd.trace.server": "verbose",
     "yaml.schemas": {"filetypes": ["yaml"]},
@@ -110,6 +111,9 @@
         "sh": "shellcheck"
     },
     "go.goplsOptions": {
-        "staticcheck": true
+        "gofumpt": true,
+        "staticcheck": true,
+        "linksInHover": false,
+        "semanticTokens": true
     }
 }
