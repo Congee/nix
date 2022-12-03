@@ -5,7 +5,7 @@
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.cwu = {
     isNormalUser = true;
-    shell = pkgs.zsh;
+    shell = pkgs.zsh;  # per user
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
 
@@ -17,6 +17,7 @@
     vim
   ];
 
+  programs.zsh.enable = true;  # default for all users, implies programs.zsh.enableCompletion
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   programs.mtr.enable = true;
