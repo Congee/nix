@@ -99,10 +99,9 @@ in
   programs.xwayland.enable = true;  # xcb (Qt), chromium and electron
 
   xdg.portal.enable = true;
-  xdg.portal.gtkUsePortal = true;
+  xdg.portal.wlr.enable = true;
   xdg.portal.extraPortals = [
     pkgs.xdg-desktop-portal-gtk  # gtk apps need it anyway?
-    pkgs.xdg-desktop-portal-wlr
   ];
 
   services.avahi.enable = true;
@@ -119,6 +118,7 @@ in
     };
   };
 
+  # FIXME: do not login until graphical.target is ready
   services.greetd.enable = true;
   services.greetd.settings = {
     default_session = {
