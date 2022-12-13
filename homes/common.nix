@@ -176,7 +176,7 @@ in
       file = "zsh-completions.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/zsh-users/zsh-completions";
-        rev = "55d07cc57750eb90f8b02be3ddf42c206ecf17b1";
+        rev = "7b8bb64cbb2014de66204b800bdac9ea149b6932";
       };
     }
     {
@@ -184,7 +184,7 @@ in
       file = "forgit.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/wfxr/forgit";
-        rev = "e0d3552d4597f42c5c965daa5abd79845990f63a";
+        rev = "8ca463b5c69e95ed100dd66e1134427319cf407c";
       };
     }
     {
@@ -192,7 +192,7 @@ in
       file = "gitstatus.prompt.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/romkatv/gitstatus";
-        rev = "6dc0738c0e5199b0ae47d9693874e7d43c7f8f29";
+        rev = "4b47ca047be1d482dbebec7279386a9365b946c6";
       };
     }
     {
@@ -200,7 +200,7 @@ in
       file = "async.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/mafredri/zsh-async";
-        rev = "a61239dd55028eec173374883809f439c93d292b";
+        rev = "3ba6e2d1ea874bfb6badb8522ab86c1ae272923d";
       };
     }
     {
@@ -208,7 +208,7 @@ in
       file = "nix-shell.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/chisui/zsh-nix-shell";
-        rev = "a2139b32fc1429160fc40658c9e16177c20597fc";
+        rev = "af6f8a266ea1875b9a3e86e14796cadbe1cfbf08";
       };
     }
   ];
