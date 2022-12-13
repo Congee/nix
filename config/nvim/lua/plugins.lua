@@ -183,9 +183,12 @@ local plugins = function(use, use_rocks)
             'xiyaowong/telescope-emoji.nvim',
             'fannheyward/telescope-coc.nvim',
             'luc-tielen/telescope_hoogle',
+            'MrcJkb/telescope-manix',
+            'AckslD/nvim-neoclip.lua',
         } },
         config = function()
             require('octo').setup()
+            require('neoclip').setup()
             local telescope = require('telescope')
             local actions = require('telescope.actions')
 
@@ -322,6 +325,7 @@ local plugins = function(use, use_rocks)
     use 'tpope/vim-liquid'
     use 'tpope/vim-dadbod' -- for SQL. TODO: help exrc
     use 'kristijanhusak/vim-dadbod-ui'
+    use 'dhruvasagar/vim-table-mode'
 
     use {
         'rhysd/git-messenger.vim',
