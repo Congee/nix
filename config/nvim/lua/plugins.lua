@@ -17,7 +17,7 @@ end
 _G.keys = function(tbl)
     local ks = {}
     for k, _ in pairs(tbl) do
-        ks[#ks+1] = k
+        ks[#ks + 1] = k
     end
     return ks;
 end
@@ -28,7 +28,7 @@ end
 _G.values = function(tbl)
     local vals = {}
     for _, v in pairs(tbl) do
-        vals[#vals+1] = v;
+        vals[#vals + 1] = v;
     end
     return vals
 end
@@ -101,7 +101,7 @@ local plugins = function(use, use_rocks)
                     }
                 }
             }
-            vim.cmd[[au BufEnter leetcode.com_* set guifont=monospace:h16]] -- no longer italic
+            vim.cmd [[au BufEnter leetcode.com_* set guifont=monospace:h16]] -- no longer italic
         end,
         run = function() vim.fn['firenvim#install'](0) end
     }
@@ -112,7 +112,7 @@ local plugins = function(use, use_rocks)
             -- Please declare this variable before polyglot is loaded (at the top of .vimrc)
             -- vim-polyglot via https://github.com/vim-python/python-syntax improves nothing
             -- not working with vim-markdown
-            vim.g.polyglot_disabled = {'python', 'sensible'}
+            vim.g.polyglot_disabled = { 'python', 'sensible' }
         end,
         cond = function()
             return vim.bo.filetype ~= '' and not _G.treesitter_ft_mod[vim.bo.filetype];
@@ -122,7 +122,7 @@ local plugins = function(use, use_rocks)
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             require('indent_blankline').setup { use_treesitter = true };
-            vim.g.indent_blankline_filetype_exclude = {'help', 'coc-explorer'}
+            vim.g.indent_blankline_filetype_exclude = { 'help', 'coc-explorer' }
             vim.g.indent_blankline_char = '│';
 
             local guifg = _G.hiof('Normal', 'fg', 'gui');
@@ -134,7 +134,7 @@ local plugins = function(use, use_rocks)
             vim.cmd('hi! link IndentBlanklineSpaceChar Normal')
         end,
     }
-    use "fladson/vim-kitty"  -- syntax highlighting for kitty cnofig
+    use "fladson/vim-kitty" -- syntax highlighting for kitty cnofig
     use {
         'olimorris/onedarkpro.nvim',
         commit = "2c439754e1a60d42197e79461bf04e358213a654",
@@ -149,15 +149,15 @@ local plugins = function(use, use_rocks)
                     DiffDelete = { fg = 'red', bg = 'NONE' },
                     DiffChange = { fg = '#d2a8ff', bg = 'NONE' },
                     diffChanged = { fg = '#d2a8ff', bg = 'NONE' },
-                    CocFloating = { link = 'Pmenu' },  -- originally NormalFloat
+                    CocFloating = { link = 'Pmenu' }, -- originally NormalFloat
                     -- CocUnusedHighlight -> CocFadeOut -> Conceal
-                    CocUnusedHighlight = { fg = colors.gray, bg='NONE' },
+                    CocUnusedHighlight = { fg = colors.gray, bg = 'NONE' },
                     CocInfoSign = { fg = 'LightBlue' },
                     CocHintSign = { fg = colors.cyan },
                 },
             })
             onedarkpro.load()
-            vim.cmd[[hi Operator gui=None ]]  -- no longer italic
+            vim.cmd [[hi Operator gui=None ]] -- no longer italic
 
             -- make indent area contrast
             vim.o.guicursor = table.concat({
@@ -168,22 +168,22 @@ local plugins = function(use, use_rocks)
                 'a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor',
                 'sm:block-blinkwait175-blinkoff150-blinkon175',
             }, ',');
-            vim.cmd[[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
+            vim.cmd [[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
         end,
     }
     use 'qxxxb/vim-searchhi'
 
-    use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
     use {
         'nvim-telescope/telescope.nvim',
-        requires = {{
+        requires = { {
             'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
             'xiyaowong/telescope-emoji.nvim',
             'fannheyward/telescope-coc.nvim',
             'luc-tielen/telescope_hoogle',
-        }},
+        } },
         config = function()
             require('octo').setup()
             local telescope = require('telescope')
@@ -201,7 +201,7 @@ local plugins = function(use, use_rocks)
                         i = {
                             ["<C-j>"] = actions.move_selection_next,
                             ["<C-k>"] = actions.move_selection_previous,
-                            ["<C-u>"] = false,  -- do not scroll up in preview
+                            ["<C-u>"] = false, -- do not scroll up in preview
                             ["<C-b>"] = actions.preview_scrolling_up,
                             ["<C-f>"] = actions.preview_scrolling_down,
                         },
@@ -218,8 +218,6 @@ local plugins = function(use, use_rocks)
             telescope.load_extension('fzf')
         end
     }
-    use {'monkoose/fzf-hoogle.vim', ft = 'haskell'}
-    use 'junegunn/fzf.vim'  -- depends on pkgs.fzf
     use 'rafcamlet/nvim-luapad'
 
     use {
@@ -228,7 +226,7 @@ local plugins = function(use, use_rocks)
         config = function()
             local cms_internal = require('ts_context_commentstring.internal');
             local cms_utils = require('ts_context_commentstring.utils');
-            require'nvim-treesitter.configs'.setup {
+            require 'nvim-treesitter.configs'.setup {
                 context_commentstring = {
                     enable = true,
                     enable_autocmd = false,
@@ -276,7 +274,7 @@ local plugins = function(use, use_rocks)
     use {
         'sbdchd/neoformat',
         config = function()
-            vim.g.neoformat_enabled_typescript = {'clang-format'};
+            vim.g.neoformat_enabled_typescript = { 'clang-format' };
             -- Enable alignment
 
             vim.g.neoformat_basic_format_align = 1
@@ -297,7 +295,7 @@ local plugins = function(use, use_rocks)
 
     use {
         'iamcco/markdown-preview.nvim',
-        ft = {'markdown'},
+        ft = { 'markdown' },
         run = 'cd app && yarn install',
         cmd = 'MarkdownPreview',
         config = function()
@@ -322,13 +320,13 @@ local plugins = function(use, use_rocks)
     use 'kana/vim-fakeclip'
     use 'chrisbra/unicode.vim'
     use 'tpope/vim-liquid'
-    use 'tpope/vim-dadbod'  -- for SQL. TODO: help exrc
+    use 'tpope/vim-dadbod' -- for SQL. TODO: help exrc
     use 'kristijanhusak/vim-dadbod-ui'
 
     use {
         'rhysd/git-messenger.vim',
-        keys = {'<leader>gm'},
-        cmd = {'GitMessenger'},
+        keys = { '<leader>gm' },
+        cmd = { 'GitMessenger' },
         config = function() vim.g.git_messenger_include_diff = "current" end
     }
 
@@ -351,10 +349,10 @@ local plugins = function(use, use_rocks)
             vim.g.netrw_nogx = 1
             if vim.fn.has('linux') == 1 then
                 vim.g.openbrowser_browser_commands = {
-                    {name = "firefox",       args = {"{browser}", "{uri}"}},
-                    {name = "xdg-open",      args = {"{browser}", "{uri}"}},
-                    {name = "x-www-browser", args = {"{browser}", "{uri}"}},
-                    {name = "w3m",           args = {"{browser}", "{uri}"}},
+                    { name = "firefox", args = { "{browser}", "{uri}" } },
+                    { name = "xdg-open", args = { "{browser}", "{uri}" } },
+                    { name = "x-www-browser", args = { "{browser}", "{uri}" } },
+                    { name = "w3m", args = { "{browser}", "{uri}" } },
                 }
             end
             vim.cmd [[ nmap gx <Plug>(openbrowser-smart-search) ]]
@@ -365,57 +363,58 @@ local plugins = function(use, use_rocks)
         'lewis6991/gitsigns.nvim',
         requires = 'nvim-lua/plenary.nvim',
         config = function() require('gitsigns').setup({
-            -- I dont like the index `Hunk 1 of 2`, maybe I can patch a plugin
-            -- https://github.com/wbthomason/packer.nvim/issues/882
-            preview_config = {
-                -- Options passed to nvim_open_win
-                border = 'none',
-                style = 'minimal',
-                relative = 'cursor',
-            },
-            on_attach = function(bufnr)
-                local gs = package.loaded.gitsigns
+                -- I dont like the index `Hunk 1 of 2`, maybe I can patch a plugin
+                -- https://github.com/wbthomason/packer.nvim/issues/882
+                preview_config = {
+                    -- Options passed to nvim_open_win
+                    border = 'none',
+                    style = 'minimal',
+                    relative = 'cursor',
+                },
+                on_attach = function(bufnr)
+                    local gs = package.loaded.gitsigns
 
-                local function map(mode, l, r, opts)
-                    opts = opts or {}
-                    opts.buffer = bufnr
-                    vim.keymap.set(mode, l, r, opts)
+                    local function map(mode, l, r, opts)
+                        opts = opts or {}
+                        opts.buffer = bufnr
+                        vim.keymap.set(mode, l, r, opts)
+                    end
+
+                    -- Navigation
+                    map('n', ']c', function()
+                        if vim.wo.diff then return ']c' end
+                        vim.schedule(gs.next_hunk)
+                        return '<Ignore>'
+                    end, { expr = true })
+                    map('n', '[c', function()
+                        if vim.wo.diff then return '[c' end
+                        vim.schedule(gs.prev_hunk)
+                        return '<Ignore>'
+                    end, { expr = true })
+
+                    -- Actions
+                    map({ 'n', 'v' }, '<leader>hs', gs.stage_hunk)
+                    map({ 'n', 'v' }, '<leader>hr', gs.reset_hunk)
+                    map('n', '<leader>hS', gs.stage_buffer)
+                    map('n', '<leader>hu', gs.undo_stage_hunk)
+                    map('n', '<leader>hR', gs.reset_buffer)
+                    map('n', '<leader>hp', gs.preview_hunk)
+                    map('n', '<leader>hb', function() gs.blame_line { full = true } end)
+                    map('n', '<leader>tb', gs.toggle_current_line_blame)
+                    map('n', '<leader>hd', gs.diffthis)
+                    map('n', '<leader>hD', function() gs.diffthis('~') end)
+                    map('n', '<leader>td', gs.toggle_deleted)
+
+                    -- Text object
+                    map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
                 end
-
-                -- Navigation
-                map('n', ']c', function()
-                    if vim.wo.diff then return ']c' end
-                    vim.schedule(gs.next_hunk)
-                    return '<Ignore>'
-                end, {expr=true})
-                map('n', '[c', function()
-                    if vim.wo.diff then return '[c' end
-                    vim.schedule(gs.prev_hunk)
-                    return '<Ignore>'
-                end, {expr=true})
-
-                -- Actions
-                map({'n', 'v'}, '<leader>hs', gs.stage_hunk)
-                map({'n', 'v'}, '<leader>hr', gs.reset_hunk)
-                map('n', '<leader>hS', gs.stage_buffer)
-                map('n', '<leader>hu', gs.undo_stage_hunk)
-                map('n', '<leader>hR', gs.reset_buffer)
-                map('n', '<leader>hp', gs.preview_hunk)
-                map('n', '<leader>hb', function() gs.blame_line{full=true} end)
-                map('n', '<leader>tb', gs.toggle_current_line_blame)
-                map('n', '<leader>hd', gs.diffthis)
-                map('n', '<leader>hD', function() gs.diffthis('~') end)
-                map('n', '<leader>td', gs.toggle_deleted)
-
-                -- Text object
-                map({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
-            end
-        }); end,
+            });
+        end,
     }
     use 'wellle/tmux-complete.vim'
     use 'chiedo/vim-case-convert'
     use 'gyim/vim-boxdraw'
-    use {'fisadev/vim-isort', ft = {'python'}}
+    use { 'fisadev/vim-isort', ft = { 'python' } }
     use {
         'tell-k/vim-autopep8',
         config = function() vim.g.autopep8_disable_show_diff = 1 end
@@ -432,23 +431,23 @@ local plugins = function(use, use_rocks)
         end
     }
 
-    use {'neomake/neomake', ft = {'python', 'cpp', 'typescript', 'rust'}}
+    use { 'neomake/neomake', ft = { 'python', 'cpp', 'typescript', 'rust' } }
     use 'skywind3000/asyncrun.vim'
     use {
         'mattn/emmet-vim',
-        ft = {'html', 'hbs', 'typescript', 'typescriptreact'},
+        ft = { 'html', 'hbs', 'typescript', 'typescriptreact' },
         config = function()
-            vim.g.user_emmet_settings = {typescript = {extends = 'jsx'}}
+            vim.g.user_emmet_settings = { typescript = { extends = 'jsx' } }
         end
     }
 
     -- color picker
-    use {'KabbAmine/vCoolor.vim', ft = {'less', 'sass', 'css', 'typescriptreact'}}
+    use { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } }
     use 'rhysd/vim-grammarous'
     use {
         'norcalli/nvim-colorizer.lua',
-        ft = {'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact'},
-        config = function() require'colorizer'.setup() end,
+        ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact' },
+        config = function() require 'colorizer'.setup() end,
 
     }
     use {
@@ -475,7 +474,7 @@ local plugins = function(use, use_rocks)
         commit = "5f68f070",
     }
 
-    use 'vimpostor/vim-tpipeline'  -- move vim statusline into tmux statsline
+    use 'vimpostor/vim-tpipeline' -- move vim statusline into tmux statsline
 
     use { 'towolf/vim-helm' }
     use {
@@ -486,7 +485,8 @@ local plugins = function(use, use_rocks)
         'neoclide/coc.nvim',
         run = 'yarn install --frozen-lockfile',
         branch = 'release',
-        requires = { 'ryanoasis/vim-devicons' },  -- coc-explorer requires it
+        commit = '040f3a9ae3b71be341040af32ae6593c91c3689e',
+        requires = { 'ryanoasis/vim-devicons' }, -- coc-explorer requires it
         config = function()
             -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
             vim.g.coc_global_extensions = {
@@ -501,10 +501,10 @@ local plugins = function(use, use_rocks)
                 -- 'coc-metals',  -- scalameta/nvim-metals
                 'coc-json', -- json-lsp
                 'coc-syntax',
-                'coc-clangd',  -- clangd
+                'coc-clangd', -- clangd
                 'coc-sh',
                 'coc-html',
-                'coc-vimlsp',  -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
+                'coc-vimlsp', -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
                 'coc-clang-format-style-options',
                 'coc-ltex',
                 'coc-emmet',
@@ -521,12 +521,13 @@ local plugins = function(use, use_rocks)
 
             -- switch between .h & .c. The good ol' a.vim
             local thunk = function() vim.api.nvim_create_user_command(
-                'A',
-                function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
-                { nargs = 0 }
-            ) end;
+                    'A',
+                    function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
+                    { nargs = 0 }
+                )
+            end;
             vim.api.nvim_create_autocmd(
-                'FileType', {pattern = {'c', 'cpp'}, callback = thunk}
+                'FileType', { pattern = { 'c', 'cpp' }, callback = thunk }
             )
 
             vim.g.coc_default_semantic_highlight_groups = 1
@@ -542,12 +543,12 @@ local plugins = function(use, use_rocks)
     }
     use {
         'gelguy/wilder.nvim',
-        requires = {'romgrk/fzy-lua-native'},
+        requires = { 'romgrk/fzy-lua-native' },
         run = ":UpdateRemotePlugins",
         config = function()
             -- VimL lambdas cannot be used with Lua calls. Will make a switch
             -- once it's fixed. https://github.com/gelguy/wilder.nvim/issues/52
-            vim.cmd[[
+            vim.cmd [[
                 function! s:wilder_init() abort
                     call wilder#setup({'modes': [':', '/', '?']})
                     call wilder#set_option('use_python_remote_plugin', 0)
@@ -597,7 +598,7 @@ local plugins = function(use, use_rocks)
             vim.g.buftabline_numbers = 2
         end
     }
-    use {'voldikss/vim-floaterm'}
+    use { 'voldikss/vim-floaterm' }
     use {
         "nvim-neotest/neotest",
         requires = {
@@ -611,31 +612,31 @@ local plugins = function(use, use_rocks)
                 adapters = {
                     require('neotest-python')({}),
                     require('neotest-vim-test')({
-                        ignore_file_types = {"python", "vim"}
+                        ignore_file_types = { "python", "vim" }
                     }),
                 }
             });
         end
     }
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
-    use {'wookayin/semshi', run = ':UpdateRemotePlugins'}
-    use {'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp'}
+    use { 'wookayin/semshi', run = ':UpdateRemotePlugins' }
+    use { 'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp' }
 
     use {
         'nvim-treesitter/nvim-treesitter',
         run = ':TSUpdate',
         config = function()
-            require'nvim-treesitter.configs'.setup {
+            require 'nvim-treesitter.configs'.setup {
                 compilers = { "clang++", "zig" },
                 ensure_installed = _G.values(_G.treesitter_ft_mod);
                 highlight = {
                     enable = true,
-                    disable = {"cpp", "bash", "python", "typescript", "go", "yaml"},
+                    disable = { "cpp", "bash", "python", "typescript", "go", "yaml" },
                     additional_vim_regex_highlighting = false,
                 },
                 indent = {
                     enable = false,
-                    disable = {"python"},
+                    disable = { "python" },
                 },
                 incremental_selection = { enable = true },
             }
@@ -644,7 +645,7 @@ local plugins = function(use, use_rocks)
 
     use {
         'windwp/nvim-autopairs',
-        config = function() require('nvim-autopairs').setup{}; end,
+        config = function() require('nvim-autopairs').setup {}; end,
     }
 
     use {
@@ -662,7 +663,7 @@ local plugins = function(use, use_rocks)
         'nvim-treesitter/nvim-treesitter-textobjects',
         requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
-            require'nvim-treesitter.configs'.setup {
+            require 'nvim-treesitter.configs'.setup {
                 textobjects = {
                     select = {
                         enable = true,
@@ -688,7 +689,7 @@ local plugins = function(use, use_rocks)
         'nvim-treesitter/nvim-treesitter-refactor',
         requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
-            require'nvim-treesitter.configs'.setup {
+            require 'nvim-treesitter.configs'.setup {
                 refactor = {
                     highlight_current_scope = { enable = false },
                     highlight_definitions = { enable = true },
@@ -707,10 +708,10 @@ local plugins = function(use, use_rocks)
         'andymass/vim-matchup',
         requires = 'nvim-treesitter/nvim-treesitter',
         config = function()
-            require'nvim-treesitter.configs'.setup {
+            require 'nvim-treesitter.configs'.setup {
                 matchup = {
-                    enable = true,              -- mandatory, false will disable the whole extension
-                    disable = {},  -- optional, list of language that will be disabled
+                    enable = true, -- mandatory, false will disable the whole extension
+                    disable = {}, -- optional, list of language that will be disabled
                     -- [options]
                 },
             }
@@ -724,7 +725,7 @@ local plugins = function(use, use_rocks)
         requires = 'nvim-treesitter/nvim-treesitter',
     }
 
-    use_rocks {'luaposix', 'lua-cjson', 'inspect', 'stdlib', 'penlight', 'lua-path'}
+    use_rocks { 'luaposix', 'lua-cjson', 'inspect', 'stdlib', 'penlight', 'lua-path' }
 end
 
 local config = {
@@ -732,4 +733,4 @@ local config = {
     max_jobs = 8;
 }
 
-return require('packer').startup({plugins, config = config})
+return require('packer').startup({ plugins, config = config })

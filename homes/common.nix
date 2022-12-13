@@ -249,7 +249,6 @@ in
       sha256 = "dGmvrQOscGZ+Qk/RCJKJEOxUOcFrAHBGxpASNKZyWCc=";
     };
   })}";
-  xdg.dataFile."nvim/site/plugin/fzf.vim".source = "${pkgs.fzf}/share/vim-plugins/fzf/plugin/fzf.vim";
   xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/lua-language-server".source = ln "${pkgs.sumneko-lua-language-server}/bin/lua-language-server";
   # xdg.configFile."nvim".source = ln ../config/nvim;
 

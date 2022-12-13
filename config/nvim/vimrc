@@ -120,8 +120,6 @@ augroup END
 syntax keyword pythonTodo contained NOTE NOTES
 syntax keyword schemeSyntax λ
 
-cnoreabbrev Fix ALEFix
-
 augroup file_type
   au!
   " Alternative: au FileType python AutoFormatBuffer autopep8
@@ -132,16 +130,17 @@ augroup file_type
   au BufRead flake.lock se ft=json
   " au FileType python set equalprg=autopep8\ -
   au FileType scheme let b:AutoPairs = {"(": ")"}
-  au Filetype python set keywordprg=pydoc3
+  au Filetype python setlocal keywordprg=pydoc3
   au FileType python hi semshiImported ctermfg=214 guifg=#aaaaaa cterm=bold gui=bold
   au FileType python setlocal foldmethod=marker
   au FileType python,java setlocal shiftwidth=4 tabstop=4
   au FileType haskell hi Structure guifg=#00ffaf
   au FileType haskell hi Type      guifg=#61afef
-  au FileType nasm,applescript,cmake,make set omnifunc=syntaxcomplete#Complete
-  au FileType cpp set makeprg="cmake --build build"
-  au FileType markdown set textwidth=78 spell
+  au FileType nasm,applescript,cmake,make setlocal omnifunc=syntaxcomplete#Complete
+  au FileType cpp setlocal makeprg="cmake --build build"
+  au FileType markdown setlocal textwidth=78 spell
   au FileType scheme inoreabbrev lambda λ
+  au FileType go setlocal noexpandtab
 
   au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix setlocal shiftwidth=2 tabstop=2
   "au FileType typescript :syn clear jsxAttrib
