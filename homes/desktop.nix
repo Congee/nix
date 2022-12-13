@@ -51,15 +51,14 @@ in
     gnome.zenity  # --color-selection
     kanshi  # display configuration tool
     greetd.tuigreet  # display/login manager
-    xdg-utils  # xdg-open
+    handlr xdg-utils  # xdg-open
     xvfb-run
-    psmisc  # pstree, fuser
+    procs psmisc  # pstree, fuser
     progress
-    lshw
+    lshw hardinfo
     ltrace
     weechat
     mold
-    gcc
     bind  # dig
 
     wavemon  # wifi signal strength
@@ -69,6 +68,7 @@ in
     onedrive
     tlaplus
     tlaplusToolbox
+    # losslesscut-bin
 
     nerdctl
     buildkit
@@ -83,14 +83,14 @@ in
     wireshark
     termshark
     scrcpy
-    tdesktop  # telegram
+    # tdesktop  # telegram
     musescore
     thunderbird
     slack
     spotify
     spicetify-cli
     postman
-    insomnia
+    # insomnia
     charles
     zoom-us
     mpv

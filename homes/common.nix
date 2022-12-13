@@ -56,9 +56,14 @@ in
     python3
     nodejs
     yarn
-    duf
-    ncdu
+    duf ncdu gdu dua du-dust nix-du
+    iotop bottom btop gtop
+    procs
+    curlie xh
+    lsd
+    dogdns
     (gitstatus.overrideAttrs (_: _: { doInstallCheck = false;}))  # fails on mac
+    git-fire git-imerge # git-trim
     gh
     awscli2
     aws-vault
@@ -80,6 +85,7 @@ in
     nix-tree
     nix-diff  # diff .drv files
     statix  # nix linter
+    manix
     patchelf
     lsof
     xh
@@ -125,6 +131,7 @@ in
     shntool
     cuetools
 
+    act # run github actions locally
     earthly
     pulumi-bin
 

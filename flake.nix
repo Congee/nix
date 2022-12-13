@@ -13,6 +13,8 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url                          = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows       = "nixpkgs";
+    flake-compat.url                    = "github:edolstra/flake-compat";
+    flake-compat.flake                  = false;
   };
 
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
@@ -31,6 +33,7 @@
               inputs.neovim-nightly.overlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
+            nixpkgs.config.allowUnfreePredicate = (_: true);
           }
         ];
 
@@ -86,6 +89,17 @@
           nixpkgs.overlays = [
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) nix; })
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
+            (_: prev: {  # https://github.com/NixOS/nixpkgs/issues/97855#issuecomment-1075818028
+              nixos-option = let
+                prefix = ''(import ${inputs.flake-compat} { src = /home/cwu/nix; }).defaultNix.nixosConfigurations.blackbox'';
+              in prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
+                makeWrapper ${prev.nixos-option}/bin/nixos-option $out/bin/nixos-option \
+                  --add-flags --config_expr \
+                  --add-flags "\"${prefix}.config\"" \
+                  --add-flags --options_expr \
+                  --add-flags "\"${prefix}.options\""
+            '';
+            })
           ];
         }
         ./hosts/blackbox/configuration.nix

@@ -39,6 +39,7 @@ in
   # https://www.kernel.org/doc/Documentation/kdump/kdump.txt
   # 160M + 2bits per 4KB = 160MB + 6MB
   boot.crashDump.reservedMemory = "192M@0M";
+  boot.tmpOnTmpfs = true;
 
   # will be available next
   # programs.droidcam.enable = true;
@@ -89,7 +90,6 @@ in
   environment.systemPackages = with pkgs; [
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
-    nixos-option
   ];
   programs.adb.enable = true;
 
