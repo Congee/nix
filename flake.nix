@@ -34,6 +34,7 @@
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
+            nixpkgs.config.permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];
           }
         ];
 

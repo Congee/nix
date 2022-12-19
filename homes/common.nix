@@ -89,6 +89,7 @@ in
     patchelf
     lsof
     xh
+    watchexec
     exercism
     litecli
     nmap

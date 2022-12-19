@@ -46,6 +46,8 @@ in
 
   networking.hostName = "blackbox"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # NOTE: nmcli does not really connect to a fixed bssid
+  # See https://unix.stackexchange.com/a/612469/195575
   networking.networkmanager.enable = true;
 
   # Set your time zone.

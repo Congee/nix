@@ -60,6 +60,7 @@ in
     weechat
     mold
     bind  # dig
+    iw wirelesstools  # iwconfig
 
     wavemon  # wifi signal strength
     pciutils  # lspci
