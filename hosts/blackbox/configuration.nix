@@ -45,24 +45,26 @@ in
   # programs.droidcam.enable = true;
 
   networking.hostName = "blackbox"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # NOTE: nmcli does not really connect to a fixed bssid
   # See https://unix.stackexchange.com/a/612469/195575
-  networking.networkmanager.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "America/New_York";
-
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.wlo1.useDHCP = true;
-  services.resolved.enable = true;
+  networking.wireless.iwd.enable = true;
+  networking.wireless.iwd.package = import ./iwd.nix { inherit pkgs; };
+  networking.wireless.iwd.settings = {
+    Settings = { Hidden = true; };
+    General = { EnableNetworkConfiguration = true; };
+    Network = { EnableIPv6 = true; };
+  };
+  networking.dhcpcd.enable = false;
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+
+  services.resolved.enable = true;
+  services.resolved.extraConfig = "DNSOverTLS=opportunistic";
+
+  # Set your time zone.
+  time.timeZone = "America/New_York";
 
   fonts.fonts = with pkgs; [
     noto-fonts
