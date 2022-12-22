@@ -7,6 +7,7 @@
 let
   # xanmod has a problem with cgroups for k3s
   linuxPackages = pkgs.linuxPackages_latest;
+  corefreq = config.boot.kernelPackages.callPackage ./corefreq.nix { };
 in
 {
   imports =
@@ -25,8 +26,8 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Droidcam
-  boot.extraModulePackages = [ linuxPackages.v4l2loopback ];
-  boot.kernelModules = [ "v4l2loopback" "snd-aloop" ];
+  boot.extraModulePackages = [ linuxPackages.v4l2loopback corefreq ];
+  boot.kernelModules = [ "v4l2loopback" "snd-aloop" "corefreqk" ];
   boot.extraModprobeConfig = ''
     # 2 for droidcam hw=2,1,0
     options snd_aloop index=2
@@ -94,6 +95,7 @@ in
   environment.systemPackages = with pkgs; [
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
+    corefreq
   ];
   programs.adb.enable = true;
 
@@ -163,6 +165,7 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
 
+  systemd.packages = [ corefreq ];
   # rootless k3s isn't ready yet.
   # rootlesskit --net=slirp4netns --copy-up=/etc --disable-host-loopback buildkitd --addr unix://$XDG_RUNTIME_DIR/buildkit/rootless --containerd-worker-addr /run/k3s/containerd/containerd.sock
   systemd.sockets.buildkit = {
