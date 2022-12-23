@@ -96,6 +96,7 @@ in
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
     corefreq
+    nixos-option
   ];
   programs.adb.enable = true;
 
