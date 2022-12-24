@@ -1,6 +1,7 @@
 [push]
     default = simple
 [alias]
+    exec = ! exec  ;  shell aliases are always executed in the top-level directory
     aliases = config --get-regexp alias
     push = push --follow-tags
     authors = shortlog -sn
