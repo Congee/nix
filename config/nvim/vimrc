@@ -23,7 +23,7 @@ set expandtab
 set display+=lastline
 set incsearch
 set updatetime=300
-set laststatus=3  " global status line
+set laststatus=0  " with cmdheight=0
 let mapleader = ","
 cnoreabbrev W w
 nnoremap <silent> <C-N> :nohlsearch<cr>

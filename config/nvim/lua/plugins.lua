@@ -1,5 +1,3 @@
-local util = require('packer.util')
---
 -- capturing upvalues
 -- https://github.com/wbthomason/packer.nvim/issues/1001#issuecomment-1206609769
 
@@ -45,7 +43,13 @@ end
 ---Pretty print lua table
 function _G.dump(...)
     local objects = vim.tbl_map(vim.inspect, { ... })
+    assert(objects ~= nil)
     print(table.unpack(objects))
+end
+
+if _VERSION == "Lua 5.1" or _VERSION == "LuaJIT" then
+    ---@diagnostic disable: deprecated
+    table.unpack = unpack
 end
 
 -- Use nvim-treesitter instead of vim-polyglot for:
@@ -77,11 +81,8 @@ _G.treesitter_ft_mod = {
     zig             = 'zig',
 };
 
---- @param use fun(_: string | table)
---- @param use_rocks fun(_: table)
-local plugins = function(use, use_rocks)
-    use 'lewis6991/impatient.nvim'
-    use {
+return {
+    {
         'glacambre/firenvim',
         config = function()
             vim.g.firenvim_config = {
@@ -103,41 +104,59 @@ local plugins = function(use, use_rocks)
             }
             vim.cmd [[au BufEnter leetcode.com_* set guifont=monospace:h16]] -- no longer italic
         end,
-        run = function() vim.fn['firenvim#install'](0) end
-    }
-    use {
+        build = function() vim.fn['firenvim#install'](0) end,
+    },
+    {
         'sheerun/vim-polyglot',
-        opt = false,
-        setup = function()
-            -- Please declare this variable before polyglot is loaded (at the top of .vimrc)
-            -- vim-polyglot via https://github.com/vim-python/python-syntax improves nothing
+        init = function()
+            vim.g.polyglot_disabled = { 'sensible', '', table.unpack(values(treesitter_ft_mod)) }
+        end,
+        enabled = function()
             -- not working with vim-markdown
-            vim.g.polyglot_disabled = { 'python', 'sensible' }
+            local set = { 'sensible', '' }
+            return set[vim.bo.filetype] == nil and _G.treesitter_ft_mod[vim.bo.filetype] == nil;
         end,
-        cond = function()
-            return vim.bo.filetype ~= '' and not _G.treesitter_ft_mod[vim.bo.filetype];
-        end,
-    }
-    use {
+        event = "FileType", -- better than FileType as plugins may set ft
+    },
+    {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             require('indent_blankline').setup { use_treesitter = true };
             vim.g.indent_blankline_filetype_exclude = { 'help', 'coc-explorer' }
             vim.g.indent_blankline_char = '│';
 
-            local guifg = _G.hiof('Normal', 'fg', 'gui');
-            local ctermfg = _G.hiof('Normal', 'fg', 'cterm');
-            -- local guifg = vim.api.nvim_eval("synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')")
-
             -- Actually need something like the freground color of the text
-            -- vim.cmd('hi IndentBlanklineChar guifg=' .. guifg .. ' ctermfg=' .. ctermfg)
-            vim.cmd('hi! link IndentBlanklineSpaceChar Normal')
+            vim.cmd([[autocmd ColorScheme hi IndentBlanklineChar guifg=synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')]])
         end,
-    }
-    use "fladson/vim-kitty" -- syntax highlighting for kitty cnofig
-    use {
+        lazy = true,
+        event = "ColorScheme",
+    },
+    {
+        "fladson/vim-kitty", -- syntax highlighting for kitty cnofig
+        lazy = true,
+        ft = "kitty",
+    },
+    {
+        "EdenEast/nightfox.nvim",
+        config = function()
+            vim.cmd [[colorscheme carbonfox]]
+            vim.cmd [[hi Operator gui=None ]] -- no longer italic
+
+            -- make indent area contrast
+            vim.o.guicursor = table.concat({
+                'n-v-c:block',
+                'i-ci-ve:hor100',
+                'r-cr:hor20',
+                'o:hor50',
+                'a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor',
+                'sm:block-blinkwait175-blinkoff150-blinkon175',
+            }, ',');
+            vim.cmd [[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
+        end,
+        enabled = function() return vim.fn.has('mac') == 1 end,
+    },
+    {
         'olimorris/onedarkpro.nvim',
-        commit = "2c439754e1a60d42197e79461bf04e358213a654",
         config = function()
             local onedarkpro = require('onedarkpro')
             local colors = onedarkpro.get_colors('onedark')
@@ -170,13 +189,15 @@ local plugins = function(use, use_rocks)
             }, ',');
             vim.cmd [[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
         end,
-    }
-    use 'qxxxb/vim-searchhi'
+        enabled = function() return vim.fn.has('linux') == 1 end,
+    },
 
-    use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-    use {
+    'qxxxb/vim-searchhi',
+
+    { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    {
         'nvim-telescope/telescope.nvim',
-        requires = { {
+        dependencies = { {
             'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
@@ -219,13 +240,14 @@ local plugins = function(use, use_rocks)
             telescope.load_extension('coc')
             telescope.load_extension('hoogle')
             telescope.load_extension('fzf')
-        end
-    }
-    use 'rafcamlet/nvim-luapad'
+        end,
+        event = "VeryLazy",
+    },
+    { 'rafcamlet/nvim-luapad', lazy = true, ft = "lua" },
 
-    use {
+    {
         'numToStr/Comment.nvim',
-        requires = 'JoosepAlviste/nvim-ts-context-commentstring',
+        dependencies = 'JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
             local cms_internal = require('ts_context_commentstring.internal');
             local cms_utils = require('ts_context_commentstring.utils');
@@ -262,19 +284,19 @@ local plugins = function(use, use_rocks)
                 }
             }
         end,
-    }
-    use {
+    },
+    {
         'kylechui/nvim-surround',
         config = function() require('nvim-surround').setup({}) end
-    }
-    use 'junegunn/vim-easy-align'
-    use 'junegunn/vim-peekaboo'
-    use 'ojroques/vim-oscyank'
-    use {
+    },
+    'junegunn/vim-easy-align',
+    'junegunn/vim-peekaboo',
+    'ojroques/vim-oscyank',
+    {
         'FooSoft/vim-argwrap',
         config = function() vim.g.argwrap_tail_comma = 1 end
-    }
-    use {
+    },
+    {
         'sbdchd/neoformat',
         config = function()
             vim.g.neoformat_enabled_typescript = { 'clang-format' };
@@ -286,20 +308,19 @@ local plugins = function(use, use_rocks)
             -- Enable trimmming of trailing whitespace
             vim.g.neoformat_basic_format_trim = 1
         end
-    }
+    },
 
-    use 'Olical/conjure'
-    use {
+    { 'Olical/conjure', lazy = true },
+    {
         'Olical/aniseed',
-        config = function()
-            vim.g["aniseed#env"] = true
-        end
-    }
+        config = function() vim.g["aniseed#env"] = true end,
+        lazy = true,
+    },
 
-    use {
+    {
         'iamcco/markdown-preview.nvim',
         ft = { 'markdown' },
-        run = 'cd app && yarn install',
+        build = 'cd app && yarn install',
         cmd = 'MarkdownPreview',
         config = function()
             vim.g.mkdp_open_ip = 'localhost'
@@ -317,29 +338,43 @@ local plugins = function(use, use_rocks)
                 vim.g.mkdp_browserfunc = 'g:OpenBrowser'
             end
         end
-    }
+    },
+    {
+        'epwalsh/obsidian.nvim',
+        dependencies = { 'hrsh7th/nvim-cmp' },
+        config = function() require('obsidian').setup({
+                dir = "~/OneDrive/obsidian",
+                use_advanced_uri = true,
+            })
+        end,
+        lazy = true,
+        ft = "markdown",
+    },
 
-    use 'ryvnf/readline.vim'
-    use 'kana/vim-fakeclip'
-    use 'chrisbra/unicode.vim'
-    use 'tpope/vim-liquid'
-    use 'tpope/vim-dadbod' -- for SQL. TODO: help exrc
-    use 'kristijanhusak/vim-dadbod-ui'
-    use 'dhruvasagar/vim-table-mode'
+    'ryvnf/readline.vim',
+    'kana/vim-fakeclip',
+    'chrisbra/unicode.vim',
+    { 'tpope/vim-liquid', lazy = true, ft = 'liquid' },
+    {
+        'tpope/vim-dadbod', -- for SQL. TODO: help exrc
+        dependencies = 'kristijanhusak/vim-dadbod-ui',
+        lazy = true,
+        cmd = "DB",
+    },
+    'dhruvasagar/vim-table-mode',
 
-    use {
+    {
         'rhysd/git-messenger.vim',
-        keys = { '<leader>gm' },
-        cmd = { 'GitMessenger' },
+        keys = { '<leader>gm', '<cmd>GitMessenger<cr>' },
         config = function() vim.g.git_messenger_include_diff = "current" end
-    }
+    },
 
     -- use 'jbyuki/instant.nvim'  -- coediting
 
     -- https://github.com/rhysd/conflict-marker.vim
     -- https://github.com/christoomey/vim-conflicted
-    use 'tpope/vim-fugitive'
-    use 'cohama/agit.vim'
+    'tpope/vim-fugitive',
+    'cohama/agit.vim',
 
     -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
     -- vim despite netrw#CheckIfRemote() returns 1.
@@ -347,7 +382,7 @@ local plugins = function(use, use_rocks)
     -- So may be xdg-open.
     -- xdg-open uses both Chromium and Firefox🤷, and it does not care about
     -- fragments in a url.
-    use {
+    {
         'tyru/open-browser.vim',
         config = function()
             vim.g.netrw_nogx = 1
@@ -362,10 +397,10 @@ local plugins = function(use, use_rocks)
             vim.cmd [[ nmap gx <Plug>(openbrowser-smart-search) ]]
             vim.cmd [[ vmap gx <Plug>(openbrowser-smart-search) ]]
         end,
-    }
-    use {
+    },
+    {
         'lewis6991/gitsigns.nvim',
-        requires = 'nvim-lua/plenary.nvim',
+        dependencies = 'nvim-lua/plenary.nvim',
         config = function() require('gitsigns').setup({
                 -- I dont like the index `Hunk 1 of 2`, maybe I can patch a plugin
                 -- https://github.com/wbthomason/packer.nvim/issues/882
@@ -414,47 +449,50 @@ local plugins = function(use, use_rocks)
                 end
             });
         end,
-    }
-    use 'wellle/tmux-complete.vim'
-    use 'chiedo/vim-case-convert'
-    use 'gyim/vim-boxdraw'
-    use { 'fisadev/vim-isort', ft = { 'python' } }
-    use {
+        lazy = true,
+        event = "BufEnter",
+    },
+    'wellle/tmux-complete.vim',
+    'chiedo/vim-case-convert',
+    'gyim/vim-boxdraw',
+    { 'fisadev/vim-isort', ft = { 'python' } },
+    {
         'tell-k/vim-autopep8',
+        ft = "python",
         config = function() vim.g.autopep8_disable_show_diff = 1 end
-    }
+    },
 
-    use {
+    {
         'SirVer/ultisnips',
-        requires = { 'honza/vim-snippets' },
+        dependencies = { 'honza/vim-snippets' },
         config = function()
             vim.g.UltiSnipsListSnippets        = "<c-tab>"
             vim.g.UltiSnipsJumpForwardTrigger  = "<tab>"
             vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
             vim.g.snips_author                 = "Congee"
         end
-    }
+    },
 
-    use { 'neomake/neomake', ft = { 'python', 'cpp', 'typescript', 'rust' } }
-    use 'skywind3000/asyncrun.vim'
-    use {
+    { 'neomake/neomake', ft = { 'python', 'cpp', 'typescript', 'rust' } },
+    'skywind3000/asyncrun.vim',
+    {
         'mattn/emmet-vim',
         ft = { 'html', 'hbs', 'typescript', 'typescriptreact' },
         config = function()
             vim.g.user_emmet_settings = { typescript = { extends = 'jsx' } }
         end
-    }
+    },
 
     -- color picker
-    use { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } }
-    use 'rhysd/vim-grammarous'
-    use {
+    { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } },
+    'rhysd/vim-grammarous',
+    {
         'norcalli/nvim-colorizer.lua',
         ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact' },
         config = function() require 'colorizer'.setup() end,
 
-    }
-    use {
+    },
+    {
         'liuchengxu/vista.vim',
         config = function()
             vim.g.vista_default_executive = 'coc'
@@ -463,34 +501,45 @@ local plugins = function(use, use_rocks)
             -- vim.g.vista_ctags_cmd = { haskell = 'hasktags -x -o - -c' }
             vim.cmd [[ nnoremap <silent> <leader>vt :Vista!!<CR> ]]
         end
-    }
+    },
     -- use {'nvim-lua/lsp-status.nvim'}
-    use 'kyazdani42/nvim-web-devicons'
+    'kyazdani42/nvim-web-devicons',
     -- use {
     --     'glepnir/galaxyline.nvim',
     --     config = function() require('eviline') end,
-    --     requires = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
+    --     dependencies = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
     -- }
-    use {
+    {
         'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true },
-        config = function() require('evil_lualine') end,
-        commit = "5f68f070",
-    }
+        dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
+        config = function()
+            require('evil_lualine')
+            -- lualine.nvim does not respect `set laststatus=0` :/
+            -- https://github.com/nvim-lualine/lualine.nvim/issues/776
+            vim.cmd [[ autocmd CursorMoved,CursorMovedI,VimResized,FileType,BufEnter * setlocal laststatus=0 ]]
+        end,
+        pin = true,
+        lazy = true,
+        event = "BufEnter",
+    },
 
-    use 'vimpostor/vim-tpipeline' -- move vim statusline into tmux statsline
+    {
+        'vimpostor/vim-tpipeline', -- move vim statusline into tmux statsline
+        lazy = true,
+        event = "BufEnter",
+    },
 
-    use { 'towolf/vim-helm' }
-    use {
+    { 'towolf/vim-helm', lazy = true, ft = "helm" },
+    {
         'williamboman/mason.nvim',
         config = function() require('mason').setup() end,
-    }
-    use {
+    },
+    {
         'neoclide/coc.nvim',
-        run = 'yarn install --frozen-lockfile',
+        build = 'yarn install --frozen-lockfile',
         branch = 'release',
         commit = '040f3a9ae3b71be341040af32ae6593c91c3689e',
-        requires = { 'ryanoasis/vim-devicons' }, -- coc-explorer requires it
+        dependencies = { 'ryanoasis/vim-devicons' }, -- coc-explorer dependencies it
         config = function()
             -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
             vim.g.coc_global_extensions = {
@@ -544,11 +593,12 @@ local plugins = function(use, use_rocks)
                 vim.env.HOME .. '/.nix-profile/bin/rust-analyzer'
             );
         end,
-    }
-    use {
+        event = "VeryLazy",
+    },
+    {
         'gelguy/wilder.nvim',
-        requires = { 'romgrk/fzy-lua-native' },
-        run = ":UpdateRemotePlugins",
+        dependencies = { 'romgrk/fzy-lua-native' },
+        build = ":UpdateRemotePlugins",
         config = function()
             -- VimL lambdas cannot be used with Lua calls. Will make a switch
             -- once it's fixed. https://github.com/gelguy/wilder.nvim/issues/52
@@ -591,21 +641,21 @@ local plugins = function(use, use_rocks)
                 autocmd CmdlineEnter * ++once call s:wilder_init() | call wilder#main#start()
             ]];
         end,
-    }
+    },
 
     -- use 'kyazdani42/nvim-tree.lua'
     -- use 'romgrk/barbar.nvim'  -- barbar does not play well with coc-explorer
-    use {
+    {
         'ap/vim-buftabline',
         config = function()
             vim.g.buftabline_show = 1
             vim.g.buftabline_numbers = 2
         end
-    }
-    use { 'voldikss/vim-floaterm' }
-    use {
+    },
+    { 'voldikss/vim-floaterm' },
+    {
         "nvim-neotest/neotest",
-        requires = {
+        dependencies = {
             "nvim-neotest/neotest-python",
             "nvim-neotest/neotest-vim-test",
             "nvim-treesitter/nvim-treesitter",
@@ -620,15 +670,17 @@ local plugins = function(use, use_rocks)
                     }),
                 }
             });
-        end
-    }
+        end,
+        lazy = true,
+        ft = { "vim", "python" },
+    },
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
-    use { 'wookayin/semshi', run = ':UpdateRemotePlugins' }
-    use { 'jackguo380/vim-lsp-cxx-highlight', ft = 'cpp' }
+    { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
+    { 'jackguo380/vim-lsp-cxx-highlight', lazy = true, ft = 'cpp' },
 
-    use {
+    {
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        build = ':TSUpdate',
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 compilers = { "clang++", "zig" },
@@ -644,28 +696,39 @@ local plugins = function(use, use_rocks)
                 },
                 incremental_selection = { enable = true },
             }
-        end
-    }
 
-    use {
+            local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+            parser_config.kdl = {
+                install_info = {
+                    url = "https://github.com/spaarmann/tree-sitter-kdl",
+                    files = { "src/parser.c", "src/scanner.c" },
+                    branch = "main",
+                },
+            }
+
+            require('nvim-treesitter.parsers').filetype_to_parsername.kdl = "kdl"
+        end
+    },
+
+    {
         'windwp/nvim-autopairs',
         config = function() require('nvim-autopairs').setup {}; end,
-    }
+    },
 
-    use {
+    {
         'yioneko/nvim-yati',
-        requires = 'nvim-treesitter/nvim-treesitter',
-        -- cond = function() return vim.bo.filetype == 'python'; end,
+        dependencies = 'nvim-treesitter/nvim-treesitter',
+        cond = function() return vim.bo.filetype == 'python'; end,
         config = function()
             require("nvim-treesitter.configs").setup {
                 yati = { enable = true },
             };
         end
-    }
+    },
 
-    use {
+    {
         'nvim-treesitter/nvim-treesitter-textobjects',
-        requires = 'nvim-treesitter/nvim-treesitter',
+        dependencies = 'nvim-treesitter/nvim-treesitter',
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 textobjects = {
@@ -687,11 +750,11 @@ local plugins = function(use, use_rocks)
                 },
             }
         end,
-    }
+    },
 
-    use {
+    {
         'nvim-treesitter/nvim-treesitter-refactor',
-        requires = 'nvim-treesitter/nvim-treesitter',
+        dependencies = 'nvim-treesitter/nvim-treesitter',
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 refactor = {
@@ -706,11 +769,11 @@ local plugins = function(use, use_rocks)
                 },
             }
         end,
-    }
+    },
 
-    use {
+    {
         'andymass/vim-matchup',
-        requires = 'nvim-treesitter/nvim-treesitter',
+        dependencies = 'nvim-treesitter/nvim-treesitter',
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 matchup = {
@@ -720,21 +783,12 @@ local plugins = function(use, use_rocks)
                 },
             }
         end
-    }
+    },
 
     -- vim.fn.synstack(...) no longer works under treesitter
     -- use :TSHighlightCapturesUnderCursor instead
-    use {
+    {
         'nvim-treesitter/playground',
-        requires = 'nvim-treesitter/nvim-treesitter',
-    }
-
-    use_rocks { 'luaposix', 'lua-cjson', 'inspect', 'stdlib', 'penlight', 'lua-path' }
-end
-
-local config = {
-    compile_path = util.join_paths(vim.fn.stdpath('data'), 'site', 'plugin', 'packer_compiled.vim'),
-    max_jobs = 8;
+        dependencies = 'nvim-treesitter/nvim-treesitter',
+    },
 }
-
-return require('packer').startup({ plugins, config = config })

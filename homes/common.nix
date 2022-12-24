@@ -244,21 +244,9 @@ in
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = true;
 
-  # packer.nvim claims everything in packer/. To prevent it from manage itself,
-  # install it in a random name like nixpacker. Anything inside
-  # will be sourced ~/.local/share/nvim/site/pack/*/start
-  # https://github.com/nix-community/home-manager/issues/1907#issuecomment-934316296
-  # xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim}";
-  xdg.dataFile."nvim/site/pack/nixpacker/start/packer.nvim".source = "${pkgs.vimPlugins.packer-nvim.overrideAttrs (_: _: {
-    src = pkgs.fetchFromGitHub {
-      owner = "wbthomason";
-      repo = "packer.nvim";
-      rev = "4dedd3b08f8c6e3f84afbce0c23b66320cd2a8f2";
-      sha256 = "dGmvrQOscGZ+Qk/RCJKJEOxUOcFrAHBGxpASNKZyWCc=";
-    };
-  })}";
+  # Need this environment to build some native stuff
+  # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/lua-language-server".source = ln "${pkgs.sumneko-lua-language-server}/bin/lua-language-server";
-  # xdg.configFile."nvim".source = ln ../config/nvim;
 
   programs.bat.enable = true;
   programs.bat.config = {
