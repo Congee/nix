@@ -83,6 +83,13 @@ _G.treesitter_ft_mod = {
 
 return {
     {
+        'tamton-aquib/duck.nvim',
+        config = function()
+            vim.api.nvim_create_user_command('Duck', function() require("duck").hatch() end, {})
+            vim.api.nvim_create_user_command('DuckCook', function() require("duck").cook() end, {})
+        end
+    },
+    {
         'glacambre/firenvim',
         config = function()
             vim.g.firenvim_config = {
