@@ -175,7 +175,8 @@ return {
                     CocHintSign = { fg = colors.cyan },
                 },
             })
-            onedarkpro.load()
+            vim.cmd [[autocmd ColorScheme * ++once hi diffChanged guifg=#61afef]]
+            vim.cmd [[colorscheme onedark ]]
             vim.cmd [[hi Operator gui=None ]] -- no longer italic
 
             -- make indent area contrast
@@ -488,7 +489,7 @@ return {
     'rhysd/vim-grammarous',
     {
         'norcalli/nvim-colorizer.lua',
-        ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact' },
+        ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact', 'Onedarkpro' },
         config = function() require 'colorizer'.setup() end,
 
     },
