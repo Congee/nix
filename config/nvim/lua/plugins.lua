@@ -118,12 +118,12 @@ return {
         init = function()
             vim.g.polyglot_disabled = { 'sensible', '', table.unpack(values(treesitter_ft_mod)) }
         end,
-        enabled = function()
+        cond = function()
             -- not working with vim-markdown
             local set = { 'sensible', '' }
             return set[vim.bo.filetype] == nil and _G.treesitter_ft_mod[vim.bo.filetype] == nil;
         end,
-        event = "FileType", -- better than FileType as plugins may set ft
+        event = "VeryLazy", -- better than FileType as plugins may set ft
     },
     {
         'lukas-reineke/indent-blankline.nvim',
@@ -704,17 +704,6 @@ return {
                 },
                 incremental_selection = { enable = true },
             }
-
-            local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-            parser_config.kdl = {
-                install_info = {
-                    url = "https://github.com/spaarmann/tree-sitter-kdl",
-                    files = { "src/parser.c", "src/scanner.c" },
-                    branch = "main",
-                },
-            }
-
-            require('nvim-treesitter.parsers').filetype_to_parsername.kdl = "kdl"
         end
     },
 
@@ -731,7 +720,9 @@ return {
             require("nvim-treesitter.configs").setup {
                 yati = { enable = true },
             };
-        end
+        end,
+        lazy = true,
+        event = "VeryLazy",
     },
 
     {
