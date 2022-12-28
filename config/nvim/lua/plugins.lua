@@ -248,6 +248,12 @@ return {
             telescope.load_extension('coc')
             telescope.load_extension('hoogle')
             telescope.load_extension('fzf')
+            vim.cmd [[
+                nnoremap <C-\> <cmd>Telescope<CR>
+                nnoremap <C-P> <cmd>Telescope find_files<CR>
+                nnoremap <unique> <silent> <LocalLeader>c <cmd>Telescope coc commands<CR>
+                nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope coc diagnostics<CR>
+            ]]
         end,
         event = "VeryLazy",
     },
@@ -297,7 +303,15 @@ return {
         'kylechui/nvim-surround',
         config = function() require('nvim-surround').setup({}) end
     },
-    'junegunn/vim-easy-align',
+    {
+        'junegunn/vim-easy-align',
+        config = function()
+            vim.cmd [[
+                xmap ga <Plug>(EasyAlign)
+                nmap ga <Plug>(EasyAlign)
+            ]]
+        end,
+    },
     'junegunn/vim-peekaboo',
     'ojroques/vim-oscyank',
     {
@@ -481,7 +495,20 @@ return {
         end
     },
 
-    { 'neomake/neomake', ft = { 'python', 'cpp', 'typescript', 'rust' } },
+    {
+        'neomake/neomake',
+        config = function()
+            vim.g.neomake_cmake_maker = {
+                name = 'cmake',
+                exe = 'cmake',
+                args = { '--build' },
+                append_file = 0
+            }
+            vim.g.neomake_cpp_enabled_makers = { 'cmake', 'makeprg' }
+        end,
+        ft = { 'python', 'cpp', 'typescript', 'rust' },
+        lazy = true,
+    },
     'skywind3000/asyncrun.vim',
     {
         'mattn/emmet-vim',
