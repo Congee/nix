@@ -41,29 +41,6 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 
 set pastetoggle=<Leader>p
-" Bufferline
-nnoremap <silent> <M-n> :bnext<CR>
-nnoremap <silent> <M-p> :bprev<CR>
-
-nmap <M-1> <Plug>BufTabLine.Go(1)
-nmap <M-2> <Plug>BufTabLine.Go(2)
-nmap <M-3> <Plug>BufTabLine.Go(3)
-nmap <M-4> <Plug>BufTabLine.Go(4)
-nmap <M-5> <Plug>BufTabLine.Go(5)
-nmap <M-6> <Plug>BufTabLine.Go(6)
-nmap <M-7> <Plug>BufTabLine.Go(7)
-nmap <M-8> <Plug>BufTabLine.Go(8)
-nmap <M-9> <Plug>BufTabLine.Go(9)
-nmap <M-0> <Plug>BufTabLine.Go(10)
-
-function! Bufferline()
-  call bufferline#refresh_status()
-  return [
-        \ g:bufferline_status_info.before,
-        \ g:bufferline_status_info.current,
-        \ g:bufferline_status_info.after
-        \]
-endfunction
 
 function! NearestMethodOrFunction() abort
   return get(b:, 'vista_nearest_method_or_function', '')
@@ -161,8 +138,6 @@ nnoremap <Leader>e :CocCommand explorer <CR>
 
 " clear italic
 hi CocExplorerIndentLine cterm=NONE guifg=#303030
-
-nnoremap <silent> <leader>q  :bp\|bd #<CR>
 
 nnoremap <C-\> <cmd>Telescope<CR>
 nnoremap <C-P> <cmd>Telescope find_files<CR>

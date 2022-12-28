@@ -652,13 +652,63 @@ return {
     },
 
     -- use 'kyazdani42/nvim-tree.lua'
-    -- use 'romgrk/barbar.nvim'  -- barbar does not play well with coc-explorer
     {
-        'ap/vim-buftabline',
+        'akinsho/bufferline.nvim',
+        dependencies = 'famiu/bufdelete.nvim',
         config = function()
-            vim.g.buftabline_show = 1
-            vim.g.buftabline_numbers = 2
-        end
+            local sidebar = 'coc-explorer';
+            require('bufferline').setup {
+                options = {
+                    show_buffer_icons = false,
+                    show_buffer_close_icons = false,
+                    show_close_icon = false,
+                    separator_style = "thin",
+                    always_show_bufferline = false,
+                    offsets = {
+                        {
+                            filetype = sidebar,
+                            highlight = "Directory",
+                            text_align = "center"
+                        }
+                    },
+                    numbers = "none",
+                    left_mouse_command = function(bufnr)
+                        if vim.bo.filetype ~= sidebar then
+                            vim.cmd("buffer " .. bufnr)
+                        end
+                    end,
+                    middle_mouse_command = function(bufnr)
+                        require('bufdelete').bufdelete(bufnr, true)
+                    end,
+                    right_mouse_command = nil,
+                    indicator = { style = "none" },
+                },
+            }
+            local map = function(key, bufnr)
+                local fn = function()
+                    if vim.bo.filetype ~= sidebar then
+                        require('bufferline').go_to_buffer(bufnr, true)
+                    end
+                end
+
+                vim.keymap.set('n', key, fn, { silent = true })
+            end
+            map("<M-1>", 1)
+            map("<M-2>", 2)
+            map("<M-3>", 3)
+            map("<M-4>", 4)
+            map("<M-5>", 5)
+            map("<M-6>", 6)
+            map("<M-7>", 7)
+            map("<M-8>", 8)
+            map("<M-9>", 9)
+            map("<M-0>", -1)
+            vim.cmd [[
+                nnoremap <silent> <leader>q :Bdelete<CR>
+                nnoremap <silent> <M-n> :bnext<CR>
+                nnoremap <silent> <M-p> :bprev<CR>
+            ]]
+        end,
     },
     { 'voldikss/vim-floaterm' },
     {
