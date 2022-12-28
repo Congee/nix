@@ -112,8 +112,6 @@ augroup highlight_yank
     au TextYankPost * silent! lua vim.highlight.on_yank { higroup='IncSearch', timeout=200 }
 augroup END
 
-
-syntax keyword pythonTodo contained NOTE NOTES
 syntax keyword schemeSyntax λ
 
 nnoremap <Leader>e :CocCommand explorer <CR>

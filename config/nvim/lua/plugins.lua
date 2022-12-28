@@ -200,6 +200,16 @@ return {
         enabled = function() return vim.fn.has('linux') == 1 end,
     },
 
+    {
+        'folke/todo-comments.nvim',
+        config = function()
+            require('todo-comments').setup {
+                highlight = { keyword = "bg", multiline = false }
+            }
+            vim.cmd [[syntax keyword Todo contained NOTE NOTES]] -- w/o treesitter
+        end
+    },
+
     'qxxxb/vim-searchhi',
 
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
