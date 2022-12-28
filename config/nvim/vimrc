@@ -124,9 +124,6 @@ set hidden
 set noshowmode  " Don't show INSERT/NORMAL... mode in cmdline
 set completeopt-=preview
 
-
-let g:qs_lazy_highlight = 1  " QuickScope
-
 " show chunk diff at current position
 nmap <Leader>d <Plug>(coc-git-chunkinfo)
 

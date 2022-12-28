@@ -210,6 +210,24 @@ return {
         end
     },
 
+    {
+        'rhysd/clever-f.vim', -- leap.nvim is clunky
+        config = function()
+            vim.g.clever_f_across_no_line = 1
+            vim.g.clever_f_not_overwrites_standard_mappings = 1
+            -- make it work with macros
+            vim.cmd [[
+                nmap <expr> f reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-f)" : "f"
+                nmap <expr> F reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-F)" : "F"
+                nmap <expr> t reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-t)" : "t"
+                nmap <expr> T reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-T)" : "T"
+
+                map ;     <Plug>(clever-f-repeat-forward)
+                map <M-,> <Plug>(clever-f-repeat-back)
+            ]]
+        end
+    },
+
     'qxxxb/vim-searchhi',
 
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
