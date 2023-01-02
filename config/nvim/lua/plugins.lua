@@ -519,7 +519,15 @@ return {
         lazy = true,
         event = "BufEnter",
     },
-    'wellle/tmux-complete.vim',
+    {
+        'wellle/tmux-complete.vim',
+        config = function()
+            vim.g['tmuxcomplete#asyncomplete_source_options'] = {
+                name = 'tmuxcomplete',
+                config = { truncate = 4 }
+            }
+        end,
+    },
     'chiedo/vim-case-convert',
     'gyim/vim-boxdraw',
     { 'fisadev/vim-isort', ft = { 'python' } },
