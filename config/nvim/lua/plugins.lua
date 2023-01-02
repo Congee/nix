@@ -52,6 +52,11 @@ if _VERSION == "Lua 5.1" or _VERSION == "LuaJIT" then
     table.unpack = unpack
 end
 
+--- @generic T
+--- @param x T
+--- @return T
+function _G.id(x) return x end
+
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
 _G.treesitter_ft_mod = {
