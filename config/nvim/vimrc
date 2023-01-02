@@ -64,10 +64,6 @@ augroup file_type
   " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
-function! NearestMethodOrFunction() abort
-  return get(b:, 'vista_nearest_method_or_function', '')
-endfunction
-
 let g:node_client_debug = 0
 
 set tagfunc=CocTagFunc
