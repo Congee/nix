@@ -739,6 +739,7 @@ return {
                     indicator = { style = "none" },
                 },
             }
+
             local map = function(key, bufnr)
                 local fn = function()
                     if vim.bo.filetype ~= sidebar then
@@ -758,11 +759,16 @@ return {
             map("<M-8>", 8)
             map("<M-9>", 9)
             map("<M-0>", -1)
-            vim.cmd [[
-                nnoremap <silent> <leader>q :Bdelete<CR>
-                nnoremap <silent> <M-n> :bnext<CR>
-                nnoremap <silent> <M-p> :bprev<CR>
-            ]]
+
+            vim.keymap.set('n', '<leader>q', function()
+                if vim.bo.filetype == sidebar then
+                    vim.api.nvim_win_close(0, false)
+                else
+                    require('bufdelete').bufdelete(0, true)
+                end
+            end, { silent = true })
+            vim.keymap.set('n', '<M-n>', ':bnext<CR>', { silent = true })
+            vim.keymap.set('n', '<M-p>', ':bprev<CR>', { silent = true })
         end,
     },
     { 'voldikss/vim-floaterm' },
