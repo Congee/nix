@@ -650,6 +650,7 @@ return {
                 'coc-tailwindcss',
                 'coc-xml',
                 'coc-go',
+                'coc-snippets',
             }
 
             -- switch between .h & .c. The good ol' a.vim
