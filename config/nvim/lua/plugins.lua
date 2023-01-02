@@ -401,7 +401,19 @@ return {
         ft = "markdown",
     },
 
-    'ryvnf/readline.vim',
+    {
+        'ryvnf/readline.vim',
+        config = function()
+            local function back_delete_char()
+                local row, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+                if col == vim.fn.col('$') - 1 then return end
+                local bufnr = vim.api.nvim_get_current_buf()
+                vim.api.nvim_buf_set_text(bufnr, row - 1, col, row - 1, col + 1, {})
+            end
+
+            vim.keymap.set('i', '<C-D>', back_delete_char, { silent = true })
+        end,
+    },
     'kana/vim-fakeclip',
     'chrisbra/unicode.vim',
     { 'tpope/vim-liquid', lazy = true, ft = 'liquid' },
