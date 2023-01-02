@@ -166,7 +166,7 @@ return {
         'olimorris/onedarkpro.nvim',
         config = function()
             local onedarkpro = require('onedarkpro')
-            local colors = onedarkpro.get_colors('onedark')
+            local colors = require('onedarkpro.helpers').get_colors()
             onedarkpro.setup({
                 options = { transparency = true },
                 hlgroups = {
