@@ -34,6 +34,7 @@
 [delta]
     features = villsau  # theme of unified view. use "chameleon" for split view
 [core]
+    hooksPath = ~/.config/git/hooks
     trustctime = false
     ; attributesfile = ~/.gitattributes
     # pager = delta --dark

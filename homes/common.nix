@@ -280,11 +280,12 @@ in
       diff.external = ''${pkgs.difftastic}/bin/difft --color=always --width ''${DFT_WIDTH:-''${FZF_PREVIEW_COLUMNS:-$COLUMNS}}'';
     };
     includes = [
-      { path = ../config/gitconfig; }
+      { path = ../config/git/config; }
       { path = builtins.toString (builtins.fetchGit "https://github.com/dandavison/delta") + "/themes.gitconfig"; }
     ];
-    attributes = lib.splitString "\n" (builtins.readFile ../config/gitattributes);
+    attributes = lib.splitString "\n" (builtins.readFile ../config/git/gitattributes);
   };
+  xdg.configFile."git/hooks".source = ln ../config/git/hooks;
 
   programs.htop.enable = true;
   programs.htop.settings.highlight_basename = true;

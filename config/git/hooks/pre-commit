@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+# An hook script to remove trailing whitespaces to be committed.
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=$(git hash-object -t tree /dev/null)
+fi
+
+# Find files with trailing whitespace
+for file in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | sed -r 's/:[0-9]+:.*//' | uniq` ; do
+    # Fix them!
+    sed -i 's/[[:space:]]*$//' "$file"
+done
