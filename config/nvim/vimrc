@@ -64,32 +64,8 @@ augroup file_type
   " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()
 augroup END
 
-let g:node_client_debug = 0
-
-set tagfunc=CocTagFunc
-" nnoremap <leader>m :CocList<cr>
-nmap <leader>ac <Plug>(coc-codeaction)
-nmap <leader>dg <Plug>(coc-diagnostic-info)
-" nmap <leader>gt <Plug>(coc-action-doHover)
-nmap <leader>sn <Plug>(coc-action-showSignatureHelp)
-nmap <leader>cl <Plug>(coc-codelens-action)
-nmap <leader>ji <Plug>(coc-implementation)
-nmap <leader>jd <Plug>(coc-definition)
-nmap <leader>jr <Plug>(coc-references)
-nmap <leader>fx <Plug>(coc-fix-current)
-nmap <leader>ft <Plug>(coc-format-selected)
-vmap <leader>ft <Plug>(coc-format-selected)
-nmap <silent>[w <Plug>(coc-diagnostic-prev)
-nmap <silent>]w <Plug>(coc-diagnostic-next)
-nmap <silent>[e <Plug>(coc-diagnostic-prev-error)
-nmap <silent>]e <Plug>(coc-diagnostic-next-error)
-nmap <leader>rn <Plug>(coc-rename)
-inoremap <silent><expr> <C-X><C-O> coc#refresh()
-nnoremap <silent><space> :call CocActionAsync('doHover')<cr>
-command! -nargs=0 Format :call CocAction('format')  " format the whole buffer
-
 " Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+" nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -109,18 +85,10 @@ augroup END
 
 syntax keyword schemeSyntax λ
 
-nnoremap <Leader>e :CocCommand explorer <CR>
-
-" clear italic
-hi CocExplorerIndentLine cterm=NONE guifg=#303030
-
 " Required for operations modifying multiple buffers like rename.
 set hidden
 set noshowmode  " Don't show INSERT/NORMAL... mode in cmdline
 set completeopt-=preview
-
-" show chunk diff at current position
-nmap <Leader>d <Plug>(coc-git-chunkinfo)
 
 " highlighting
 " let g:haskell_enable_quantification   = 1  " `forall`

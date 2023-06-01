@@ -121,7 +121,7 @@ return {
     {
         'sheerun/vim-polyglot',
         init = function()
-            vim.g.polyglot_disabled = { 'sensible', '', table.unpack(values(treesitter_ft_mod)) }
+            vim.g.polyglot_disabled = { 'sensible', '', table.unpack(vim.tbl_values(treesitter_ft_mod)) }
         end,
         cond = function()
             -- not working with vim-markdown
@@ -134,7 +134,7 @@ return {
         'lukas-reineke/indent-blankline.nvim',
         config = function()
             require('indent_blankline').setup { use_treesitter = true };
-            vim.g.indent_blankline_filetype_exclude = { 'help', 'coc-explorer' }
+            vim.g.indent_blankline_filetype_exclude = { 'help', 'neo-tree' }
             vim.g.indent_blankline_char = '│';
 
             -- Actually need something like the freground color of the text
@@ -190,6 +190,7 @@ return {
             vim.cmd [[autocmd ColorScheme * ++once hi diffChanged guifg=#61afef]]
             vim.cmd [[colorscheme onedark ]]
             vim.cmd [[hi Operator gui=None ]] -- no longer italic
+            vim.cmd [[hi @variable guifg=clear ]]
 
             -- make indent area contrast
             vim.o.guicursor = table.concat({
@@ -221,12 +222,17 @@ return {
             vim.g.clever_f_across_no_line = 1
             vim.g.clever_f_not_overwrites_standard_mappings = 1
             -- make it work with macros
-            vim.cmd [[
-                nmap <expr> f reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-f)" : "f"
-                nmap <expr> F reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-F)" : "F"
-                nmap <expr> t reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-t)" : "t"
-                nmap <expr> T reg_recording() .. reg_executing() == "" ? "<Plug>(clever-f-T)" : "T"
+            local check = function(ch)
+                local rec = vim.fn.reg_recording() .. vim.fn.reg_executing() == ""
+                return rec and ("<Plug>(clever-f-" .. ch .. ")") or ch
+            end
 
+            local opts = { silent = true, remap = true, expr = true }
+            vim.keymap.set('n', 'f', function() return check('f') end, opts)
+            vim.keymap.set('n', 'F', function() return check('F') end, opts)
+            vim.keymap.set('n', 't', function() return check('t') end, opts)
+            vim.keymap.set('n', 'T', function() return check('T') end, opts)
+            vim.cmd [[
                 map ;     <Plug>(clever-f-repeat-forward)
                 map <M-,> <Plug>(clever-f-repeat-back)
             ]]
@@ -237,13 +243,21 @@ return {
 
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     {
+        'folke/trouble.nvim',
+        config = function()
+            local opts = { silent = true, noremap = true }
+            vim.keymap.set("n", "<leader>xx", "<cmd>TroubleToggle<cr>", opts)
+        end,
+        lazy = true,
+        event = 'VeryLazy',
+    },
+    {
         'nvim-telescope/telescope.nvim',
         dependencies = { {
             'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
             'xiyaowong/telescope-emoji.nvim',
-            'fannheyward/telescope-coc.nvim',
             'luc-tielen/telescope_hoogle',
             'MrcJkb/telescope-manix',
             'AckslD/nvim-neoclip.lua',
@@ -278,26 +292,22 @@ return {
                 }
             }
 
-            telescope.load_extension('coc')
             telescope.load_extension('hoogle')
             telescope.load_extension('fzf')
             vim.cmd [[
                 nnoremap <C-\> <cmd>Telescope<CR>
                 nnoremap <C-P> <cmd>Telescope find_files<CR>
-                nnoremap <unique> <silent> <LocalLeader>c <cmd>Telescope coc commands<CR>
-                nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope coc diagnostics<CR>
+                nnoremap <unique> <silent> <LocalLeader>d <cmd>Telescope diagnostics<CR>
             ]]
         end,
         event = "VeryLazy",
     },
-    { 'rafcamlet/nvim-luapad', lazy = true, ft = "lua" },
+    { 'rafcamlet/nvim-luapad',                    lazy = true,   ft = "lua" },
 
     {
         'numToStr/Comment.nvim',
         dependencies = 'JoosepAlviste/nvim-ts-context-commentstring',
         config = function()
-            local cms_internal = require('ts_context_commentstring.internal');
-            local cms_utils = require('ts_context_commentstring.utils');
             require 'nvim-treesitter.configs'.setup {
                 context_commentstring = {
                     enable = true,
@@ -306,35 +316,21 @@ return {
             }
 
             require('Comment').setup {
-                pre_hook = function(ctx)
-                    local U = require('Comment.utils')
-                    local ty = ctx.type == U.ctype.line and '__single' or '__multi'
-
-                    local location = nil;
-
-                    if vim.bo.filetype == 'typescriptreact' then
-                        if ctx.ctype == U.ctype.block then
-                            location = cms_utils.get_cursor_location()
-                        elseif ctx.cmotion == U.cmotion.v or ctx.cmotion == U.cmotion.V then
-                            location = cms_utils.get_visual_start_location()
-                        end
-                    end
-
-                    return cms_internal.calculate_commentstring({
-                        key = ty,
-                        location = location,
-                    })
-                end,
+                pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
                 mappings = {
                     basic = true,
                     extra = false,
                 }
             }
         end,
+        lazy = true,
+        event = "VeryLazy",
     },
     {
         'kylechui/nvim-surround',
-        config = function() require('nvim-surround').setup({}) end
+        config = function() require('nvim-surround').setup({}) end,
+        lazy = true,
+        event = "VeryLazy",
     },
     {
         'junegunn/vim-easy-align',
@@ -352,19 +348,26 @@ return {
         config = function() vim.g.argwrap_tail_comma = 1 end
     },
     {
-        'sbdchd/neoformat',
+        'mhartington/formatter.nvim',
         config = function()
-            vim.g.neoformat_enabled_typescript = { 'clang-format' };
-            -- Enable alignment
-
-            vim.g.neoformat_basic_format_align = 1
-            -- Enable tab to spaces conversion
-            vim.g.neoformat_basic_format_retab = 1
-            -- Enable trimmming of trailing whitespace
-            vim.g.neoformat_basic_format_trim = 1
-        end
+            require('formatter').setup({
+                logging = true,
+                log_level = vim.log.levels.WARN,
+                filetype = {
+                    typescript = {
+                        require('formatter.filetypes.typescript').clangformat,
+                    },
+                    ['*'] = {
+                        require('formatter.filetypes.any').remove_trailing_whitespace
+                    },
+                    python = {
+                        require('formatter.filetypes.python').isort,
+                        require('formatter.filetypes.python').isort,
+                    }
+                }
+            })
+        end,
     },
-
     { 'Olical/conjure', lazy = true },
     {
         'Olical/aniseed',
@@ -397,7 +400,8 @@ return {
     {
         'epwalsh/obsidian.nvim',
         dependencies = { 'hrsh7th/nvim-cmp' },
-        config = function() require('obsidian').setup({
+        config = function()
+            require('obsidian').setup({
                 dir = "~/OneDrive/obsidian",
                 use_advanced_uri = true,
             })
@@ -419,9 +423,12 @@ return {
             vim.keymap.set('i', '<C-D>', back_delete_char, { silent = true })
         end,
     },
-    'kana/vim-fakeclip',
+    {
+        'kana/vim-fakeclip',
+        lazy = true,
+        event = "VeryLazy",
+    },
     'chrisbra/unicode.vim',
-    { 'tpope/vim-liquid', lazy = true, ft = 'liquid' },
     {
         'tpope/vim-dadbod', -- for SQL. TODO: help exrc
         dependencies = 'kristijanhusak/vim-dadbod-ui',
@@ -440,7 +447,11 @@ return {
 
     -- https://github.com/rhysd/conflict-marker.vim
     -- https://github.com/christoomey/vim-conflicted
-    'tpope/vim-fugitive',
+    {
+        'tpope/vim-fugitive',
+        lazy = true,
+        event = "VeryLazy",
+    },
     'cohama/agit.vim',
 
     -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
@@ -455,10 +466,10 @@ return {
             vim.g.netrw_nogx = 1
             if vim.fn.has('linux') == 1 then
                 vim.g.openbrowser_browser_commands = {
-                    { name = "firefox", args = { "{browser}", "{uri}" } },
-                    { name = "xdg-open", args = { "{browser}", "{uri}" } },
+                    { name = "firefox",       args = { "{browser}", "{uri}" } },
+                    { name = "xdg-open",      args = { "{browser}", "{uri}" } },
                     { name = "x-www-browser", args = { "{browser}", "{uri}" } },
-                    { name = "w3m", args = { "{browser}", "{uri}" } },
+                    { name = "w3m",           args = { "{browser}", "{uri}" } },
                 }
             end
             vim.cmd [[ nmap gx <Plug>(openbrowser-smart-search) ]]
@@ -468,7 +479,8 @@ return {
     {
         'lewis6991/gitsigns.nvim',
         dependencies = 'nvim-lua/plenary.nvim',
-        config = function() require('gitsigns').setup({
+        config = function()
+            require('gitsigns').setup({
                 -- I dont like the index `Hunk 1 of 2`, maybe I can patch a plugin
                 -- https://github.com/wbthomason/packer.nvim/issues/882
                 preview_config = {
@@ -504,7 +516,7 @@ return {
                     map('n', '<leader>hS', gs.stage_buffer)
                     map('n', '<leader>hu', gs.undo_stage_hunk)
                     map('n', '<leader>hR', gs.reset_buffer)
-                    map('n', '<leader>hp', gs.preview_hunk)
+                    map('n', '<leader>hp', gs.preview_hunk_inline)
                     map('n', '<leader>hb', function() gs.blame_line { full = true } end)
                     map('n', '<leader>tb', gs.toggle_current_line_blame)
                     map('n', '<leader>hd', gs.diffthis)
@@ -519,33 +531,19 @@ return {
         lazy = true,
         event = "BufEnter",
     },
-    {
-        'wellle/tmux-complete.vim',
-        config = function()
-            vim.g['tmuxcomplete#asyncomplete_source_options'] = {
-                name = 'tmuxcomplete',
-                config = { truncate = 4 }
-            }
-        end,
-    },
     'chiedo/vim-case-convert',
     'gyim/vim-boxdraw',
-    { 'fisadev/vim-isort', ft = { 'python' } },
     {
-        'tell-k/vim-autopep8',
-        ft = "python",
-        config = function() vim.g.autopep8_disable_show_diff = 1 end
-    },
-
-    {
-        'SirVer/ultisnips',
+        'SirVer/ultisnips', -- TODO: try LuaSnip + cmp_luasnip
         dependencies = { 'honza/vim-snippets' },
         config = function()
             vim.g.UltiSnipsListSnippets        = "<c-tab>"
             vim.g.UltiSnipsJumpForwardTrigger  = "<tab>"
             vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
             vim.g.snips_author                 = "Congee"
-        end
+        end,
+        lazy = true,
+        event = "VeryLazy",
     },
 
     {
@@ -562,7 +560,11 @@ return {
         ft = { 'python', 'cpp', 'typescript', 'rust' },
         lazy = true,
     },
-    'skywind3000/asyncrun.vim',
+    {
+        'skywind3000/asyncrun.vim',
+        lazy = true,
+        event = "VeryLazy",
+    },
     {
         'mattn/emmet-vim',
         ft = { 'html', 'hbs', 'typescript', 'typescriptreact' },
@@ -573,171 +575,155 @@ return {
 
     -- color picker
     { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } },
-    'rhysd/vim-grammarous',
+    'rhysd/vim-grammarous',  -- maybe migrate to nvim-lint or null-ls
     {
         'norcalli/nvim-colorizer.lua',
         ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact', 'Onedarkpro' },
         config = function() require 'colorizer'.setup() end,
+    },
+    -- { 'ray-x/navigator.lua' },
+    {
+        'simrat39/symbols-outline.nvim',
+        config = function()
+            local outline = require("symbols-outline")
 
-    },
-    {
-        'liuchengxu/vista.vim',
-        config = function()
-            vim.g.vista_default_executive = 'coc'
-            vim.g['vista#renderer#enable_icon'] = 1
-            -- doesn't hls provide symbols?
-            -- vim.g.vista_ctags_cmd = { haskell = 'hasktags -x -o - -c' }
-            vim.cmd [[ nnoremap <silent> <leader>vt :Vista!!<CR> ]]
-        end
-    },
-    -- use {'nvim-lua/lsp-status.nvim'}
-    'kyazdani42/nvim-web-devicons',
-    -- use {
-    --     'glepnir/galaxyline.nvim',
-    --     config = function() require('eviline') end,
-    --     dependencies = {'kyazdani42/nvim-web-devicons', 'liuchengxu/vista.vim'}
-    -- }
-    {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
-        config = function()
-            require('evil_lualine')
-            -- lualine.nvim does not respect `set laststatus=0` :/
-            -- https://github.com/nvim-lualine/lualine.nvim/issues/776
-            vim.cmd [[ autocmd CursorMoved,CursorMovedI,VimResized,FileType,BufEnter * setlocal laststatus=0 ]]
+            outline.setup({ opts = { width = 20 } })
+            vim.keymap.set('n', '<leader>vt', outline.toggle_outline, { silent = true })
         end,
-        pin = true,
-        lazy = true,
-        event = "BufEnter",
     },
-
+    {
+        'rebelot/heirline.nvim',
+        dependencies = { 'kyazdani42/nvim-web-devicons', 'olimorris/onedarkpro.nvim' },
+        config = function() require('statusline') end,
+        lazy = true,
+        event = "UiEnter",
+    },
     {
         'vimpostor/vim-tpipeline', -- move vim statusline into tmux statsline
         lazy = true,
-        event = "BufEnter",
+        event = "UiEnter",
     },
 
-    { 'towolf/vim-helm', lazy = true, ft = "helm" },
     {
-        'williamboman/mason.nvim',
-        config = function() require('mason').setup() end,
-    },
-    {
-        'neoclide/coc.nvim',
-        build = 'yarn install --frozen-lockfile',
-        branch = 'release',
-        commit = '040f3a9ae3b71be341040af32ae6593c91c3689e',
-        dependencies = { 'ryanoasis/vim-devicons' }, -- coc-explorer dependencies it
-        config = function()
-            -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
-            vim.g.coc_global_extensions = {
-                'coc-sumneko-lua',
-                'coc-rust-analyzer',
-                'coc-git',
-                'coc-yaml',
-                'coc-diagnostic',
-                'coc-explorer',
-                'coc-tsserver',
-                'coc-pyright',
-                -- 'coc-metals',  -- scalameta/nvim-metals
-                'coc-json', -- json-lsp
-                'coc-syntax',
-                'coc-clangd', -- clangd
-                'coc-sh',
-                'coc-html',
-                'coc-vimlsp', -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
-                'coc-clang-format-style-options',
-                'coc-ltex',
-                'coc-emmet',
-                'coc-markdown-preview-enhanced', 'coc-webview',
-                'coc-markmap',
-                'coc-markdownlint',
-                'coc-prettier',
-                'coc-docker',
-                'coc-cmake',
-                'coc-tailwindcss',
-                'coc-xml',
-                'coc-go',
-                'coc-snippets',
-            }
-
-            -- switch between .h & .c. The good ol' a.vim
-            local thunk = function() vim.api.nvim_create_user_command(
-                    'A',
-                    function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
-                    { nargs = 0 }
-                )
-            end;
-            vim.api.nvim_create_autocmd(
-                'FileType', { pattern = { 'c', 'cpp' }, callback = thunk }
-            )
-
-            vim.g.coc_default_semantic_highlight_groups = 1
-            -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
-            -- need to dynamically evaluate $JAVA_HOME:
-            -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
-            vim.fn["coc#config"]('ltex.java.path', vim.env.JAVA_HOME);
-            vim.fn["coc#config"](
-                'rust-analyzer.server.path',
-                vim.env.HOME .. '/.nix-profile/bin/rust-analyzer'
-            );
-        end,
+        'hrsh7th/nvim-cmp',
+        lazy = true,
         event = "VeryLazy",
+        dependencies = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-path',
+            'hrsh7th/cmp-cmdline',
+            'hrsh7th/cmp-nvim-lsp-signature-help',
+            'quangnguyen30192/cmp-nvim-ultisnips',
+            'neovim/nvim-lspconfig',
+            'williamboman/mason.nvim',
+            'williamboman/mason-lspconfig.nvim',
+            'jose-elias-alvarez/null-ls.nvim',
+            'jay-babu/mason-null-ls.nvim',
+            'mfussenegger/nvim-lint',
+            'folke/neodev.nvim',
+            'andersevenrud/cmp-tmux',
+            {
+                'lvimuser/lsp-inlayhints.nvim',
+                config = function() require('lsp-inlayhints').setup({
+                    inlay_hints = { type_hints = { show = false, remove_colon_start = true } }
+                }) end,
+            },
+
+            { 'SmiteshP/nvim-navbuddy', "MunifTanjim/nui.nvim" },
+
+            'SmiteshP/nvim-navic',
+            'j-hui/fidget.nvim',
+
+            'p00f/clangd_extensions.nvim',
+            'MrcJkb/haskell-tools.nvim',
+            'simrat39/rust-tools.nvim',
+        },
+        config = function() require('lsp') end,
     },
     {
-        'gelguy/wilder.nvim',
-        dependencies = { 'romgrk/fzy-lua-native' },
-        build = ":UpdateRemotePlugins",
+        "ThePrimeagen/refactoring.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function() require('refactoring').setup({}) end,
+    },
+    -- {
+    --     'neoclide/coc.nvim',
+    --     build = 'yarn install --frozen-lockfile',
+    --     branch = 'release',
+    --     commit = '040f3a9ae3b71be341040af32ae6593c91c3689e',
+    --     dependencies = { 'ryanoasis/vim-devicons' }, -- coc-explorer dependencies it
+    --     config = function()
+    --         -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
+    --         vim.g.coc_global_extensions = {
+    --             'coc-sumneko-lua',
+    --             'coc-rust-analyzer',
+    --             'coc-git',
+    --             'coc-yaml',
+    --             'coc-diagnostic',
+    --             'coc-explorer',
+    --             'coc-tsserver',
+    --             'coc-pyright',
+    --             -- 'coc-metals',  -- scalameta/nvim-metals
+    --             'coc-json', -- json-lsp
+    --             'coc-syntax',
+    --             'coc-clangd', -- clangd
+    --             'coc-sh',
+    --             'coc-html',
+    --             'coc-vimlsp', -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
+    --             'coc-clang-format-style-options',
+    --             'coc-ltex',
+    --             'coc-emmet',
+    --             'coc-markdown-preview-enhanced', 'coc-webview',
+    --             'coc-markmap',
+    --             'coc-markdownlint',
+    --             'coc-prettier',
+    --             'coc-docker',
+    --             'coc-cmake',
+    --             'coc-tailwindcss',
+    --             'coc-xml',
+    --             'coc-go',
+    --             'coc-snippets',
+    --         }
+    --
+    --         -- switch between .h & .c. The good ol' a.vim
+    --         local thunk = function() vim.api.nvim_create_user_command(
+    --                 'A',
+    --                 function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
+    --                 { nargs = 0 }
+    --             )
+    --         end;
+    --         vim.api.nvim_create_autocmd(
+    --             'FileType', { pattern = { 'c', 'cpp' }, callback = thunk }
+    --         )
+    --
+    --         vim.g.coc_default_semantic_highlight_groups = 1
+    --         -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
+    --         -- need to dynamically evaluate $JAVA_HOME:
+    --         -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
+    --         vim.fn["coc#config"]('ltex.java.path', vim.env.JAVA_HOME);
+    --         vim.fn["coc#config"](
+    --             'rust-analyzer.server.path',
+    --             vim.env.HOME .. '/.nix-profile/bin/rust-analyzer'
+    --         );
+    --     end,
+    --     event = "VeryLazy",
+    -- },
+    {
+        'nvim-neo-tree/neo-tree.nvim',
         config = function()
-            -- VimL lambdas cannot be used with Lua calls. Will make a switch
-            -- once it's fixed. https://github.com/gelguy/wilder.nvim/issues/52
-            vim.cmd [[
-                function! s:wilder_init() abort
-                    call wilder#setup({'modes': [':', '/', '?']})
-                    call wilder#set_option('use_python_remote_plugin', 0)
-                    call wilder#set_option('pipeline', [
-                      \   wilder#branch(
-                      \     wilder#cmdline_pipeline({
-                      \       'fuzzy': 1,
-                      \       'fuzzy_filter': wilder#lua_fzy_filter(),
-                      \     }),
-                      \     wilder#vim_search_pipeline(),
-                      \   ),
-                      \ ])
-
-                    let l:hightlight_accent = wilder#make_hl(
-                      \   'WilderAccent',
-                      \   'Pmenu',
-                      \   [{}, {}, {'foreground': '#f4468f'}]
-                      \ )
-                    call wilder#set_option('renderer', wilder#renderer_mux({
-                      \ ':': wilder#popupmenu_renderer({
-                      \   'highlighter': wilder#lua_fzy_highlighter(),
-                      \   'highlights': {'accent': l:hightlight_accent},
-                      \   'max_height': '25%',
-                      \   'left':  [ ' ', wilder#popupmenu_devicons() ],
-                      \   'right': [ ' ', wilder#popupmenu_scrollbar() ],
-                      \ }),
-                      \ '/': wilder#popupmenu_renderer({
-                      \   'highlighter': wilder#lua_fzy_highlighter(),
-                      \   'highlights': {'accent': l:hightlight_accent},
-                      \   'max_height': '25%',
-                      \   'right': [ ' ', wilder#popupmenu_scrollbar() ],
-                      \ }),
-                      \ }))
-                endfunction
-                " defer startup
-                autocmd CmdlineEnter * ++once call s:wilder_init() | call wilder#main#start()
-            ]];
+            vim.g.neo_tree_remove_legacy_commands = 1
+            local cmd = [[ :Neotree action=show toggle=true reveal <CR> ]]
+            vim.keymap.set('n', '<Leader>e', cmd, { silent = true })
         end,
     },
-
-    -- use 'kyazdani42/nvim-tree.lua'
     {
         'akinsho/bufferline.nvim',
         dependencies = 'famiu/bufdelete.nvim',
         config = function()
-            local sidebar = 'coc-explorer';
+            local sidebar = 'neo-tree';
             require('bufferline').setup {
                 options = {
                     show_buffer_icons = false,
@@ -761,7 +747,7 @@ return {
                     middle_mouse_command = function(bufnr)
                         require('bufdelete').bufdelete(bufnr, true)
                     end,
-                    right_mouse_command = nil,
+                    right_mouse_command = function() end,
                     indicator = { style = "none" },
                 },
             }
@@ -821,7 +807,7 @@ return {
     },
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
-    { 'jackguo380/vim-lsp-cxx-highlight', lazy = true, ft = 'cpp' },
+    -- { 'jackguo380/vim-lsp-cxx-highlight', lazy = true,                    ft = 'cpp' },
 
     {
         'nvim-treesitter/nvim-treesitter',
@@ -829,7 +815,7 @@ return {
         config = function()
             require 'nvim-treesitter.configs'.setup {
                 compilers = { "clang++", "zig" },
-                ensure_installed = _G.values(_G.treesitter_ft_mod);
+                ensure_installed = vim.tbl_values(_G.treesitter_ft_mod),
                 highlight = {
                     enable = true,
                     disable = { "cpp", "bash", "python", "typescript", "go", "yaml" },
@@ -886,6 +872,8 @@ return {
                 },
             }
         end,
+        lazy = true,
+        event = "VeryLazy",
     },
 
     {
@@ -905,6 +893,8 @@ return {
                 },
             }
         end,
+        lazy = true,
+        event = "VeryLazy",
     },
 
     {
@@ -914,7 +904,7 @@ return {
             require 'nvim-treesitter.configs'.setup {
                 matchup = {
                     enable = true, -- mandatory, false will disable the whole extension
-                    disable = {}, -- optional, list of language that will be disabled
+                    disable = {},  -- optional, list of language that will be disabled
                     -- [options]
                 },
             }
@@ -926,5 +916,7 @@ return {
     {
         'nvim-treesitter/playground',
         dependencies = 'nvim-treesitter/nvim-treesitter',
+        lazy = true,
+        event = "VeryLazy",
     },
 }

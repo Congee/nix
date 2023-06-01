@@ -56,6 +56,7 @@
     "python.linting.flake8Enabled": true,
     "coc.preferences.currentFunctionSymbolAutoUpdate": true,
     "coc.preferences.extensionUpdateCheck": "weekly",
+    "coc.preferences.useQuickfixForLocations": true,
     "markdown-preview-enhanced.usePandocParser": false,
     "markdownlint.config": {
         "blanks-around-headers": false,
