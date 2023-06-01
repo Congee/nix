@@ -19,7 +19,7 @@ in
 
     # wayland
     waybar
-    wayfire-unstable
+    wayfire
     unstable.wcm  # wayfire config manager
     # XXX: wofi does not pick up envs from ~/.pam_environment 😠
     (symlinkJoin {
@@ -62,6 +62,7 @@ in
     bind  # dig
     iw wirelesstools  # iwconfig
 
+    powertop
     wavemon  # wifi signal strength
     pciutils  # lspci
     usbutils  # lsusb
@@ -87,10 +88,12 @@ in
     # tdesktop  # telegram
     musescore
     thunderbird
+    qq
     slack
     spotify
     spicetify-cli
     postman
+    obsidian
     # insomnia
     charles
     zoom-us
@@ -121,7 +124,6 @@ in
   ];
 
   i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx.engines = with pkgs.fcitx-engines; [ rime ];
   i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-rime fcitx5-with-addons ];
   pam.sessionVariables = {
     # actually cannot be picked up by wofi 😠

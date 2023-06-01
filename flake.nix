@@ -5,7 +5,7 @@
     nur.url                             = "github:nix-community/NUR";
     utils.url                           = "github:numtide/flake-utils";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-22.11";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-23.05";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
@@ -92,6 +92,7 @@
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
             (_: prev: {  # https://github.com/NixOS/nixpkgs/issues/97855#issuecomment-1075818028
               nixos-option = let
+                # consider --impure with bultins.getEnv "HOME"
                 prefix = ''(import ${inputs.flake-compat} { src = /home/cwu/nix; }).defaultNix.nixosConfigurations.blackbox'';
               in prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
                 makeWrapper ${prev.nixos-option}/bin/nixos-option $out/bin/nixos-option \

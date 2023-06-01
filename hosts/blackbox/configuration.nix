@@ -6,7 +6,7 @@
 
 let
   # xanmod has a problem with cgroups for k3s
-  linuxPackages = pkgs.linuxPackages_latest;
+  linuxPackages = pkgs.linuxPackages;
   corefreq = config.boot.kernelPackages.callPackage ./corefreq.nix { };
 in
 {
@@ -27,7 +27,7 @@ in
 
   # Droidcam
   boot.extraModulePackages = [ linuxPackages.v4l2loopback corefreq ];
-  boot.kernelModules = [ "v4l2loopback" "snd-aloop" "corefreqk" ];
+  boot.kernelModules = [ "v4l2loopback" "snd-aloop" "corefreqk" "binder_linux" ];
   boot.extraModprobeConfig = ''
     # 2 for droidcam hw=2,1,0
     options snd_aloop index=2
@@ -40,7 +40,7 @@ in
   # https://www.kernel.org/doc/Documentation/kdump/kdump.txt
   # 160M + 2bits per 4KB = 160MB + 6MB
   boot.crashDump.reservedMemory = "192M@0M";
-  boot.tmpOnTmpfs = true;
+  boot.tmp.useTmpfs = true;
 
   # will be available next
   # programs.droidcam.enable = true;
@@ -92,11 +92,17 @@ in
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
+
+  virtualisation.virtualbox.host.enable = true;
+  users.extraGroups.vboxusers.members = [ "cwu" ];
+
+  virtualisation.libvirtd.enable = true;
   environment.systemPackages = with pkgs; [
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
     corefreq
     nixos-option
+    virt-manager 
   ];
   programs.adb.enable = true;
 
@@ -129,7 +135,8 @@ in
   services.greetd.enable = true;
   services.greetd.settings = {
     default_session = {
-      command = "${pkgs.greetd.greetd}/bin/agreety --cmd wayfire";
+      # command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "wayfire >/tmp/wayfire.out 2>/tmp/wayfire.err"'';
+      command = ''${pkgs.greetd.greetd}/bin/agreety --cmd "zsh --login"'';
     };
   };
 
@@ -169,25 +176,25 @@ in
   systemd.packages = [ corefreq ];
   # rootless k3s isn't ready yet.
   # rootlesskit --net=slirp4netns --copy-up=/etc --disable-host-loopback buildkitd --addr unix://$XDG_RUNTIME_DIR/buildkit/rootless --containerd-worker-addr /run/k3s/containerd/containerd.sock
-  systemd.sockets.buildkit = {
-    socketConfig = {
-      ListenStream = "%t/buildkit/buildkitd.sock";
-      SocketMode = "0660";
-    };
-    wantedBy = [ "sockets.target" ];
-  };
+  # systemd.sockets.buildkit = {
+  #   socketConfig = {
+  #     ListenStream = "%t/buildkit/buildkitd.sock";
+  #     SocketMode = "0660";
+  #   };
+  #   wantedBy = [ "sockets.target" ];
+  # };
+  #
+  # systemd.services.buildkit = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig = {
+  #     Type = "notify";
+  #     ExecStart = "${pkgs.buildkit}/bin/buildkitd --addr unix://%t/buildkit/buildkitd.sock --containerd-worker-addr %t/k3s/containerd/containerd.sock";
+  #   };
+  # };
 
-  systemd.services.buildkit = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "notify";
-      ExecStart = "${pkgs.buildkit}/bin/buildkitd --addr unix://%t/buildkit/buildkitd.sock --containerd-worker-addr %t/k3s/containerd/containerd.sock";
-    };
-  };
-
-  services.k3s.enable = true;
+  services.k3s.enable = false;
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless.enable = true;
   virtualisation.docker.rootless.setSocketVariable = true;
-  virtualisation.waydroid.enable = true;
+  virtualisation.waydroid.enable = false;
 }

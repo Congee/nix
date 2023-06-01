@@ -244,6 +244,9 @@ in
 
   programs.java.enable = true;
   programs.neovim.enable = true;
+  programs.neovim.package = pkgs.neovim-nightly.overrideAttrs (old: {
+    runtimeDependencies = old.runtimeDependencies or [] ++ [ pkgs.llvmPackages_latest.clang ];
+  });
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = true;
