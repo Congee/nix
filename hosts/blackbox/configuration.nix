@@ -111,6 +111,10 @@ in
   programs.dconf.enable = true;
   programs.xwayland.enable = true;  # xcb (Qt), chromium and electron
 
+  programs.steam.enable = true;
+  programs.steam.remotePlay.openFirewall = true;
+  programs.steam.dedicatedServer.openFirewall = true;
+
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
   xdg.portal.extraPortals = [
