@@ -102,7 +102,7 @@ in
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
     corefreq
     nixos-option
-    virt-manager 
+    virt-manager
   ];
   programs.adb.enable = true;
 
@@ -192,7 +192,28 @@ in
   #   };
   # };
 
-  services.k3s.enable = false;
+  virtualisation.containerd.enable = true;
+  virtualisation.containerd.settings.version = 2;
+  virtualisation.containerd.settings.plugins."io.containerd.grpc.v1.cri" = {
+    cni.conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d/";
+    cni.bin_dir = let plugins = pkgs.buildEnv {
+      name = "full-cni";
+      paths = with pkgs; [ cni-plugins cni-plugin-flannel ];
+    }; in "${plugins}/bin";
+  };
+
+  systemd.services.k3s = {
+    wants = [ "containerd.service" ];
+    after = [ "containerd.service" ];
+  };
+
+  services.k3s.enable = true;
+  services.k3s.clusterInit = true;
+  services.k3s.disableAgent = false;
+  services.k3s.extraFlags = builtins.toString [
+    "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
+  ];
+
   virtualisation.docker.enable = true;
   virtualisation.docker.rootless.enable = true;
   virtualisation.docker.rootless.setSocketVariable = true;

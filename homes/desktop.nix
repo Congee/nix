@@ -93,6 +93,7 @@ in
     spotify
     spicetify-cli
     postman
+    octant
     obsidian
     # insomnia
     charles

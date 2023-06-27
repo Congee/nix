@@ -79,7 +79,7 @@ in
     zbar  # qrcode
     p7zip
     nixfmt
-    nil
+    nil nixd
     rnix-lsp
     nix-index
     nix-tree
@@ -100,6 +100,7 @@ in
     cargo-clone  # download .crate files
     rust-analyzer
     gdb
+    gdbgui
     scc
     navi # cheat sheet
     # haskellPackages.stack
@@ -117,6 +118,7 @@ in
     stylua
     buf-language-server
 
+    skaffold
     hadolint  # lint Dockerfile
     rancher
     # -- Already provided by Rancher Desktop
@@ -124,7 +126,9 @@ in
     # kubernetes
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
+    helmfile
     kubectl
+    k9s
     # kubectl-tree
     # kompose
     sops age rage ssh-to-age
@@ -135,7 +139,7 @@ in
 
     act # run github actions locally
     earthly
-    pulumi-bin
+    pulumi
 
     tmate
     tmux
@@ -289,6 +293,13 @@ in
     attributes = lib.splitString "\n" (builtins.readFile ../config/git/gitattributes);
   };
   xdg.configFile."git/hooks".source = ln ../config/git/hooks;
+
+  xdg.dataFile."helm/plugins/helm-diff".source = "${pkgs.kubernetes-helmPlugins.helm-diff}/helm-diff";
+  xdg.dataFile."helm/plugins/helm-secrets".source = "${pkgs.kubernetes-helmPlugins.helm-secrets}/helm-secrets";
+  xdg.dataFile."helm/plugins/helm-git".source = "${pkgs.kubernetes-helmPlugins.helm-git}/helm-git";
+  xdg.dataFile."helm/plugins/helm-s3".source = let helm-s3 =
+    pkgs.kubernetes-helmPlugins.helm-s3.overrideAttrs( old: { ldflags = [ "-s" "-w" "-X main.version=${old.version}" ]; });
+  in "${helm-s3}/helm-s3";
 
   programs.htop.enable = true;
   programs.htop.settings.highlight_basename = true;
