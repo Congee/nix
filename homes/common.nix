@@ -47,7 +47,7 @@ in
     croc
     unzip
     binutils  # ar for libluajit.a
-    sumneko-lua-language-server
+    lua-language-server
     luajit
     luajitPackages.luarocks
     socat
@@ -115,6 +115,7 @@ in
     # conflict with gcc/*/bin/cc
     clang-tools
     stylua
+    buf-language-server
 
     hadolint  # lint Dockerfile
     rancher
@@ -243,6 +244,9 @@ in
   ];
 
   programs.java.enable = true;
+
+  # Need this environment to build some native stuff
+  # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   programs.neovim.enable = true;
   programs.neovim.package = pkgs.neovim-nightly.overrideAttrs (old: {
     runtimeDependencies = old.runtimeDependencies or [] ++ [ pkgs.llvmPackages_latest.clang ];
@@ -250,10 +254,6 @@ in
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = true;
-
-  # Need this environment to build some native stuff
-  # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
-  xdg.configFile."coc/extensions/coc-sumneko-lua-data/sumneko-lua-ls/extension/server/bin/lua-language-server".source = ln "${pkgs.sumneko-lua-language-server}/bin/lua-language-server";
 
   programs.bat.enable = true;
   programs.bat.config = {

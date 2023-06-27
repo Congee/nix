@@ -1,3 +1,5 @@
+-- To debug :lua print(vim.inspect(vim.lsp.get_client_by_id(1).config))
+
 local lspconfig = require('lspconfig');
 local cmp = require("cmp")
 local navic = require("nvim-navic")
@@ -5,7 +7,7 @@ local navbuddy = require("nvim-navbuddy")
 local rust_tools = require('rust-tools')
 local inlayhints = require('lsp-inlayhints')
 
-local servers = { 'pyright', 'tsserver', 'lua_ls', 'rust_analyzer', 'jsonls', 'rnix' };
+local servers = { 'pyright', 'tsserver', 'rust_analyzer', 'jsonls', 'nil_ls' };
 
 require('mason').setup();
 require('mason-lspconfig').setup({
@@ -27,6 +29,12 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>ft', function() vim.lsp.buf.format({ async = true }) end, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set('n', '[h', function()
+        vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.HINT })
+    end, opts)
+    vim.keymap.set('n', ']h', function()
+        vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.HINT })
+    end, opts)
     vim.keymap.set('n', '[w', function()
         vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN })
     end, opts)
@@ -56,7 +64,12 @@ local on_attach = function(client, bufnr)
 end
 
 
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- Recently lsp client of neovim watch files by polling. This is embarrassing :/
+-- https://github.com/neovim/neovim/issues/23291
+-- https://github.com/neovim/neovim/issues/23725#issuecomment-1561364086
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = vim.tbl_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 local setup = { on_attach = on_attach, capabilities = capabilities }
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
@@ -64,6 +77,9 @@ end
 
 lspconfig['lua_ls'].setup(vim.tbl_extend('error', setup, {
     cmd = { vim.env.HOME .. '/.nix-profile/bin/lua-language-server' },
+}))
+lspconfig['bufls'].setup(vim.tbl_extend('error', setup, {
+    cmd = { vim.env.HOME .. '/.nix-profile/bin/bufls' },
 }))
 
 rust_tools.setup({
@@ -84,6 +100,7 @@ rust_tools.setup({
                     rangeFormatting = true,
                     extraArgs = { "+nightly" },
                 },
+                cargo = { buildScripts = { enable = true } }
             },
         },
     }),
@@ -110,7 +127,7 @@ cmp.setup({
         { name = 'ultisnips' },
     },
     window = { documentation = { max_width = 79 } },
-    completion = { autocomplete = false },
+    completion = { autocomplete = {} },
     preselect = cmp.PreselectMode.None,
     mapping = cmp.mapping.preset.insert({
         ["<C-p>"] = cmp.mapping.select_prev_item(),
