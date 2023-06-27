@@ -82,6 +82,13 @@ lspconfig['bufls'].setup(vim.tbl_extend('error', setup, {
     cmd = { vim.env.HOME .. '/.nix-profile/bin/bufls' },
 }))
 
+lspconfig['sourcekit'].setup(vim.tbl_extend('error', setup, {
+    cmd = { 'sourcekit-lsp' },
+    filetypes = {'swift', 'objective-c', 'objective-cpp'},
+    root_dir = lspconfig.util.root_pattern('Package.swift', '.git'),
+    single_file_support = true,
+}))
+
 rust_tools.setup({
     tools = { inlay_hints = { auto = false } },
     server = vim.tbl_extend('force', setup, {
