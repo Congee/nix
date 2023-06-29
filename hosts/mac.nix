@@ -20,6 +20,19 @@
   services.nix-daemon.enable = true;
   # nix.package = pkgs.nix;
 
+  # required for services.tailscale.magicDNS
+  # networking.dns = [
+  #   "1.1.1.1"
+  #   "8.8.8.8"
+  #   "2606:4700:4700::1111"
+  #   "2606:4700:4700::1001"
+  #   "2001:4860:4860::8888"
+  #   "2001:4860:4860::8844"
+  # ];
+  # services.tailscale.magicDNS.enable = true;
+  services.tailscale.enable = true;
+  services.tailscale.domain = "congee.github";
+
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina
   programs.gnupg.agent.enable = true;
