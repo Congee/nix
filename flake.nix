@@ -103,6 +103,12 @@
             '';
             })
           ];
+          nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (nixos.lib.getName pkg) [
+            "steam"
+            "steam-run"
+            "steam-original"
+            "steam-runtime"
+          ];
         }
         ./hosts/blackbox/configuration.nix
       ];
