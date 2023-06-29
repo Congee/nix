@@ -97,6 +97,6 @@
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 25;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
   system.defaults.CustomUserPreferences = {
-    com.apple.mail = { DisableInlineAttachmentViewing = true; };
+    "com.apple.mail" = { "com.apple.mail.DisableInlineAttachmentViewing" = true; };
   };
 }
