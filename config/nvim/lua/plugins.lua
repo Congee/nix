@@ -633,7 +633,7 @@ return {
             { 'SmiteshP/nvim-navbuddy', "MunifTanjim/nui.nvim" },
 
             'SmiteshP/nvim-navic',
-            'j-hui/fidget.nvim',
+            { 'j-hui/fidget.nvim', branch = 'legacy' },
 
             'p00f/clangd_extensions.nvim',
             'MrcJkb/haskell-tools.nvim',
