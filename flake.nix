@@ -13,6 +13,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url                          = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows       = "nixpkgs";
+    nixseparatedebuginfod.url           = "github:symphorien/nixseparatedebuginfod";
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
   };
@@ -110,6 +111,7 @@
             "steam-runtime"
           ];
         }
+        inputs.nixseparatedebuginfod.nixosModules.default
         ./hosts/blackbox/configuration.nix
       ];
       specialArgs = { inherit inputs; };
