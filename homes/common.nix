@@ -78,6 +78,7 @@ in
     zip
     zbar  # qrcode
     p7zip
+    yamlfmt
     nixfmt
     nil nixd
     rnix-lsp

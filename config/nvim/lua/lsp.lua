@@ -7,7 +7,7 @@ local navbuddy = require("nvim-navbuddy")
 local rust_tools = require('rust-tools')
 local inlayhints = require('lsp-inlayhints')
 
-local servers = { 'pyright', 'tsserver', 'rust_analyzer', 'jsonls', 'nil_ls' };
+local servers = { 'pyright', 'tsserver', 'rust_analyzer', 'jsonls', 'nil_ls', 'yamlls' };
 
 require('mason').setup();
 require('mason-lspconfig').setup({

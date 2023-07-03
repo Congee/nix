@@ -357,6 +357,15 @@ return {
                     typescript = {
                         require('formatter.filetypes.typescript').clangformat,
                     },
+                    yaml = {
+                        function()
+                            return {
+                                exe = 'yamlfmt',
+                                args = { '-in' },
+                                stdin = true,
+                            }
+                        end
+                    },
                     ['*'] = {
                         require('formatter.filetypes.any').remove_trailing_whitespace
                     },
