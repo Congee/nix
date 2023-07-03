@@ -72,6 +72,8 @@ capabilities = vim.tbl_extend('force', capabilities, require('cmp_nvim_lsp').def
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 local setup = { on_attach = on_attach, capabilities = capabilities }
 for _, lsp in ipairs(servers) do
+    -- FIXME: why do I have to call this twice? Is is because of race condition?
+    lspconfig[lsp].setup({})
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
 end
 
