@@ -19,50 +19,11 @@
 
 Host *
     SendEnv LANG LC_*
-    #UserRomaing no # TODO: remove this if it's fixed. CVE-2016-0777
-
-Host ec2
-    HostName ec2-3-19-14-84.us-east-2.compute.amazonaws.com
-    ServerAliveInterval 120
-    IdentityFile ~/.ssh/id_rsa
-    User ec2-user
 
 Host github
     HostName github.com
     IdentitiesOnly yes
     IdentityFile ~/.ssh/id_ed25519
-
-Host github-youngalfred
-    HostName github.com
-    IdentitiesOnly yes
-    IdentityFile ~/.ssh/id_ed25519_cwu@ya
-
-Host mysql
-    HostName 18.221.65.240
-    IdentitiesOnly yes
-    IdentityFile ~/.ssh/id_ed25519_cwu@ya
-    User ubuntu
-
-Host butler
-    Hostname youngalfred.dev
-    IdentitiesOnly yes
-    IdentityFile ~/.ssh/id_ed25519
-    User cwu
-
-Host proxy
-    HostName ec2-34-225-202-50.compute-1.amazonaws.com
-    ServerAliveInterval 120
-    IdentitiesOnly yes
-    IdentityFile ~/.ssh/id_ed25519_cwu@ya
-    User ubuntu
-
-Host replica_proxy
-    HostName 172.31.2.127
-    ServerAliveInterval 120
-    IdentitiesOnly yes
-    IdentityFile ~/.ssh/replica_db_proxy.pem
-    SetEnv TERM=xterm-256color
-    User ec2-user
 
 # Configuration options and default values (see ssh_config(5) for their meaning):
 #

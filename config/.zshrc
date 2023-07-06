@@ -249,15 +249,6 @@ dadjoke() {
   curl --silent --header "Accept: text/plain" https://icanhazdadjoke.com/ && echo
 }
 
-gh() {
-  local result=$(git remote get-url origin 2>/dev/null)
-  if [[ $result =~ 'youngalfred' ]]; then
-    GH_CONFIG_DIR=$HOME/.config/gh-youngalfred command gh "$@"
-  else
-    command gh "$@"
-  fi
-}
-
 # aprod() {
 #   export AWS_PROFILE=production
 # }
