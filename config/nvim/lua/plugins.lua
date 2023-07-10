@@ -149,6 +149,10 @@ return {
         ft = "kitty",
     },
     {
+        -- basically `hi Normal guibg=none` but with more hl groups
+        'xiyaowong/transparent.nvim',
+    },
+    {
         "EdenEast/nightfox.nvim",
         config = function()
             vim.cmd [[colorscheme carbonfox]]
