@@ -30,6 +30,10 @@ in
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
 
+  programs.alacritty.enable = true;
+  programs.alacritty.package = pkgs.alacritty;
+  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.macos.yml;
+
   programs.kitty.enable = true;
   programs.kitty.theme = "One Dark";
   programs.kitty.extraConfig = ''
