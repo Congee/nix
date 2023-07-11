@@ -151,6 +151,15 @@ return {
     {
         -- basically `hi Normal guibg=none` but with more hl groups
         'xiyaowong/transparent.nvim',
+        config = function()
+            require("transparent").setup({
+                extra_groups = {
+                    "NeoTreeNormal",
+                    "NeoTreeNormalNC",
+                    "NormalFloat",
+                }
+            })
+        end,
     },
     {
         "EdenEast/nightfox.nvim",
@@ -728,7 +737,7 @@ return {
         'nvim-neo-tree/neo-tree.nvim',
         config = function()
             vim.g.neo_tree_remove_legacy_commands = 1
-            local cmd = [[ :Neotree action=show toggle=true reveal <CR> ]]
+            local cmd = ':Neotree action=show toggle=true reveal <CR>'
             vim.keymap.set('n', '<Leader>e', cmd, { silent = true })
         end,
     },
