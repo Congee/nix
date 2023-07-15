@@ -13,10 +13,12 @@ in
     (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
     mtr
     mas
-    buildkit
+    kubectl
+    colima
     pinentry_mac nur.pinentry-touchid
     nur.pam-reattach
     (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
+    (writeScriptBin "nerdctl" ''exec ${colima}/bin/colima nerdctl -- "$@"'')
   ];
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''

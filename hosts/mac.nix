@@ -61,7 +61,6 @@
     "itsycal"
     "musicbrainz-picard"
     "postman"
-    "rancher"
     "rectangle"
     "secretive"
     "sekey"

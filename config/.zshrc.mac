@@ -1,14 +1,11 @@
 function nerdctl() {
-    local __nerdctl="$HOME/.rd/bin/nerdctl"
-
     # XXX: should I put it in ~/.zsh/functions of $fpath?
     if ! typeset -f _nerdctl > /dev/null; then
-        local comp=$("${__nerdctl}" completion zsh)
-        eval "${comp}"
+        eval "$(colima nerdctl -- completion zsh)"
         compdef _nerdctl nerdctl
     fi
 
-    "${__nerdctl}" "$@"
+    colima nerdctl -- "$@"
 }
 
 wifi-password() {
