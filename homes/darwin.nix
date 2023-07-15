@@ -16,7 +16,6 @@ in
     kubectl
     colima
     pinentry_mac nur.pinentry-touchid
-    nur.pam-reattach
     (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     (writeScriptBin "nerdctl" ''exec ${colima}/bin/colima nerdctl -- "$@"'')
   ];
@@ -35,14 +34,6 @@ in
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
   home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.macos.yml;
-
-  programs.kitty.enable = true;
-  programs.kitty.theme = "One Dark";
-  programs.kitty.extraConfig = ''
-    # include ${config.home.homeDirectory}/.nix/config/kitty.conf
-    include ${ln ../config/kitty.conf}
-  '';
-  # home.file.".config/kitty/kitty.conf".source = ln "${config.home.homeDirectory}/.nix/config/kitty.conf";
 
   home.file.".zprofile".source = ln ../config/.zprofile;
   home.file.".zshrc.mac".source = ln ../config/.zshrc.mac;

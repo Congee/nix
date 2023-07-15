@@ -28,8 +28,6 @@ in
     leetcode-cli
 
     nur.sncli
-    nur.devspace
-    nur.kim
 
     difftastic
     delta
@@ -162,7 +160,7 @@ in
   (builtins.readFile ../config/.tmux.conf) + lib.optionalString stdenv.isDarwin
   ''
     # Make pam_tid.so work in tmux
-    __helper="${nur.pam-reattach}/bin/reattach-to-session-namespace";
+    __helper="${pam-reattach}/bin/reattach-to-session-namespace";
     set-option -g default-command "$__helper zsh"
   '';
   home.file.".tmuxinator.yml".source = ln ../config/.tmuxinator.yml;

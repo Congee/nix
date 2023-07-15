@@ -54,24 +54,18 @@
     "adobe-acrobat-reader"
     "aldente"
     "audacity"
-    "aws-vpn-client"
     "dbeaver-community"
     "dozer"
     "firefox"
     "itsycal"
     "musicbrainz-picard"
-    "postman"
     "rectangle"
     "secretive"
     "sekey"
     "stats"
-    "tunnelblick"
   ];
   homebrew.extraConfig = ''
-    tap "conduktor/brew"
-    cask "conduktor", greedy: true
     cask "zoom", greedy: true
-    cask "spotify", greedy: true
   '';
   # This is painfully slow
   homebrew.masApps = if true then { } else {
