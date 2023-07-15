@@ -17,6 +17,8 @@ require('mason-lspconfig').setup({
 
 require('mason-null-ls').setup({
     ensure_installed = { 'stylua', 'ruff', 'eslint_d' },
+    automatic_setup = true,
+    handlers = {},
 })
 
 local on_attach = function(client, bufnr)
