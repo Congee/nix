@@ -16,10 +16,12 @@ require('mason-lspconfig').setup({
     automatic_installation = true,
 })
 
-require('mason-null-ls').setup({
-    ensure_installed = { 'stylua', 'ruff', 'eslint_d' },
-    automatic_setup = true,
-    handlers = {},
+require('lint').linters_by_ft = {
+    javascript = {'eslint_d'},
+    python = {'ruff'},
+}
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    callback = function() require("lint").try_lint() end,
 })
 
 local on_attach = function(client, bufnr)

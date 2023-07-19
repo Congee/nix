@@ -367,8 +367,12 @@ return {
                 logging = true,
                 log_level = vim.log.levels.WARN,
                 filetype = {
+                    lua = { require("formatter.filetypes.lua").stylua },
                     typescript = {
                         require('formatter.filetypes.typescript').clangformat,
+                    },
+                    javascript = {
+                        require('formatter.filetypes.javascript').clangformat,
                     },
                     yaml = {
                         function()
@@ -597,7 +601,7 @@ return {
 
     -- color picker
     { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } },
-    'rhysd/vim-grammarous',  -- maybe migrate to nvim-lint or null-ls
+    'rhysd/vim-grammarous',  -- maybe migrate to nvim-lint
     {
         'norcalli/nvim-colorizer.lua',
         ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact', 'Onedarkpro' },
@@ -640,8 +644,6 @@ return {
             'neovim/nvim-lspconfig',
             'williamboman/mason.nvim',
             'williamboman/mason-lspconfig.nvim',
-            'jose-elias-alvarez/null-ls.nvim',
-            'jay-babu/mason-null-ls.nvim',
             'mfussenegger/nvim-lint',
             'folke/neodev.nvim',
             'andersevenrud/cmp-tmux',
