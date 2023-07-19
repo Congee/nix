@@ -6,6 +6,7 @@ local navic = require("nvim-navic")
 local navbuddy = require("nvim-navbuddy")
 local rust_tools = require('rust-tools')
 local inlayhints = require('lsp-inlayhints')
+local telescope = require('telescope.builtin')
 
 local servers = { 'pyright', 'tsserver', 'rust_analyzer', 'jsonls', 'nil_ls', 'yamlls' };
 
@@ -23,10 +24,10 @@ require('mason-null-ls').setup({
 
 local on_attach = function(client, bufnr)
     local opts = { silent = true, buffer = bufnr }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', 'gD', telescope.lsp_type_definitions, opts)
+    vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
+    vim.keymap.set('n', 'gI', telescope.lsp_implementations, opts)
+    vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>ft', function() vim.lsp.buf.format({ async = true }) end, opts)
