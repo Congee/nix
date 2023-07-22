@@ -58,7 +58,7 @@ augroup file_type
   au FileType scheme inoreabbrev lambda λ
   au FileType go setlocal noexpandtab
 
-  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix setlocal shiftwidth=2 tabstop=2
+  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix,sql setlocal shiftwidth=2 tabstop=2
   "au FileType typescript :syn clear jsxAttrib
   " very slow
   " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()

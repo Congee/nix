@@ -8,7 +8,17 @@ local rust_tools = require('rust-tools')
 local inlayhints = require('lsp-inlayhints')
 local telescope = require('telescope.builtin')
 
-local servers = { 'pyright', 'tsserver', 'rust_analyzer', 'jsonls', 'nil_ls', 'yamlls' };
+local servers = {
+    'pyright',
+    'tsserver',
+    'rust_analyzer',
+    'nil_ls',
+    'bashls',
+    'dockerls',
+    'docker_compose_language_service',
+    'jsonls',
+    'yamlls',
+};
 
 require('mason').setup();
 require('mason-lspconfig').setup({
@@ -62,9 +72,9 @@ local on_attach = function(client, bufnr)
     vim.b.navic_lazy_update_context = true
     if client.server_capabilities.documentSymbolProvider then
         navic.attach(client, bufnr)
+        navbuddy.attach(client, bufnr)
     end
 
-    navbuddy.attach(client, bufnr)
     inlayhints.on_attach(client, bufnr)
 end
 
