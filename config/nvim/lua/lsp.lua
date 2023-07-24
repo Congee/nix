@@ -4,7 +4,6 @@ local lspconfig = require('lspconfig');
 local cmp = require("cmp")
 local navic = require("nvim-navic")
 local navbuddy = require("nvim-navbuddy")
-local rust_tools = require('rust-tools')
 local inlayhints = require('lsp-inlayhints')
 local telescope = require('telescope.builtin')
 
@@ -20,6 +19,7 @@ local servers = {
     'yamlls',
 };
 
+inlayhints.setup()
 require('mason').setup();
 require('mason-lspconfig').setup({
     ensure_installed = servers,
@@ -75,6 +75,12 @@ local on_attach = function(client, bufnr)
         navbuddy.attach(client, bufnr)
     end
 
+    -- lsp client somehow does not send textDocument/rangeFormatting
+    if client.server_capabilities.documentRangeFormattingProvider then
+        local fn = function() vim.lsp.buf.format({ async = true }) end
+        vim.keymap.set('v', 'gq', fn, opts)
+    end
+
     inlayhints.on_attach(client, bufnr)
 end
 
@@ -82,13 +88,12 @@ end
 -- Recently lsp client of neovim watch files by polling. This is embarrassing :/
 -- https://github.com/neovim/neovim/issues/23291
 -- https://github.com/neovim/neovim/issues/23725#issuecomment-1561364086
+-- :lua =vim.lsp.get_active_clients()[1].server_capabilities
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 local setup = { on_attach = on_attach, capabilities = capabilities }
 for _, lsp in ipairs(servers) do
-    -- FIXME: why do I have to call this twice? Is is because of race condition?
-    lspconfig[lsp].setup({})
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
 end
 
@@ -106,28 +111,40 @@ lspconfig['sourcekit'].setup(vim.tbl_extend('error', setup, {
     single_file_support = true,
 }))
 
-rust_tools.setup({
-    tools = { inlay_hints = { auto = false } },
-    server = vim.tbl_extend('force', setup, {
-        on_attach = function(client, bufnr)
-            vim.api.nvim_buf_set_option(
-                bufnr,
-                'formatexpr',
-                'v:lua.vim.lsp.formatexpr(#{timeout_ms:250})'
-            )
-            return on_attach(client, bufnr)
-        end,
-        cmd = { vim.env.HOME .. '/.nix-profile/bin/rust-analyzer' },
-        settings = {
-            ['rust-analyzer'] = {
-                rustfmt = {
-                    rangeFormatting = true,
-                    extraArgs = { "+nightly" },
-                },
-                cargo = { buildScripts = { enable = true } }
-            },
+
+local rt = require("rust-tools")
+rt.setup({
+  server = {
+    on_attach = function(client, bufnr)
+      client.server_capabilities.documentRangeFormattingProvider = true;
+
+      -- Hover actions
+      vim.keymap.set("n", "<space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>ac", rt.code_action_group.code_action_group, { buffer = bufnr })
+      on_attach(client, bufnr)
+    end,
+    cmd = { vim.env.HOME .. '/.nix-profile/bin/rust-analyzer' },
+    settings = {
+      ['rust-analyzer'] = {
+        rustfmt = {
+          -- require `rustfmt` binary
+          overrideCommand = { "rustfmt", "--" },
+          rangeFormatting = { enable = true },
+          extraArgs = { "+nightly" },
         },
-    }),
+        cargo = { buildScripts = { enable = true } }
+      },
+    },
+  },
+  dap = {
+    adapter = (function()
+      local exe = vim.fn.resolve(vim.fn.exepath('codelldb'))
+      local dir = vim.fn.fnamemodify(exe, ':h')
+      local lib = vim.fn.resolve(dir .. '/../lldb/lib/liblldb.so')
+      return require('rust-tools.dap').get_codelldb_adapter(exe, lib)
+    end)()
+  },
 })
 
 cmp.setup({

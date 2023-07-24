@@ -629,7 +629,30 @@ return {
         lazy = true,
         event = "UiEnter",
     },
+    {
+         'simrat39/rust-tools.nvim',
+         ft = { 'rust' },
+         dependencies = { 'mfussenegger/nvim-dap', 'hrsh7th/nvim-cmp' },
+    },
+    {
+        'mfussenegger/nvim-dap',
+        dependencies = { 'nvim-telescope/telescope-dap.nvim', 'rcarriga/nvim-dap-ui' },
+        config = function()
+          local dap, dapui = require("dap"), require("dapui")
+          require('telescope').load_extension('dap')
+          dapui.setup()
 
+          dap.listeners.after.event_initialized["dapui_config"] = function()
+            dapui.open()
+          end
+          dap.listeners.before.event_terminated["dapui_config"] = function()
+            dapui.close()
+          end
+          dap.listeners.before.event_exited["dapui_config"] = function()
+            dapui.close()
+          end
+        end,
+    },
     {
         'hrsh7th/nvim-cmp',
         lazy = true,
@@ -661,7 +684,6 @@ return {
 
             'p00f/clangd_extensions.nvim',
             'MrcJkb/haskell-tools.nvim',
-            'simrat39/rust-tools.nvim',
         },
         config = function() require('lsp') end,
     },
