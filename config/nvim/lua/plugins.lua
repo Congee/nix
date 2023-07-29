@@ -707,68 +707,6 @@ return {
         },
         config = function() require('refactoring').setup({}) end,
     },
-    -- {
-    --     'neoclide/coc.nvim',
-    --     build = 'yarn install --frozen-lockfile',
-    --     branch = 'release',
-    --     commit = '040f3a9ae3b71be341040af32ae6593c91c3689e',
-    --     dependencies = { 'ryanoasis/vim-devicons' }, -- coc-explorer dependencies it
-    --     config = function()
-    --         -- vim.env.NVIM_COC_LOG_LEVEL = 'debug'
-    --         vim.g.coc_global_extensions = {
-    --             'coc-sumneko-lua',
-    --             'coc-rust-analyzer',
-    --             'coc-git',
-    --             'coc-yaml',
-    --             'coc-diagnostic',
-    --             'coc-explorer',
-    --             'coc-tsserver',
-    --             'coc-pyright',
-    --             -- 'coc-metals',  -- scalameta/nvim-metals
-    --             'coc-json', -- json-lsp
-    --             'coc-syntax',
-    --             'coc-clangd', -- clangd
-    --             'coc-sh',
-    --             'coc-html',
-    --             'coc-vimlsp', -- hrsh7th/cmp-nvim-lua  dmitmel/cmp-vim-lsp
-    --             'coc-clang-format-style-options',
-    --             'coc-ltex',
-    --             'coc-emmet',
-    --             'coc-markdown-preview-enhanced', 'coc-webview',
-    --             'coc-markmap',
-    --             'coc-markdownlint',
-    --             'coc-prettier',
-    --             'coc-docker',
-    --             'coc-cmake',
-    --             'coc-tailwindcss',
-    --             'coc-xml',
-    --             'coc-go',
-    --             'coc-snippets',
-    --         }
-    --
-    --         -- switch between .h & .c. The good ol' a.vim
-    --         local thunk = function() vim.api.nvim_create_user_command(
-    --                 'A',
-    --                 function() vim.cmd('CocCommand clangd.switchSourceHeader'); end,
-    --                 { nargs = 0 }
-    --             )
-    --         end;
-    --         vim.api.nvim_create_autocmd(
-    --             'FileType', { pattern = { 'c', 'cpp' }, callback = thunk }
-    --         )
-    --
-    --         vim.g.coc_default_semantic_highlight_groups = 1
-    --         -- Apparently, coc-settings.json does not parse $JAVA_HOME, so we
-    --         -- need to dynamically evaluate $JAVA_HOME:
-    --         -- vim.cmd[[ :call coc#config('ltex.java.path', $JAVA_HOME) ]]
-    --         vim.fn["coc#config"]('ltex.java.path', vim.env.JAVA_HOME);
-    --         vim.fn["coc#config"](
-    --             'rust-analyzer.server.path',
-    --             vim.env.HOME .. '/.nix-profile/bin/rust-analyzer'
-    --         );
-    --     end,
-    --     event = "VeryLazy",
-    -- },
     {
         'nvim-neo-tree/neo-tree.nvim',
         config = function()
@@ -865,8 +803,6 @@ return {
     },
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
-    -- { 'jackguo380/vim-lsp-cxx-highlight', lazy = true,                    ft = 'cpp' },
-
     {
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
