@@ -17,6 +17,8 @@ local servers = {
     'docker_compose_language_service',
     'jsonls',
     'yamlls',
+    'volar',
+    'rome',
 };
 
 inlayhints.setup()

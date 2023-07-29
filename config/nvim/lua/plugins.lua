@@ -363,11 +363,21 @@ return {
     {
         'mhartington/formatter.nvim',
         config = function()
+            local util = require "formatter.util"
             require('formatter').setup({
                 logging = true,
                 log_level = vim.log.levels.WARN,
                 filetype = {
                     lua = { require("formatter.filetypes.lua").stylua },
+                    vue = require("formatter.filetypes.vue").prettier,
+                    json5 = function()
+                        return {
+                            exe = 'prettier',
+                            args = {
+                                util.escape_path(util.get_current_buffer_file_path())
+                            }
+                        }
+                    end,
                     typescript = {
                         require('formatter.filetypes.typescript').clangformat,
                     },
@@ -656,7 +666,9 @@ return {
     {
         'hrsh7th/nvim-cmp',
         lazy = true,
-        event = "VeryLazy",
+        -- Must be earlier enough to avoid lazy loading a lazy load
+        -- https://github.com/neovim/nvim-lspconfig/issues/1142#issuecomment-1656844163
+        event = "BufReadPre",
         dependencies = {
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
