@@ -77,6 +77,7 @@ in
     zbar  # qrcode
     p7zip
     yamlfmt
+    nix-output-monitor
     nixfmt
     nil nixd
     rnix-lsp
@@ -116,6 +117,7 @@ in
     clang-tools
     stylua
     buf-language-server
+    shellcheck
 
     skaffold
     hadolint  # lint Dockerfile

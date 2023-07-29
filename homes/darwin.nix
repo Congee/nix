@@ -18,6 +18,7 @@ in
     pinentry_mac nur.pinentry-touchid
     (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     (writeScriptBin "nerdctl" ''exec ${colima}/bin/colima nerdctl -- "$@"'')
+    (writeScriptBin "docker-compose" ''exec ${colima}/bin/colima nerdctl -- compose "$@"'')
   ];
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
