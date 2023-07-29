@@ -49,7 +49,6 @@ augroup file_type
   au Filetype python setlocal keywordprg=pydoc3
   au FileType python hi semshiImported ctermfg=214 guifg=#aaaaaa cterm=bold gui=bold
   au FileType python setlocal foldmethod=marker
-  au FileType python,java setlocal shiftwidth=4 tabstop=4
   au FileType haskell hi Structure guifg=#00ffaf
   au FileType haskell hi Type      guifg=#61afef
   au FileType nasm,applescript,cmake,make setlocal omnifunc=syntaxcomplete#Complete
@@ -58,25 +57,12 @@ augroup file_type
   au FileType scheme inoreabbrev lambda λ
   au FileType go setlocal noexpandtab
 
-  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix,sql setlocal shiftwidth=2 tabstop=2
+  au FileType python,java setlocal shiftwidth=4 tabstop=4
+  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix,sql,lua setlocal shiftwidth=2 tabstop=2
   "au FileType typescript :syn clear jsxAttrib
   " very slow
   " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()
 augroup END
-
-" Use K to show documentation in preview window.
-" nnoremap <silent> K :call <SID>show_documentation()<CR>
-
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
-endfunction
-
 
 augroup highlight_yank
     autocmd!
