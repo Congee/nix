@@ -117,6 +117,8 @@ return {
             vim.cmd [[au BufEnter leetcode.com_* set guifont=monospace:h16]] -- no longer italic
         end,
         build = function() vim.fn['firenvim#install'](0) end,
+        lazy = true,
+        event = 'VeryLazy',
     },
     {
         'sheerun/vim-polyglot',
@@ -160,6 +162,8 @@ return {
                 }
             })
         end,
+        lazy = true,
+        event = 'BufEnter',
     },
     {
         "EdenEast/nightfox.nvim",
@@ -252,7 +256,11 @@ return {
         end
     },
 
-    'qxxxb/vim-searchhi',
+    {
+      'qxxxb/vim-searchhi',
+      lazy = true,
+      event = 'VeryLazy',
+    },
 
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     {
@@ -353,12 +361,20 @@ return {
                 nmap ga <Plug>(EasyAlign)
             ]]
         end,
+        lazy = true,
+        event = "BufEnter",
     },
     'junegunn/vim-peekaboo',
-    'ojroques/vim-oscyank',
+    {
+      'ojroques/vim-oscyank',
+      lazy = true,
+      event = "BufEnter",
+    },
     {
         'FooSoft/vim-argwrap',
-        config = function() vim.g.argwrap_tail_comma = 1 end
+        config = function() vim.g.argwrap_tail_comma = 1 end,
+        lazy = true,
+        cmd = 'ArgWrap',
     },
     {
         'mhartington/formatter.nvim',
@@ -403,6 +419,8 @@ return {
                 }
             })
         end,
+        lazy = true,
+        event = 'VeryLazy',
     },
     { 'Olical/conjure', lazy = true },
     {
@@ -458,21 +476,30 @@ return {
 
             vim.keymap.set('i', '<C-D>', back_delete_char, { silent = true })
         end,
+        lazy = true,
+        event = 'VeryLazy',
     },
     {
         'kana/vim-fakeclip',
         lazy = true,
         event = "VeryLazy",
     },
-    'chrisbra/unicode.vim',
+    {
+      'chrisbra/unicode.vim',
+      lazy = true,
+      event = 'VeryLazy',
+    },
     {
         'tpope/vim-dadbod', -- for SQL. TODO: help exrc
         dependencies = 'kristijanhusak/vim-dadbod-ui',
         lazy = true,
         cmd = "DB",
     },
-    'dhruvasagar/vim-table-mode',
-
+    {
+      'dhruvasagar/vim-table-mode',
+      lazy = true,
+      event = 'VeryLazy',
+    },
     {
         'rhysd/git-messenger.vim',
         keys = { '<leader>gm', '<cmd>GitMessenger<cr>' },
@@ -488,7 +515,11 @@ return {
         lazy = true,
         event = "VeryLazy",
     },
-    'cohama/agit.vim',
+    {
+      'cohama/agit.vim',
+      lazy = true,
+      cmd = 'Agit',
+    },
 
     -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
     -- vim despite netrw#CheckIfRemote() returns 1.
@@ -567,8 +598,16 @@ return {
         lazy = true,
         event = "BufEnter",
     },
-    'chiedo/vim-case-convert',
-    'gyim/vim-boxdraw',
+    {
+      'chiedo/vim-case-convert',
+      lazy = true,
+      event = "BufEnter",
+    },
+    {
+      'gyim/vim-boxdraw',
+      lazy = true,
+      event = "BufEnter",
+    },
     {
         'SirVer/ultisnips', -- TODO: try LuaSnip + cmp_luasnip
         dependencies = { 'honza/vim-snippets' },
@@ -611,7 +650,11 @@ return {
 
     -- color picker
     { 'KabbAmine/vCoolor.vim', ft = { 'less', 'sass', 'css', 'typescriptreact' } },
-    'rhysd/vim-grammarous',  -- maybe migrate to nvim-lint
+    {
+      'rhysd/vim-grammarous',  -- maybe migrate to nvim-lint
+      lazy = true,
+      event = "VeryLazy",
+    },
     {
         'norcalli/nvim-colorizer.lua',
         ft = { 'css', 'javascript', 'html', 'less', 'sass', 'typescriptreact', 'Onedarkpro' },
@@ -626,18 +669,20 @@ return {
             outline.setup({ opts = { width = 20 } })
             vim.keymap.set('n', '<leader>vt', outline.toggle_outline, { silent = true })
         end,
+        lazy = true,
+        event = 'UIEnter',
     },
     {
         'rebelot/heirline.nvim',
         dependencies = { 'kyazdani42/nvim-web-devicons', 'olimorris/onedarkpro.nvim' },
         config = function() require('statusline') end,
         lazy = true,
-        event = "UiEnter",
+        event = "UIEnter",
     },
     {
         'vimpostor/vim-tpipeline', -- move vim statusline into tmux statsline
         lazy = true,
-        event = "UiEnter",
+        event = "UIEnter",
     },
     {
          'simrat39/rust-tools.nvim',
@@ -662,6 +707,8 @@ return {
             dapui.close()
           end
         end,
+        lazh = true,
+        event = 'VeryLazy',
     },
     {
         'hrsh7th/nvim-cmp',
@@ -706,6 +753,14 @@ return {
             "nvim-treesitter/nvim-treesitter",
         },
         config = function() require('refactoring').setup({}) end,
+        lazy = true,
+        event = 'VeryLazy',
+    },
+    {
+        -- regarding the issue of very long output from :messages
+        -- noice.nvim is too intrusive.
+        -- https://github.com/neovim/neovim/pull/5189 would be btter
+        -- 'folke/noice.nvim',
     },
     {
         'nvim-neo-tree/neo-tree.nvim',
@@ -778,8 +833,14 @@ return {
             vim.keymap.set('n', '<M-n>', ':bnext<CR>', { silent = true })
             vim.keymap.set('n', '<M-p>', ':bprev<CR>', { silent = true })
         end,
+        lazy = true,
+        event = 'VeryLazy',
     },
-    { 'voldikss/vim-floaterm' },
+    {
+      'voldikss/vim-floaterm',
+      lazy = true,
+      event = 'UIEnter',
+    },
     {
         "nvim-neotest/neotest",
         dependencies = {
@@ -827,6 +888,8 @@ return {
     {
         'windwp/nvim-autopairs',
         config = function() require('nvim-autopairs').setup {}; end,
+        lazy = true,
+        event = 'VeryLazy',
     },
 
     {
@@ -902,7 +965,9 @@ return {
                     -- [options]
                 },
             }
-        end
+        end,
+        lazy = true,
+        event = 'VeryLazy',
     },
 
     -- vim.fn.synstack(...) no longer works under treesitter
