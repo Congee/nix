@@ -237,8 +237,8 @@ in
 
   programs.broot.enable = true;
   programs.readline.enable = true;
-  programs.exa.enable = true;
-  programs.zsh.shellAliases = { e = "${pkgs.exa}/bin/exa"; };
+  programs.eza.enable = true;
+  programs.zsh.shellAliases = { e = "${pkgs.eza}/bin/eza"; };
 
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
