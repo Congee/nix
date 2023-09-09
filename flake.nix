@@ -3,11 +3,11 @@
 
   inputs = {
     nur.url                             = "github:nix-community/NUR";
-    utils.url                           = "github:numtide/flake-utils";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url                           = "github:NixOS/nixpkgs/nixos-23.05";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
-    neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
+    # https://github.com/nix-community/neovim-nightly-overlay/issues/176#issuecomment-1528902953
+    neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay/a9719c5050b1abbb0adada7dd9f98e0cdbd3ed53";
     home-manager.url                    = "github:nix-community/home-manager";
     # home-manager.url                    = "github:Congee/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +35,7 @@
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
+            # for goldendict
             nixpkgs.config.permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];
           }
         ];

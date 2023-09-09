@@ -131,6 +131,7 @@ case $OSTYPE in
     alias grep='grep --color=auto'
     alias egrep='egrep --color=auto'
     alias fgrep='fgrep --color=auto'
+    alias htop='TERM=xterm-256color htop'
     alias mp='mdfind -onlyin . -name '
     alias js='osascript -l JavaScript'
     alias tempmonitor='tempmonitor -c -a -l'

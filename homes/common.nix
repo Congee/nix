@@ -29,6 +29,7 @@ in
 
     nur.sncli
 
+    qrencode
     difftastic
     delta
     expect
@@ -54,8 +55,8 @@ in
     python3
     nodejs
     yarn
-    duf ncdu gdu dua du-dust nix-du
-    iotop bottom btop gtop
+    duf gdu dua du-dust # nix-du
+    bottom btop gtop
     procs
     curlie xh
     lsd
@@ -79,7 +80,7 @@ in
     yamlfmt
     nix-output-monitor
     nixfmt
-    nil nixd
+    nil
     rnix-lsp
     nix-index
     nix-tree
@@ -99,8 +100,8 @@ in
     cargo-edit
     cargo-clone  # download .crate files
     rust-analyzer
-    gdb
-    gdbgui
+    # gdb
+    # gdbgui
     scc
     navi # cheat sheet
     # haskellPackages.stack
@@ -120,7 +121,7 @@ in
     shellcheck
 
     skaffold
-    hadolint  # lint Dockerfile
+    # hadolint  # lint Dockerfile
     rancher
     # -- Already provided by Rancher Desktop
     # lima
@@ -130,6 +131,7 @@ in
     helmfile
     kubectl
     k9s
+    dive
     # kubectl-tree
     # kompose
     sops age rage ssh-to-age

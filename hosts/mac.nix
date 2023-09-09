@@ -31,7 +31,6 @@
   # ];
   # services.tailscale.magicDNS.enable = true;
   services.tailscale.enable = true;
-  services.tailscale.domain = "congee.github";
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina

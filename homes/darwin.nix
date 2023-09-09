@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... } @ inputs:
 
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -14,11 +14,13 @@ in
     mtr
     mas
     kubectl
+    lima-bin
     colima
+    docker docker-credential-helpers
     pinentry_mac nur.pinentry-touchid
-    (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
+    # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     (writeScriptBin "nerdctl" ''exec ${colima}/bin/colima nerdctl -- "$@"'')
-    (writeScriptBin "docker-compose" ''exec ${colima}/bin/colima nerdctl -- compose "$@"'')
+    swift-format
   ];
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
