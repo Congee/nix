@@ -159,13 +159,12 @@ cmp.setup({
     sources = {
         { name = 'nvim_lsp_signature_help' },
         { name = 'nvim_lsp' },
-        { name = 'buffer', max_item_count = 10 },
         { name = 'path' },
         {
             name = 'tmux',
             max_item_count = 5,
             -- not working yet: https://github.com/andersevenrud/cmp-tmux/issues/27
-            option = { trigger_characters = {}, keyword_pattern = [[\w{4,}]] },
+            option = { trigger_characters = {}, keyword_pattern = [[\w{4,79}]] },
             priority = 0,
         },
         { name = 'ultisnips' },
