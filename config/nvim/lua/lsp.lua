@@ -223,6 +223,3 @@ cmp.setup.cmdline(':', {
 
     })
 })
-
-require('neodev').setup({})
-require("fidget").setup({}) -- nvim-lsp progress
