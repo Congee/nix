@@ -227,7 +227,16 @@ in
   ];
 
   virtualisation.docker.enable = true;
-  virtualisation.docker.rootless.enable = true;
-  virtualisation.docker.rootless.setSocketVariable = true;
+  virtualisation.docker.package = pkgs.docker_24;
+  virtualisation.docker.daemon.settings = {
+    containerd = "/run/containerd/containerd.sock";
+    containerd-namespace = "k8s.io";
+    features = {
+      containerd-snapshotter = true;
+    };
+    experimental = true;
+    debug = true;
+  };
+
   virtualisation.waydroid.enable = false;
 }

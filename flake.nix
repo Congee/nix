@@ -90,6 +90,7 @@
       modules = [
         {
           nixpkgs.overlays = [
+            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) docker_24; })
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) nix; })
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
             (_: prev: {  # https://github.com/NixOS/nixpkgs/issues/97855#issuecomment-1075818028
