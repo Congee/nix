@@ -22,6 +22,7 @@ in
   hardware.opengl.driSupport = true;
 
   # Use the systemd-boot EFI boot loader.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 

@@ -6,6 +6,7 @@
       experimental-features = nix-command flakes repl-flake
       keep-outputs = true
       keep-derivations = true
+      extra-platforms = aarch64-linux
     '';
     # Make `nix search nixpkgs#hello` use caches. `nix registry list` shows
     # by default `global flake:nixpkgs github:NixOS/nixpkgs/nixpkgs-unstable`
