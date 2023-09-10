@@ -210,6 +210,7 @@ in
       # A NixOS issue. It always asks if it's the default browser
       "browser.shell.checkDefaultBrowser" = false;
       "media.ffmpeg.vaapi.enabled" = true;
+      "browser.urlbar.resultMenu.keyboardAccessible" = false;
     };
   };
 
