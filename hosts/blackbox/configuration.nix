@@ -50,9 +50,14 @@ in
   # See https://unix.stackexchange.com/a/612469/195575
   networking.wireless.iwd.enable = true;
   networking.wireless.iwd.package = import ./iwd.nix { inherit pkgs; };
+  # man iwd.config(5)
   networking.wireless.iwd.settings = {
     Settings = { Hidden = true; };
-    General = { EnableNetworkConfiguration = true; };
+    General = {
+      EnableNetworkConfiguration = true;
+      RoamThreshold = "-55";  # 2.4G, default = -70
+      RoamThreshold5G = "-80"; # 5G, default = -76
+    };
     Network = { EnableIPv6 = true; };
   };
   networking.dhcpcd.enable = false;
