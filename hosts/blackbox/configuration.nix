@@ -100,8 +100,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
-  virtualisation.virtualbox.host.enable = true;
-  users.extraGroups.vboxusers.members = [ "cwu" ];
+  services.nixseparatedebuginfod.enable = true;
 
   virtualisation.libvirtd.enable = true;
   environment.systemPackages = with pkgs; [
