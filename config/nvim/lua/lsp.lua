@@ -9,16 +9,16 @@ local telescope = require('telescope.builtin')
 
 local servers = {
     'pyright',
-    'tsserver',
     'rust_analyzer',
     'nil_ls',
     'bashls',
     'dockerls',
     'docker_compose_language_service',
     'jsonls',
+    'html',
     'yamlls',
     'volar',
-    'rome',
+    'biome',
     'gopls',
 };
 
@@ -99,6 +99,13 @@ local setup = { on_attach = on_attach, capabilities = capabilities }
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
 end
+
+lspconfig['volar'].setup(vim.tbl_extend('error', setup, {
+  -- XXX: replaces tsserver to avoid conflicts
+  -- Ideally, only enable this on vite.config..s, but
+  -- I don't have a way to disable tsserver by lspconfig.util.root_pattern()
+    filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+}))
 
 lspconfig['lua_ls'].setup(vim.tbl_extend('error', setup, {
     cmd = { vim.env.HOME .. '/.nix-profile/bin/lua-language-server' },
