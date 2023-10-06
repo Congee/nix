@@ -126,7 +126,7 @@ alias urlunquote='python -c "import urllib, sys; print urllib.unquote(sys.argv[1
 case $OSTYPE in
   darwin*)
     alias t=trash
-    alias ls='ls -G'
+    alias ls='ls --color=auto'
     alias eject='diskutil eject'
     alias grep='grep --color=auto'
     alias egrep='egrep --color=auto'
