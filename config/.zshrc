@@ -151,26 +151,6 @@ case $OSTYPE in
     alias ls='ls --color=auto'
     alias drop_caches='sudo sysctl vm.drop_caches=1'
     alias godoc='godoc -goroot=/usr/share/go-1.15'
-
-    function knitr() {
-      local filename="$1"
-      local code=$(cat <<- EOF
-        require(knitr);
-        require(dplyr);
-        require(xaringan);
-        # knitr::opts_chunk\$set(cache.extra = knitr::rand_seed);
-        knitr::opts_chunk\$set(cache = T);
-        xaringan::infinite_moon_reader('${filename}');
-EOF
-      )
-      R --quiet -e "${code}"
-    }
-
-    function __rmd() {
-      local filename="$1"
-      R --quiet -e "rmarkdown::render('${filename}')"
-    }
-
     # broot
     # source /home/congee/.config/broot/launcher/bash/br
     ;;
