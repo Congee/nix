@@ -69,7 +69,7 @@ _G.treesitter_ft_mod = {
     haskell         = 'haskell',
     hcl             = 'hcl',
     html            = 'html',
-    lua             = 'lua',
+    -- lua             = 'lua',
     nix             = 'nix',
     ocaml           = 'ocaml',
     ocaml_interface = 'ocaml_interface',
@@ -134,8 +134,9 @@ return {
     -- },
     {
         'lukas-reineke/indent-blankline.nvim',
+        dependencies = 'nvim-treesitter/nvim-treesitter',
         config = function()
-            require('indent_blankline').setup { use_treesitter = true };
+            require('ibl').setup();
             vim.g.indent_blankline_filetype_exclude = { 'help', 'neo-tree' }
             vim.g.indent_blankline_char = '│';
 
@@ -144,11 +145,6 @@ return {
         end,
         lazy = true,
         event = "ColorScheme",
-    },
-    {
-        "fladson/vim-kitty", -- syntax highlighting for kitty cnofig
-        lazy = true,
-        ft = "kitty",
     },
     {
         -- basically `hi Normal guibg=none` but with more hl groups
@@ -222,46 +218,46 @@ return {
         end,
         enabled = function() return vim.fn.has('linux') == 1 end,
     },
-    --
-    -- {
-    --     'folke/todo-comments.nvim',
-    --     config = function()
-    --         require('todo-comments').setup {
-    --             highlight = { keyword = "bg", multiline = false }
-    --         }
-    --         vim.cmd [[syntax keyword Todo contained NOTE NOTES]] -- w/o treesitter
-    --     end
-    -- },
-    --
-    -- {
-    --     'rhysd/clever-f.vim', -- leap.nvim is clunky
-    --     config = function()
-    --         vim.g.clever_f_across_no_line = 1
-    --         vim.g.clever_f_not_overwrites_standard_mappings = 1
-    --         -- make it work with macros
-    --         local check = function(ch)
-    --             local rec = vim.fn.reg_recording() .. vim.fn.reg_executing() == ""
-    --             return rec and ("<Plug>(clever-f-" .. ch .. ")") or ch
-    --         end
-    --
-    --         local opts = { silent = true, remap = true, expr = true }
-    --         vim.keymap.set('n', 'f', function() return check('f') end, opts)
-    --         vim.keymap.set('n', 'F', function() return check('F') end, opts)
-    --         vim.keymap.set('n', 't', function() return check('t') end, opts)
-    --         vim.keymap.set('n', 'T', function() return check('T') end, opts)
-    --         vim.cmd [[
-    --             map ;     <Plug>(clever-f-repeat-forward)
-    --             map <M-,> <Plug>(clever-f-repeat-back)
-    --         ]]
-    --     end
-    -- },
-    --
-    -- {
-    --   'qxxxb/vim-searchhi',
-    --   lazy = true,
-    --   event = 'VeryLazy',
-    -- },
-    --
+
+    {
+        'folke/todo-comments.nvim',
+        config = function()
+            require('todo-comments').setup {
+                highlight = { keyword = "bg", multiline = false }
+            }
+            vim.cmd [[syntax keyword Todo contained NOTE NOTES]] -- w/o treesitter
+        end
+    },
+
+    {
+        'rhysd/clever-f.vim', -- leap.nvim is clunky
+        config = function()
+            vim.g.clever_f_across_no_line = 1
+            vim.g.clever_f_not_overwrites_standard_mappings = 1
+            -- make it work with macros
+            local check = function(ch)
+                local rec = vim.fn.reg_recording() .. vim.fn.reg_executing() == ""
+                return rec and ("<Plug>(clever-f-" .. ch .. ")") or ch
+            end
+
+            local opts = { silent = true, remap = true, expr = true }
+            vim.keymap.set('n', 'f', function() return check('f') end, opts)
+            vim.keymap.set('n', 'F', function() return check('F') end, opts)
+            vim.keymap.set('n', 't', function() return check('t') end, opts)
+            vim.keymap.set('n', 'T', function() return check('T') end, opts)
+            vim.cmd [[
+                map ;     <Plug>(clever-f-repeat-forward)
+                map <M-,> <Plug>(clever-f-repeat-back)
+            ]]
+        end
+    },
+
+    {
+      'qxxxb/vim-searchhi',
+      lazy = true,
+      event = 'VeryLazy',
+    },
+
     { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     {
         'folke/trouble.nvim',
@@ -274,7 +270,7 @@ return {
     },
     {
         'nvim-telescope/telescope.nvim',
-        dependencies = { {
+        dependencies = {
             'pwntester/octo.nvim',
             'nvim-lua/plenary.nvim',
             'nvim-telescope/telescope-symbols.nvim',
@@ -282,7 +278,7 @@ return {
             'luc-tielen/telescope_hoogle',
             'MrcJkb/telescope-manix',
             'AckslD/nvim-neoclip.lua',
-        } },
+        },
         config = function()
             require('octo').setup()
             require('neoclip').setup()
@@ -359,110 +355,96 @@ return {
         lazy = true,
         event = "VeryLazy",
     },
-    -- {
-    --     'kylechui/nvim-surround',
-    --     config = function() require('nvim-surround').setup({}) end,
-    --     lazy = true,
-    --     event = "VeryLazy",
-    -- },
-    -- {
-    --     'junegunn/vim-easy-align',
-    --     config = function()
-    --         vim.cmd [[
-    --             xmap ga <Plug>(EasyAlign)
-    --             nmap ga <Plug>(EasyAlign)
-    --         ]]
-    --     end,
-    --     lazy = true,
-    --     event = "BufEnter",
-    -- },
-    -- 'junegunn/vim-peekaboo',
-    -- {
-    --   'ojroques/vim-oscyank',
-    --   lazy = true,
-    --   event = "BufEnter",
-    -- },
-    -- {
-    --     'FooSoft/vim-argwrap',
-    --     config = function() vim.g.argwrap_tail_comma = 1 end,
-    --     lazy = true,
-    --     cmd = 'ArgWrap',
-    -- },
-    -- {
-    --     'mhartington/formatter.nvim',
-    --     config = function()
-    --         local util = require "formatter.util"
-    --         require('formatter').setup({
-    --             logging = true,
-    --             log_level = vim.log.levels.WARN,
-    --             filetype = {
-    --                 lua = { require("formatter.filetypes.lua").stylua },
-    --                 vue = require("formatter.filetypes.vue").prettier,
-    --                 json5 = function()
-    --                     return {
-    --                         exe = 'prettier',
-    --                         args = {
-    --                             util.escape_path(util.get_current_buffer_file_path())
-    --                         }
-    --                     }
-    --                 end,
-    --                 typescript = {
-    --                     require('formatter.filetypes.typescript').clangformat,
-    --                 },
-    --                 javascript = {
-    --                     require('formatter.filetypes.javascript').clangformat,
-    --                 },
-    --                 yaml = {
-    --                     function()
-    --                         return {
-    --                             exe = 'yamlfmt',
-    --                             args = { '-in' },
-    --                             stdin = true,
-    --                         }
-    --                     end
-    --                 },
-    --                 ['*'] = {
-    --                     require('formatter.filetypes.any').remove_trailing_whitespace
-    --                 },
-    --                 python = {
-    --                     require('formatter.filetypes.python').isort,
-    --                     require('formatter.filetypes.python').isort,
-    --                 }
-    --             }
-    --         })
-    --     end,
-    --     lazy = true,
-    --     event = 'VeryLazy',
-    -- },
-    -- { 'Olical/conjure', lazy = true },
-    -- {
-    --     'Olical/aniseed',
-    --     config = function() vim.g["aniseed#env"] = true end,
-    --     lazy = true,
-    -- },
-    --
-    -- {
-    --     'iamcco/markdown-preview.nvim',
-    --     ft = { 'markdown' },
-    --     build = 'cd app && yarn install',
-    --     cmd = 'MarkdownPreview',
-    --     config = function()
-    --         vim.g.mkdp_open_ip = 'localhost'
-    --         -- To debug
-    --         -- vim.env.NVIM_MKDP_LOG_FILE = '/tmp/mkdp.log'
-    --         -- vim.env.NVIM_MKDP_LOG_LEVEL = 'debug'
-    --
-    --         -- wsl2
-    --         if vim.fn.has('wsl') == 1 then
-    --             vim.cmd([[
-    --                 function! g:OpenBrowser(url)
-    --                     silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
-    --                 endfunction
-    --             ]]);
-    --             vim.g.mkdp_browserfunc = 'g:OpenBrowser'
-    --         end
-    --     end
-    -- },
+    {
+        'kylechui/nvim-surround',
+        config = function() require('nvim-surround').setup({}) end,
+        lazy = true,
+        event = "VeryLazy",
+    },
+    {
+        'junegunn/vim-easy-align',
+        config = function()
+            vim.cmd [[
+                xmap ga <Plug>(EasyAlign)
+                nmap ga <Plug>(EasyAlign)
+            ]]
+        end,
+        lazy = true,
+        event = "BufEnter",
+    },
+    'junegunn/vim-peekaboo',
+    {
+      'ojroques/vim-oscyank',
+      lazy = true,
+      event = "BufEnter",
+    },
+
+    -- See also
+    -- https://github.com/AckslD/nvim-trevJ.lua
+    -- https://github.com/aarondiel/spread.nvim
+    -- https://github.com/AndrewRadev/splitjoin.vim
+    {
+        'FooSoft/vim-argwrap',
+        config = function() vim.g.argwrap_tail_comma = 1 end,
+        lazy = true,
+        cmd = 'ArgWrap',
+    },
+
+    {
+      'stevearc/conform.nvim',
+      cmd = { "ConformInfo" },
+      keys = {
+        {
+          -- Customize or remove this keymap to your liking
+          "<leader>ft",
+          function()
+            require("conform").format({ async = true, lsp_fallback = true })
+          end,
+          mode = "",
+          desc = "Format buffer",
+        },
+      },
+      opts = {
+          formatters_by_ft = {
+            lua = { "stylua" },
+            vue = { { "prettierd", "prettier" } },
+            javascript = { 'clang_format' },
+            typescript = { 'clang_format' },
+            python = { 'isort' },
+            yaml = { command = 'yamlfmt', args = { '-i', '-n' } },
+            ["*"] = { "trim_whitespace" },
+          },
+      },
+      init = function()
+        -- overrides formatexpr=v:lua.vim.lsp.formatexpr()
+        vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+      end,
+      lazy = true,
+      event = { "BufWritePre" },
+    },
+
+    {
+        'iamcco/markdown-preview.nvim',
+        ft = { 'markdown' },
+        build = 'cd app && yarn install',
+        cmd = 'MarkdownPreview',
+        config = function()
+            vim.g.mkdp_open_ip = 'localhost'
+            -- To debug
+            -- vim.env.NVIM_MKDP_LOG_FILE = '/tmp/mkdp.log'
+            -- vim.env.NVIM_MKDP_LOG_LEVEL = 'debug'
+
+            -- wsl2
+            if vim.fn.has('wsl') == 1 then
+                vim.cmd([[
+                    function! g:OpenBrowser(url)
+                        silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
+                    endfunction
+                ]]);
+                vim.g.mkdp_browserfunc = 'g:OpenBrowser'
+            end
+        end
+    },
     -- {
     --     'epwalsh/obsidian.nvim',
     --     dependencies = { 'hrsh7th/nvim-cmp' },
@@ -475,27 +457,27 @@ return {
     --     lazy = true,
     --     ft = "markdown",
     -- },
-    --
-    -- {
-    --     'ryvnf/readline.vim',
-    --     config = function()
-    --         local function back_delete_char()
-    --             local row, col = table.unpack(vim.api.nvim_win_get_cursor(0))
-    --             if col == vim.fn.col('$') - 1 then return end
-    --             local bufnr = vim.api.nvim_get_current_buf()
-    --             vim.api.nvim_buf_set_text(bufnr, row - 1, col, row - 1, col + 1, {})
-    --         end
-    --
-    --         vim.keymap.set('i', '<C-D>', back_delete_char, { silent = true })
-    --     end,
-    --     lazy = true,
-    --     event = 'VeryLazy',
-    -- },
-    -- {
-    --     'kana/vim-fakeclip',
-    --     lazy = true,
-    --     event = "VeryLazy",
-    -- },
+
+    {
+        'ryvnf/readline.vim',
+        config = function()
+            local function back_delete_char()
+                local row, col = table.unpack(vim.api.nvim_win_get_cursor(0))
+                if col == vim.fn.col('$') - 1 then return end
+                local bufnr = vim.api.nvim_get_current_buf()
+                vim.api.nvim_buf_set_text(bufnr, row - 1, col, row - 1, col + 1, {})
+            end
+
+            vim.keymap.set('i', '<C-D>', back_delete_char, { silent = true })
+        end,
+        lazy = true,
+        event = 'VeryLazy',
+    },
+    {
+        'kana/vim-fakeclip',
+        lazy = true,
+        event = "VeryLazy",
+    },
     {
       'chrisbra/unicode.vim',
       lazy = true,
@@ -689,7 +671,7 @@ return {
     },
     {
         'rebelot/heirline.nvim',
-        dependencies = { 'kyazdani42/nvim-web-devicons', 'olimorris/onedarkpro.nvim' },
+        dependencies = { 'nvim-tree/nvim-web-devicons', 'olimorris/onedarkpro.nvim' },
         config = function() require('statusline') end,
         lazy = true,
         event = "UIEnter",
@@ -726,9 +708,9 @@ return {
             dapui.close()
           end
 
-          vim.keymap.set('n', '<Leader>db', function() require('dap').toggle_breakpoint() end)
-          vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
-          vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)
+          vim.keymap.set('n', '<Leader>db', function() dap.toggle_breakpoint() end)
+          vim.keymap.set('n', '<Leader>dr', function() dap.repl.open() end)
+          vim.keymap.set('n', '<Leader>dl', function() dap.run_last() end)
           vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
             require('dap.ui.widgets').hover()
           end)
@@ -806,6 +788,11 @@ return {
     },
     {
         'nvim-neo-tree/neo-tree.nvim',
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+        },
         config = function()
             vim.g.neo_tree_remove_legacy_commands = 1
             local cmd = ':Neotree action=show toggle=true reveal <CR>'
@@ -913,6 +900,8 @@ return {
             require 'nvim-treesitter.configs'.setup {
                 compilers = { "clang++", "zig" },
                 ensure_installed = vim.tbl_values(_G.treesitter_ft_mod),
+                auto_install = false,
+                ignore_install = {'lua'},
                 highlight = {
                     enable = true,
                     disable = { "cpp", "bash", "python", "typescript", "go", "yaml" },
