@@ -794,6 +794,21 @@ return {
           "MunifTanjim/nui.nvim",
         },
         config = function()
+            require("neo-tree").setup({
+              window = {
+                mappings = {
+                  ["Z"] = "expand_all_nodes",
+                }
+              },
+              filesystem = {
+                window = {
+                  mappings = {
+                    ["[c"] = "prev_git_modified",
+                    ["]c"] = "next_git_modified",
+                  }
+                }
+              }
+            });
             vim.g.neo_tree_remove_legacy_commands = 1
             local cmd = ':Neotree action=show toggle=true reveal <CR>'
             vim.keymap.set('n', '<Leader>e', cmd, { silent = true })
