@@ -89,11 +89,6 @@ setopt hist_ignore_space
 # setopt extended_history
 setopt share_history
 setopt inc_append_history
-
-
-# Ctrl-r replaced with hstr
-export HH_CONFIG=hicolor        # get more colors
-# bindkey -s "\C-r" "\eqhh\n"     # bind hh to Ctrl-r (for Vi mode check doc)
 # }}}
 
 # alias {{{
@@ -177,11 +172,6 @@ unsetopt extendedglob
 promptinit
 ###############################################################################
 
-
-[[ -d /usr/local/opt/coreutils/bin ]] &&\
-  find /usr/local/opt/coreutils/bin\
-  -print0 | xargs -0 basename | compdef _gnu_generic
-
 # zstyle ':completion:function:completer:command:argument:tag'
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path ~/.zsh/cache
@@ -229,14 +219,6 @@ cheat() {
 dadjoke() {
   curl --silent --header "Accept: text/plain" https://icanhazdadjoke.com/ && echo
 }
-
-# aprod() {
-#   export AWS_PROFILE=production
-# }
-
-# adev() {
-#   export AWS_PROFILE=development
-# }
 
 bluethooth() {
   [[ -z $1 ]] && type -f bluethooth && return 1
@@ -317,12 +299,6 @@ undozip() {
       print $i " ";
       print $NF "\n"
   }' | xargs -I{} rm -r {}
-}
-
-taobao_ip () {
-  #INTERNEL_IP=$(ifconfig en0 inet | fgrep inet | cut -d' ' -f2)
-  INTERNEL_IP=$(ipconfig getifaddr en0)
-  echo INTERNEL_IP="${INTERNEL_IP}"
 }
 
 myip () {
@@ -406,33 +382,8 @@ setopt PUSHD_SILENT
 setopt PUSHD_IGNORE_DUPS
 bindkey -e  # emacs style binding
 bindkey '^[[Z' reverse-menu-complete
-#bindkey 'ƒ'  forward-word		# OSX iTerm2 Opiton-F
-#bindkey '∫'  backward-word	# OSX iTerm2 Opiton-B
-
-# nix programs.fzf enables it already
-#
-# FZF CTRL-R - Paste the selected command from history into the command line
-# bindkey -r '^R'  # remove default binding for history-incremental-search-backward
-# fzf-history-widget() {
-# local selected num
-# setopt localoptions noglobsubst noposixbuiltins pipefail 2> /dev/null
-# selected=( $(fc -rl 1 |
-#   FZF_DEFAULT_OPTS="--height ${FZF_TMUX_HEIGHT:-40%} $FZF_DEFAULT_OPTS -n2..,.. --tiebreak=index --bind=ctrl-r:toggle-sort $FZF_CTRL_R_OPTS --query=${(qqq)LBUFFER} +m" $(__fzfcmd)) )
-#   local ret=$?
-#   if [ -n "$selected" ]; then
-#     num=$selected[1]
-#     if [ -n "$num" ]; then
-#       zle vi-fetch-history -n $num
-#     fi
-#   fi
-#   zle reset-prompt
-#   return $ret
-# }
-# zle     -N   fzf-history-widget
-# bindkey '^R' fzf-history-widget  # must be after `bindkey -e`
 # bindkey '^T' transpose-chars
 
-#
 # Ctrl+X Ctrl+E
 autoload edit-command-line
 zle -N edit-command-line

@@ -243,6 +243,17 @@ in
   programs.zoxide.enable = true;
   programs.zoxide.enableZshIntegration = true;
 
+  programs.atuin.enable = true;
+  programs.atuin.settings = {
+    auto_sync = false;
+    update_check = false;
+    style = "compact";
+  };
+  programs.atuin.flags = [
+    "--disable-up-arrow"
+  ];
+  programs.atuin.enableZshIntegration = true;
+
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
   programs.fzf.defaultOptions = [
