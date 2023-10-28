@@ -4,3 +4,9 @@ fn main() -> Result<(), std::io::Error> {
     Ok(())
 }
 endsnippet
+
+snippet sleep "std::thread::sleep(...)"
+std::thread::sleep(std::time::Duration::from_secs(${0}));
+endsnippet
+
+# vim:ft=snippets:
