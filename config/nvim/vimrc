@@ -34,6 +34,11 @@ vnoremap <Leader>c :OSCYank<CR>
 " Yank to system clipboard register
 " autocmd TextYankPost * if v:event.operator is 'y' && v:event.regname is '+' | OSCYankReg + | endif
 
+" CTRL+Space seems to insert the text that was typed in the last insert-mode session
+" This is very annoying when I accidentally hit it
+" https://stackoverflow.com/questions/24983372/what-does-ctrlspace-do-in-vim
+inoremap <C-Space> <Nop>
+
 set pastetoggle=<Leader>p
 
 augroup file_type
