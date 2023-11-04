@@ -33,3 +33,8 @@ endsnippet
 snippet vector "std::vector (v)"
 std::vector<${1:int}> vec$0
 endsnippet
+
+snippet sleep "std::this_thread::sleep_for(...)"
+using namespace std::chrono_literals;
+std::this_thread::sleep_for(2000ms);
+endsnippet
