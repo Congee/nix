@@ -9,7 +9,6 @@ local telescope = require('telescope.builtin')
 
 local servers = {
     'pyright',
-    'rust_analyzer',
     'nil_ls',
     'bashls',
     'dockerls',
@@ -37,13 +36,33 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     callback = function() require("lint").try_lint() end,
 })
 
-local on_attach = function(client, bufnr)
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id);
+    local bufnr = ev.buf;
+
+    local function show_documentation()
+        local filetype = vim.bo.filetype
+        if vim.tbl_contains({ 'vim','help' }, filetype) then
+            vim.cmd('h '..vim.fn.expand('<cword>'))
+        elseif vim.tbl_contains({ 'man' }, filetype) then
+            vim.cmd('Man '..vim.fn.expand('<cword>'))
+        elseif vim.fn.expand('%:t') == 'Cargo.toml' and require('crates').popup_available() then
+            require('crates').show_popup()
+        else
+            vim.lsp.buf.hover()
+        end
+    end
+
     local opts = { silent = true, buffer = bufnr }
     vim.keymap.set('n', 'gD', telescope.lsp_type_definitions, opts)
     vim.keymap.set('n', 'gd', telescope.lsp_definitions, opts)
     vim.keymap.set('n', 'gI', telescope.lsp_implementations, opts)
     vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'K', show_documentation, opts)
+    vim.keymap.set("n", "<space>", function() vim.cmd.RustLsp { 'hover', 'range' } end, opts)
     vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '[h', function()
@@ -84,8 +103,8 @@ local on_attach = function(client, bufnr)
     end
 
     inlayhints.on_attach(client, bufnr)
-end
-
+  end,
+})
 
 -- Recently lsp client of neovim watch files by polling. This is embarrassing :/
 -- https://github.com/neovim/neovim/issues/23291
@@ -94,7 +113,7 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-local setup = { on_attach = on_attach, capabilities = capabilities }
+local setup = { capabilities = capabilities }
 for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
 end
@@ -119,42 +138,7 @@ lspconfig['sourcekit'].setup(vim.tbl_extend('error', setup, {
     root_dir = lspconfig.util.root_pattern('Package.swift', '.git'),
     single_file_support = true,
 }))
-
-
-local rt = require("rust-tools")
-rt.setup({
-  server = {
-    on_attach = function(client, bufnr)
-      client.server_capabilities.documentRangeFormattingProvider = true;
-
-      -- Hover actions
-      vim.keymap.set("n", "<space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-      -- Code action groups
-      vim.keymap.set("n", "<Leader>ac", rt.code_action_group.code_action_group, { buffer = bufnr })
-      on_attach(client, bufnr)
-    end,
-    cmd = { vim.env.HOME .. '/.nix-profile/bin/rust-analyzer' },
-    settings = {
-      ['rust-analyzer'] = {
-        rustfmt = {
-          -- require `rustfmt` binary
-          overrideCommand = { "rustfmt", "--" },
-          rangeFormatting = { enable = true },
-          extraArgs = { "+nightly" },
-        },
-        cargo = { buildScripts = { enable = true } }
-      },
-    },
-  },
-  dap = {
-    adapter = (function()
-      local exe = vim.fn.resolve(vim.fn.exepath('codelldb'))
-      local dir = vim.fn.fnamemodify(exe, ':h')
-      local lib = vim.fn.resolve(dir .. '/../lldb/lib/liblldb.so')
-      return require('rust-tools.dap').get_codelldb_adapter(exe, lib)
-    end)()
-  },
-})
+lspconfig['clangd'].setup(vim.tbl_extend('error', setup, { }))
 
 cmp.setup({
     snippet = {
@@ -174,6 +158,7 @@ cmp.setup({
             priority = 0,
         },
         { name = 'ultisnips' },
+        { name = "crates" },
     },
     window = { documentation = { max_width = 79 } },
     completion = { autocomplete = {} },

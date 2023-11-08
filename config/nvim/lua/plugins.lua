@@ -682,9 +682,51 @@ return {
         event = "UIEnter",
     },
     {
-         'simrat39/rust-tools.nvim',
-         ft = { 'rust' },
-         dependencies = { 'mfussenegger/nvim-dap', 'hrsh7th/nvim-cmp' },
+        'mrcjkb/rustaceanvim',
+        version = '^3', -- Recommended
+        ft = { 'rust' },
+        dependencies = { 'mfussenegger/nvim-dap', 'hrsh7th/nvim-cmp' },
+        init = function()
+          vim.g.rustaceanvim = {
+            tools = {
+              hover_actions = {
+                replace_builtin_hover = false,
+              },
+            },
+            server = {
+              settings = {
+                ['rust-analyzer'] = {
+                  rustfmt = {
+                    -- require `rustfmt` binary
+                    overrideCommand = { "rustfmt", "--" },
+                    rangeFormatting = { enable = true },
+                    extraArgs = { "+nightly" },
+                  },
+                  cargo = { buildScripts = { enable = true } }
+                },
+              },
+            },
+            -- dap = {  -- FIXME: this is evaluated too early
+            --   adapter = (function()
+            --     local exe = vim.fn.resolve(vim.fn.exepath('codelldb'))
+            --     local dir = vim.fn.fnamemodify(exe, ':h')
+            --     local lib = vim.fn.resolve(dir .. '/../lldb/lib/liblldb.so')
+            --     return require('rustaceanvim.dap').get_codelldb_adapter(exe, lib)
+            --   end)()
+            -- },
+          }
+        end
+    },
+    {
+      'saecki/crates.nvim',
+      tag = 'v0.4.0',
+      dependencies = { 'nvim-lua/plenary.nvim', 'hrsh7th/nvim-cmp' },
+      event = { "BufRead Cargo.toml" },
+      config = function()
+        require('crates').setup({
+          src = { cmp = { enabled = true } }
+      })
+    end
     },
     {
         'mfussenegger/nvim-dap',
