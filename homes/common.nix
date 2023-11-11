@@ -292,13 +292,11 @@ in
 
   programs.git = {
     enable = true;
-    # fix difft with --color and --width in fzf prewview
-    difftastic.enable = false;  # TODO: make a PR to add --with
+    difftastic.enable = true;
     difftastic.background = "dark";
     difftastic.color = "always";
     extraConfig = {
       core.pager = "${pkgs.less}/bin/less -XF";
-      diff.external = ''${pkgs.difftastic}/bin/difft --color=always --width ''${DFT_WIDTH:-''${FZF_PREVIEW_COLUMNS:-$COLUMNS}}'';
     };
     includes = [
       { path = ../config/git/config; }
