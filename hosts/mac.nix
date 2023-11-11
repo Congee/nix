@@ -51,13 +51,19 @@
   homebrew.global.brewfile = true;
   homebrew.casks = [
     "adobe-acrobat-reader"
-    "aldente"
+    # removed Al Dente for BatFi
+    # need to figure out how to install proprietary apps
+    # might also give Energiza Pro a try
     "audacity"
+    "battery"
     "dbeaver-community"
     "dozer"
     "firefox"
+    "gas-mask"  # hosts.txt manager
     "itsycal"
     "musicbrainz-picard"
+    "orbstack"
+    "rapidapi"
     "rectangle"
     "secretive"
     "sekey"
@@ -68,12 +74,13 @@
   '';
   # This is painfully slow
   homebrew.masApps = if true then { } else {
-    "Bible Study" = 472790630;
+    "Spotica Menu"= 570549457;
     Bitwarden     = 1352778147;
     EuDic         = 434350458;
     GIF           = 1081413713;
     GarageBand    = 682658836;
     Gifski        = 1351639930;
+    Monodraw      = 920404675;
     OneDrive      = 823766827;
     QQ            = 451108668;
     Telegram      = 747648890;
