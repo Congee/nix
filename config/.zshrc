@@ -408,6 +408,10 @@ my_prompt() {
   [[ -n $SSH_CONNECTION ]] && host_info="$USER${red_at}$HOST "
 
   if [[ $USER == "CC" || $USER == "congee" || $USER == "cwu" ]]; then
+    local nix_logo="%{$fg[blue]%} %{$reset_color%}"
+    local nix_prompt
+    [[ -n $IN_NIX_SHELL ]] && nix_prompt="${nix_logo}" || nix_prompt=""
+
     # number of chracters of the path of the prompt is less 30
     # use '~' to represent $HOME as long as possible
     local prefix_slash
@@ -419,23 +423,25 @@ my_prompt() {
       prefix_slash=/
     fi
 
-    local nix_logo="%{$fg[blue]%} %{$reset_color%}"
-    local nix_prompt
-    [[ -n $IN_NIX_SHELL ]] && nix_prompt="${nix_logo}" || nix_prompt=""
-
     # ugly work around
     # IFS=/ read -A pwdarr <<< "$pwd"
     local pwdarr=(${(ps:/:)pwd})
+    local dir
+    if [[ ${#pwdarr[@]} -le 2 ]]; then
+        dir="$pwd"
+    else
+        dir="${prefix_slash}${pwdarr[1]}/.../${pwdarr[-1]}"
+    fi
 
     RPROMPT="${GITSTATUS_PROMPT}"
 
     prompt=""
-    if [[ ${#pwd[@]} -le 30 ]]; then
+    if [[ ${#pwd[@]} -gt 30 ]]; then
       prompt="${prompt}%~"
     else
-      prompt="${prompt}${prefix_slash}${host_info}${pwdarr[1]}/.../${pwdarr[-1]}"
+      prompt="${prompt}${dir}"
     fi
-    prompt="${nix_prompt}${prompt}${red_dollar} "
+    prompt="${host_info}${nix_prompt}${prompt}${red_dollar} "
   else  # other user
     prompt=${red_at}'%c % '
   fi
