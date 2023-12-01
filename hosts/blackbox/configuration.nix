@@ -48,7 +48,7 @@ in
   networking.hostName = "blackbox"; # Define your hostname.
   # NOTE: nmcli does not really connect to a fixed bssid
   # See https://unix.stackexchange.com/a/612469/195575
-  networking.wireless.iwd.enable = true;
+  networking.wireless.iwd.enable = false;
   networking.wireless.iwd.package = import ./iwd.nix { inherit pkgs; };
   # man iwd.config(5)
   networking.wireless.iwd.settings = {
@@ -60,7 +60,6 @@ in
     };
     Network = { EnableIPv6 = true; };
   };
-  networking.dhcpcd.enable = false;
 
   services.tailscale.enable = true;
 
