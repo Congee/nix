@@ -133,6 +133,12 @@ in
   services.avahi.publish.enable = true;
   services.avahi.publish.addresses = true;
   services.avahi.publish.userServices = true;
+  services.avahi.publish.domain = true;
+  services.avahi.extraConfig = ''
+    [publish]
+    publish-aaaa-on-ipv4=no
+    publish-a-on-ipv6=no
+  '';
   services.geoclue2.enable = true;
   services.geoclue2.appConfig = {
     "geoclue-where-am-i" = {
