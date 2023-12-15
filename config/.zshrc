@@ -71,6 +71,7 @@ fi
 
 typeset -U fpath
 fpath=(
+  ~/.local/share/zsh/site-functions  # volatile
   $fpath  # placed at last to be overridden
 )
 

@@ -232,6 +232,9 @@ in
   # tmux new sessions do not source .zshrc which is for an _interactive_ shell.
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
   home.file.".zlogin".source = ln ../config/.zlogin;
+  home.activation.fpath = lib.hm.dag.entryAfter ["wrieBoundary"] ''
+    mkdir -p ${config.xdg.dataHome}/zsh/site-functions
+  '';
 
   programs.dircolors.enable = true;
 
