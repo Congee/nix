@@ -8,6 +8,7 @@
     shell = pkgs.zsh;  # per user
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
+  users.groups.realtime.members = [ "cwu" ];  # for rtkit
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
