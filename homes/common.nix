@@ -93,6 +93,9 @@ in
     watchexec
     exercism
     litecli
+    zola
+    cloudflared
+    hostctl
     nmap
     # fx  # json viewer. I don't like cli written in js tho
     mkcert  # https on localhost
@@ -120,6 +123,7 @@ in
     stylua
     buf-language-server
     shellcheck
+    jwt-cli
 
     skaffold
     # hadolint  # lint Dockerfile
