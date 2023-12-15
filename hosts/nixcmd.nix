@@ -13,6 +13,9 @@
     # and cache misses.
     #
     # See https://github.com/NixOS/nixpkgs/issues/151533#issuecomment-999894356
+    # NOTE: remember to run darwin-rebuild or nixos-rebuild to have
+    # `nix registry list` to output the latest nixpkgs after doing
+    # `nix flake lock --update-input nixpkgs`
     registry.nixpkgs.flake = inputs.nixpkgs;
     nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
 
