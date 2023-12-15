@@ -62,7 +62,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gI', telescope.lsp_implementations, opts)
     vim.keymap.set('n', 'gr', telescope.lsp_references, opts)
     vim.keymap.set('n', 'K', show_documentation, opts)
-    vim.keymap.set("n", "<space>", function() vim.cmd.RustLsp { 'hover', 'range' } end, opts)
+    if vim.bo.filetype == 'rust' then
+      vim.keymap.set("n", "<space>", function() vim.cmd.RustLsp { 'hover', 'range' } end, opts)
+    end
     vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '[h', function()
