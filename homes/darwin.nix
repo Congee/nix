@@ -14,12 +14,9 @@ in
     mtr
     mas
     kubectl
-    lima-bin
-    colima
     docker docker-credential-helpers
-    pinentry_mac nur.pinentry-touchid
+    pinentry_mac
     # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
-    (writeScriptBin "nerdctl" ''exec ${colima}/bin/colima nerdctl -- "$@"'')
     swift-format
   ];
 

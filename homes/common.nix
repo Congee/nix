@@ -128,9 +128,6 @@ in
     skaffold
     # hadolint  # lint Dockerfile
     rancher
-    # -- Already provided by Rancher Desktop
-    # lima
-    # kubernetes
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
     helmfile
