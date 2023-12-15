@@ -169,6 +169,32 @@ in
   services.pipewire.enable = true;
   services.pipewire.alsa.enable = true;
   services.pipewire.pulse.enable = true;
+    
+  services.blueman.enable = true;
+  environment.etc = {
+    "wireplumber/bluetooth.lua.d/50-bluez-config.lua".text = ''
+      bluez_monitor.properties = {
+        ["bluez5.headset-roles"] = "[ hsp_hs hsp_ag hfp_hf hfp_ag ]",
+        -- mSBC provides better audio + microphone
+        ["bluez5.enable-msbc"] = true,
+        -- SBC XQ provides better audio
+        ["bluez5.enable-sbc-xq"] = true,
+        -- Hardware volume control
+        ["bluez5.enable-hw-volume"] = true,
+      };
+
+      bluez_monitor.rules = {
+        matches = {
+          {
+            { "device.name", "matches", "bluez_output.*" },
+          },
+        },
+        apply_properties = {
+          ["bluez5.auto-connect"] = "[ hfp_hf hsp_hs hsp_ag hsp_hs a2dp_source a2dp_sink ]",
+        },
+      };
+    '';
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
