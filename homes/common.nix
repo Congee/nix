@@ -99,6 +99,7 @@ in
     cargo  # for shell completion
     cargo-edit
     cargo-clone  # download .crate files
+    cargo-generate
     rust-analyzer
     # gdb
     # gdbgui

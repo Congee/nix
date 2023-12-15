@@ -57,6 +57,7 @@ in
     progress
     lshw hardinfo
     ltrace
+    trace-cmd kernelshark
     weechat
     mold
     bind  # dig
