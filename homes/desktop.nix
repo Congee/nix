@@ -34,7 +34,7 @@ in
           --set XMODIFIERS "@im=fcitx"
       '';
     })
-    mako  # notifacation daemon
+    swaynotificationcenter  # notifacation daemon
     gtk-layer-shell
     aml  # vnc server
     clipman
