@@ -223,7 +223,7 @@ return {
         'folke/todo-comments.nvim',
         config = function()
             require('todo-comments').setup {
-                highlight = { keyword = "bg", multiline = false }
+                highlight = { keyword = "bg", multiline = true }
             }
             vim.cmd [[syntax keyword Todo contained NOTE NOTES]] -- w/o treesitter
         end
