@@ -55,7 +55,6 @@
     # need to figure out how to install proprietary apps
     # might also give Energiza Pro a try
     "audacity"
-    "battery"
     "dbeaver-community"
     "dozer"
     "firefox"
@@ -65,13 +64,11 @@
     "orbstack"
     "rapidapi"
     "rectangle"
+    "red-canary-mac-monitor"  # replaces dtruss
     "secretive"
     "sekey"
     "stats"
   ];
-  homebrew.extraConfig = ''
-    cask "zoom", greedy: true
-  '';
   # This is painfully slow
   homebrew.masApps = if true then { } else {
     "Spotica Menu"= 570549457;
