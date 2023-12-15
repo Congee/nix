@@ -63,6 +63,7 @@ _G.treesitter_ft_mod = {
     bibtex          = 'bibtex',
     cmake           = 'cmake',
     comment         = 'comment',
+    ejs             = 'embedded_template',
     fennel          = 'fennel',
     gitattributes   = 'gitattributes',
     graphql         = 'graphql',
@@ -1000,6 +1001,7 @@ return {
                     disable = { "python" },
                 },
                 incremental_selection = { enable = true },
+                embedded_template = { enable = true, }
             }
         end
     },
