@@ -100,6 +100,7 @@ in
   # $ nix search wget
 
   services.nixseparatedebuginfod.enable = true;
+  services.preload.enable = true;
 
   virtualisation.libvirtd.enable = true;
   environment.systemPackages = with pkgs; [
