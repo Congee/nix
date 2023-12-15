@@ -73,7 +73,7 @@ in
   # Set your time zone.
   time.timeZone = "America/New_York";
 
-  fonts.fonts = with pkgs; [
+  fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk
     noto-fonts-emoji
@@ -123,6 +123,7 @@ in
 
   xdg.portal.enable = true;
   xdg.portal.wlr.enable = true;
+  xdg.portal.config.common.default = "*";
   xdg.portal.extraPortals = [
     pkgs.xdg-desktop-portal-gtk  # gtk apps need it anyway?
   ];

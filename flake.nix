@@ -4,7 +4,7 @@
   inputs = {
     nur.url                             = "github:nix-community/NUR";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-23.05";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-23.11";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     # https://github.com/nix-community/neovim-nightly-overlay/issues/176#issuecomment-1528902953
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay/a9719c5050b1abbb0adada7dd9f98e0cdbd3ed53";
