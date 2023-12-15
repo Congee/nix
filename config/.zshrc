@@ -76,7 +76,7 @@ fpath=(
 )
 
 typeset -U module_path
-module_path=($module_path /usr/local/lib/zpython)
+module_path=($module_path)
 # }}}
 
 # {{{ History
