@@ -2,22 +2,13 @@ name: 0
 
 startup_window: simplenote
 windows:
-    - batmobile:
-        layout: 393b,295x75,0,0{209x75,0,0,0,85x75,210,0,3}  # big left
-        pre: cd ~/dev/batmobile
-        panes:
-            -
-            -
-    - simplenote:
-        panes:
-            - sncli
-
     - personal:
         panes:
             - cd ~/dev
 
-    - vpn:
+    - work:
+        pre: cd ~/dev/speedify
         panes:
-            - test -f ~/vpn/vpn.sh && (cd ~/vpn && ./vpn.sh) || exit
+            -
 
 # vim: shiftwidth=4 tabstop=4:
