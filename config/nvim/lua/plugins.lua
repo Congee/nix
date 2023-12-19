@@ -366,9 +366,20 @@ return {
         lazy = true,
         event = "BufEnter",
     },
-    'junegunn/vim-peekaboo',
+    'gennaro-tedesco/nvim-peekup',
     {
-      'ojroques/vim-oscyank',
+      -- To test OSC52 do
+      -- `printf "\033]52;c;$(printf "%s" "hello" | base64)\a"`
+      'ojroques/nvim-osc52',
+      config = function()
+        local function copy()
+          if vim.v.event.operator == 'y' and vim.v.event.regname == '+' then
+            require('osc52').copy_register('+')
+          end
+        end
+
+        vim.api.nvim_create_autocmd('TextYankPost', {callback = copy})
+      end,
       lazy = true,
       event = "BufEnter",
     },
@@ -466,11 +477,6 @@ return {
         end,
         lazy = true,
         event = 'VeryLazy',
-    },
-    {
-        'kana/vim-fakeclip',
-        lazy = true,
-        event = "VeryLazy",
     },
     {
       'chrisbra/unicode.vim',
