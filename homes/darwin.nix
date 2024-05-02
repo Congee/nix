@@ -10,7 +10,8 @@ in
   ];
 
   home.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
+    (nerdfonts.override { fonts = [ "CodeNewRoman" ]; })
+    swiftdefaultapps # swda getUTIs | rg -i mpv 
     mtr
     mas
     kubectl
@@ -29,6 +30,9 @@ in
 
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
+  home.sessionVariables = {
+    FONTCONFIG_PATH = "${config.xdg.configHome}/fontconfig";
+  };
 
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
