@@ -16,15 +16,14 @@ local servers = {
     'jsonls',
     'html',
     'yamlls',
-    'volar',
-    'biome',
+    'tsserver',
     'gopls',
 };
 
 inlayhints.setup()
 require('mason').setup();
 require('mason-lspconfig').setup({
-    ensure_installed = servers,
+    ensure_installed = { 'biome', table.unpack(servers) },
     automatic_installation = true,
 })
 
@@ -120,11 +119,54 @@ for _, lsp in ipairs(servers) do
     lspconfig[lsp].setup(setup) -- call :LspStart on startup
 end
 
-lspconfig['volar'].setup(vim.tbl_extend('error', setup, {
+lspconfig['tsserver'].setup(vim.tbl_extend('error', setup, {
   -- XXX: replaces tsserver to avoid conflicts
   -- Ideally, only enable this on vite.config..s, but
   -- I don't have a way to disable tsserver by lspconfig.util.root_pattern()
-    filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+  root_dir = lspconfig.util.root_pattern('package.json', '.git'),
+  init_options = {
+    plugins = {
+      {
+        name = "@vue/typescript-plugin",
+        location = require('mason-registry').get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin',
+        languages = { "javascript", "typescript", "vue" },
+      },
+    },
+  },
+  filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'},
+}))
+
+lspconfig['yamlls'].setup(vim.tbl_extend('error', setup, {
+  settings = {
+    yaml = {
+      customTags = {
+        "!vault scalar",
+      },
+      -- Schemas https://www.schemastore.org
+      schemas = {
+        ["http://json.schemastore.org/github-action.json"] = ".github/action.{yml,yaml}",
+      },
+    }
+  }
+}))
+
+lspconfig['jsonls'].setup(vim.tbl_extend('error', setup, {
+  filetypes = {"json", "jsonc"},
+  settings = {
+    json = {
+      -- Schemas https://www.schemastore.org
+      schemas = {
+        {
+          fileMatch = {"package.json"},
+          url = "https://json.schemastore.org/package.json"
+        },
+        {
+          fileMatch = {"tsconfig*.json"},
+          url = "https://json.schemastore.org/tsconfig.json"
+        },
+      }
+    }
+  }
 }))
 
 lspconfig['lua_ls'].setup(vim.tbl_extend('error', setup, {
