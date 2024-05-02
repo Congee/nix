@@ -61,6 +61,7 @@
     "gas-mask"  # hosts.txt manager
     "itsycal"
     "musicbrainz-picard"
+    "obsidain"
     "orbstack"
     "rapidapi"
     "rectangle"

@@ -450,18 +450,19 @@ return {
             end
         end
     },
-    -- {
-    --     'epwalsh/obsidian.nvim',
-    --     dependencies = { 'hrsh7th/nvim-cmp' },
-    --     config = function()
-    --         require('obsidian').setup({
-    --             dir = "~/OneDrive/obsidian",
-    --             use_advanced_uri = true,
-    --         })
-    --     end,
-    --     lazy = true,
-    --     ft = "markdown",
-    -- },
+    {
+        'epwalsh/obsidian.nvim',
+        dependencies = { 'hrsh7th/nvim-cmp', 'nvim-lua/plenary.nvim' },
+        config = function()
+            require('obsidian').setup({
+                dir = "~/OneDrive/Apps/remotely-save/obsidian",
+                use_advanced_uri = true,
+            })
+            vim.opt_local.conceallevel = 2;
+        end,
+        lazy = true,
+        ft = "markdown",
+    },
 
     {
         'ryvnf/readline.vim',
