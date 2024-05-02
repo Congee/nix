@@ -1,5 +1,7 @@
 [push]
     default = simple
+[advice]
+    skippedcherrypicks = true
 [alias]
     exec = ! exec  ;  shell aliases are always executed in the top-level directory
     aliases = config --get-regexp alias
@@ -14,7 +16,7 @@
     lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
     cmp = log --left-right --graph --oneline --cherry
     cp = cherry-pick
-    prune-local = !"git branch --verbose | fgrep '[gone]' | awk '{print $1}' | xargs git branch -D"
+    prunelocal = !"git branch --verbose | fgrep '[gone]' | awk '{print $1}' | xargs --no-run-if-empty git branch -D"
 [merge]
     tool = vimdiff
     ff = true
