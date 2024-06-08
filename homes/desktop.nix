@@ -202,6 +202,8 @@ in
       "browser.shell.checkDefaultBrowser" = false;
       "media.ffmpeg.vaapi.enabled" = true;
       "browser.urlbar.resultMenu.keyboardAccessible" = false;
+      "browser.urlbar.quickactions.enabled" = true;
+      "browser.urlbar.clickSelectsAll" = false;
     };
   };
 
