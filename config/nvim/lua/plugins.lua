@@ -660,15 +660,13 @@ return {
     },
     -- { 'ray-x/navigator.lua' },
     {
-        'simrat39/symbols-outline.nvim',
+        'hedyhli/outline.nvim', -- or stevearc/aerial.nvim
         config = function()
-            local outline = require("symbols-outline")
-
-            outline.setup({ opts = { width = 20 } })
-            vim.keymap.set('n', '<leader>vt', outline.toggle_outline, { silent = true })
+            require'outline'.setup{ outline_window = { width = 20 } }
+            vim.keymap.set('n', '<leader>vt', require'outline'.toggle, { silent = true })
         end,
         lazy = true,
-        event = 'UIEnter',
+        cmd = { 'Outline', 'OutlineOpen' },
     },
     {
         'rebelot/heirline.nvim',
