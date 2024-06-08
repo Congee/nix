@@ -282,7 +282,11 @@ return {
             'AckslD/nvim-neoclip.lua',
         },
         config = function()
-            require('octo').setup()
+            require('octo').setup({
+              suppress_missing_scope = {
+                projects_v2 = true,
+              },
+            });
             require('neoclip').setup()
             local telescope = require('telescope')
             local actions = require('telescope.actions')
