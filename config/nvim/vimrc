@@ -5,6 +5,10 @@ let g:loaded_python_provider = 1
 
 let g:vimsyn_embed = 'l'
 
+" 😢 causes wezterm clutter
+" https://github.com/wez/wezterm/issues/4607#issuecomment-1831628722
+set notermsync
+
 set termguicolors
 set background=dark
 highlight MatchParen cterm=bold ctermbg=none ctermfg=magenta guibg=NONE guifg=Magenta

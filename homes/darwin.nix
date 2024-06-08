@@ -36,6 +36,8 @@ in
 
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
+  programs.wezterm.enable = true;
+  programs.wezterm.package = pkgs.wezterm;
   home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.macos.yml;
 
   home.file.".zprofile".source = ln ../config/.zprofile;

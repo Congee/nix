@@ -673,12 +673,7 @@ return {
     {
         'rebelot/heirline.nvim',
         dependencies = { 'nvim-tree/nvim-web-devicons', 'olimorris/onedarkpro.nvim' },
-        config = function() require('statusline') end,
-        lazy = true,
-        event = "UIEnter",
-    },
-    {
-        'vimpostor/vim-tpipeline', -- move vim statusline into tmux statsline
+        config = function() require('statusline'); require('wezterm_bar'); end,
         lazy = true,
         event = "UIEnter",
     },
@@ -800,7 +795,6 @@ return {
             'williamboman/mason-lspconfig.nvim',
             'mfussenegger/nvim-lint',
             'folke/neodev.nvim',
-            'andersevenrud/cmp-tmux',
             {
                 'lvimuser/lsp-inlayhints.nvim',
                 config = function() require('lsp-inlayhints').setup({
