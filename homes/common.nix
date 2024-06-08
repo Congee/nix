@@ -271,7 +271,7 @@ in
   # Need this environment to build some native stuff
   # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   programs.neovim.enable = true;
-  programs.neovim.package = pkgs.neovim-nightly.overrideAttrs (old: {
+  programs.neovim.package = pkgs.neovim.overrideAttrs (old: {
     runtimeDependencies = old.runtimeDependencies or [] ++ [ pkgs.llvmPackages_latest.clang ];
   });
   programs.neovim.withPython3 = true;

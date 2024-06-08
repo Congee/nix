@@ -6,8 +6,7 @@
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixos.url                           = "github:NixOS/nixpkgs/nixos-23.11";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
-    # https://github.com/nix-community/neovim-nightly-overlay/issues/176#issuecomment-1528902953
-    neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay/a9719c5050b1abbb0adada7dd9f98e0cdbd3ed53";
+    neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
     # home-manager.url                    = "github:Congee/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -31,7 +30,7 @@
             nixpkgs.overlays = [
               inputs.nur.overlay
               inputs.wayland.overlay
-              inputs.neovim-nightly.overlay
+              inputs.neovim-nightly.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
@@ -49,7 +48,7 @@
           {
             nixpkgs.overlays = [
               inputs.nur.overlay
-              inputs.neovim-nightly.overlay
+              inputs.neovim-nightly.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
@@ -63,7 +62,7 @@
           {
             nixpkgs.overlays = [
               inputs.nur.overlay
-              inputs.neovim-nightly.overlay
+              inputs.neovim-nightly.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
