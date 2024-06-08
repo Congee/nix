@@ -16,6 +16,8 @@ local servers = {
     'jsonls',
     'html',
     'yamlls',
+    'helm_ls',
+    'ansiblels',
     'tsserver',
     'gopls',
 };
@@ -48,6 +50,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id);
     local bufnr = ev.buf;
+
+    -- https://github.com/neovim/nvim-lspconfig/issues/2626#issuecomment-2117022664
+    if client.name == 'yamlls' and vim.bo.filetype == 'helm' then
+      return vim.lsp.buf_detach_client(bufnr, client.id);
+    end
 
     local function show_documentation()
         local filetype = vim.bo.filetype
@@ -146,15 +153,28 @@ lspconfig['tsserver'].setup(vim.tbl_extend('error', setup, {
 lspconfig['yamlls'].setup(vim.tbl_extend('error', setup, {
   settings = {
     yaml = {
+      filetypes_exclude = { 'helm' },
       customTags = {
         "!vault scalar",
       },
       -- Schemas https://www.schemastore.org
       schemas = {
         ["http://json.schemastore.org/github-action.json"] = ".github/action.{yml,yaml}",
+        kubernetes = "templates/**",
       },
     }
   }
+}))
+
+lspconfig['helm_ls'].setup(vim.tbl_extend('error', setup, {
+	settings = {
+		helm = {
+			command = "helm_ls",
+			args = { "serve" },
+			filetypes = { "helm", "helmfile" },
+			rootPatterns = { "Chart.yaml" },
+		},
+	},
 }))
 
 lspconfig['jsonls'].setup(vim.tbl_extend('error', setup, {

@@ -69,6 +69,7 @@ _G.treesitter_ft_mod = {
     graphql         = 'graphql',
     haskell         = 'haskell',
     hcl             = 'hcl',
+    helm            = 'helm',
     html            = 'html',
     -- lua             = 'lua',
     nix             = 'nix',
@@ -979,6 +980,7 @@ return {
         lazy = true,
         ft = { "vim", "python" },
     },
+    { 'towolf/vim-helm' },
     -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
     { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
     {
