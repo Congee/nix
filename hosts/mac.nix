@@ -50,18 +50,17 @@
   homebrew.enable = true;  # still have to manually install homebrew
   homebrew.global.brewfile = true;
   homebrew.casks = [
-    "adobe-acrobat-reader"
     # removed Al Dente for BatFi
     # need to figure out how to install proprietary apps
     # might also give Energiza Pro a try
     "audacity"
     "dbeaver-community"
-    "dozer"
+    "dozer"  # "jordanbaird-ice"
     "firefox"
     "gas-mask"  # hosts.txt manager
     "itsycal"
     "musicbrainz-picard"
-    "obsidain"
+    "obsidian"
     "orbstack"
     "rapidapi"
     "rectangle"
