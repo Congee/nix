@@ -35,6 +35,13 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
     callback = function() require("lint").try_lint() end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'cmp_docs',
+    callback = function()
+        vim.treesitter.start(0, 'markdown')
+    end,
+})
+
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
