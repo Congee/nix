@@ -29,6 +29,7 @@ in
 
     nur.sncli
 
+    exiftool
     qrencode
     difftastic
     delta
@@ -77,11 +78,12 @@ in
     zip
     zbar  # qrcode
     p7zip
+    unar
     yamlfmt
+    nix-inspect
     nix-output-monitor
-    nixfmt
+    nixfmt-rfc-style
     nil
-    rnix-lsp
     nix-index
     nix-tree
     nix-diff  # diff .drv files
@@ -95,6 +97,7 @@ in
     litecli
     zola
     cloudflared
+    doctl civo
     hostctl
     nmap
     # fx  # json viewer. I don't like cli written in js tho
@@ -103,6 +106,8 @@ in
     cargo-edit
     cargo-clone  # download .crate files
     cargo-generate
+    cargo-show-asm
+    cargo-expand
     rust-analyzer
     # gdb
     # gdbgui
@@ -114,7 +119,7 @@ in
     # haskellPackages.haskell-language-server
     haskellPackages.implicit-hie
     haskellPackages.hoogle
-    rbw pinentry
+    rbw
     yt-dlp-light
     ffmpeg
     # llvmPackages_latest.clang also ships this binary but bin/cc is in
@@ -143,8 +148,6 @@ in
     cuetools
 
     act # run github actions locally
-    earthly
-    pulumi
 
     tmate
     tmux
