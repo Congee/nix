@@ -11,14 +11,16 @@ in
 
   home.packages = with pkgs; [
     (nerdfonts.override { fonts = [ "CodeNewRoman" ]; })
-    swiftdefaultapps # swda getUTIs | rg -i mpv 
+    swiftdefaultapps # swda getUTIs | rg -i mpv
+    wireshark
     mtr
     mas
-    kubectl
-    docker docker-credential-helpers
+    docker_26 docker-credential-helpers
     pinentry_mac
     # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     swift-format
+    (pkgs.writeShellScriptBin "ggrep" "exec -a $0 ${gnugrep}/bin/grep $@")
+    (pkgs.writeShellScriptBin "gsed" "exec -a $0 ${gnused}/bin/sed $@")
   ];
 
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
