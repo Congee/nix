@@ -52,6 +52,7 @@ augroup file_type
 
   " au Filetype python nmap <LocalLeader>rn :Semshi rename
   au BufRead *.rkt se ft=racket
+  au BufRead *.ejs se ft=embedded_template
   au BufRead flake.lock se ft=json
   " au FileType python set equalprg=autopep8\ -
   au FileType scheme let b:AutoPairs = {"(": ")"}
@@ -65,9 +66,11 @@ augroup file_type
   au FileType markdown setlocal textwidth=78 spell
   au FileType scheme inoreabbrev lambda λ
   au FileType go setlocal noexpandtab
+  au FileType rust setlocal colorcolumn=100
+  au FileType vue setlocal colorcolumn=120
 
   au FileType python,java setlocal shiftwidth=4 tabstop=4
-  au FileType typescript,typescript.jsx,javascript,cpp,haskell,go,cabal,nix,sql,lua setlocal shiftwidth=2 tabstop=2
+  au FileType html,embedded_template,typescript,typescript.jsx,javascript,vue,cpp,haskell,go,cabal,nix,sql,lua setlocal shiftwidth=2 tabstop=2
   "au FileType typescript :syn clear jsxAttrib
   " very slow
   " au FileType python se foldmethod=expr | se foldexpr=nvim_treesitter#foldexpr()
