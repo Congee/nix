@@ -93,6 +93,16 @@
   system.defaults.NSGlobalDomain.InitialKeyRepeat = 25;
   system.defaults.NSGlobalDomain.KeyRepeat = 2;
   system.defaults.NSGlobalDomain.AppleFontSmoothing = 0;  # unfortunately global
+  # https://flaky.build/native-fix-for-applications-hiding-under-the-macbook-pro-notch
+  system.defaults.CustomSystemPreferences = {
+    NSGlobalDomain = {
+      NSStatusItemSelectionPadding = 6;
+      NSStatusItemSpacing = 6;
+    };
+  };
+  # System Preferences -> Privacy -> Full Disk Access
+  # https://apple.stackexchange.com/a/360610/167199
+  # https://superuser.com/questions/526183/remove-applications-from-location-services-in-security-privacy-on-mac-os-x-10
   system.defaults.CustomUserPreferences = {
     "com.apple.mail" = { "com.apple.mail.DisableInlineAttachmentViewing" = true; };
   };
