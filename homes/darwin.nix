@@ -10,6 +10,7 @@ in
   ];
 
   home.packages = with pkgs; [
+    plistwatch
     (nerdfonts.override { fonts = [ "CodeNewRoman" ]; })
     swiftdefaultapps # swda getUTIs | rg -i mpv
     wireshark
