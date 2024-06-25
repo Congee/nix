@@ -49,7 +49,6 @@ in
   # NOTE: nmcli does not really connect to a fixed bssid
   # See https://unix.stackexchange.com/a/612469/195575
   networking.wireless.iwd.enable = false;
-  networking.wireless.iwd.package = import ./iwd.nix { inherit pkgs; };
   # man iwd.config(5)
   networking.wireless.iwd.settings = {
     Settings = { Hidden = true; };
@@ -67,8 +66,9 @@ in
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
+  networking.useNetworkd = true; # gets multiple name servers via dhcp
   services.resolved.enable = true;
-  services.resolved.extraConfig = "DNSOverTLS=opportunistic";
+  services.resolved.dnsovertls = "opportunistic";
 
   # Set your time zone.
   time.timeZone = "America/New_York";
