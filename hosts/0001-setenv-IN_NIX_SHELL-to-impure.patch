@@ -1,0 +1,27 @@
+From 5071dfca61e916676c19b1fc878b50c6c5baf17a Mon Sep 17 00:00:00 2001
+From: Congee <congeec@qq.com>
+Date: Thu, 26 Sep 2024 15:18:56 -0400
+Subject: [PATCH] setenv IN_NIX_SHELL to impure
+
+---
+ src/nix/main.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/nix/main.cc b/src/nix/main.cc
+index 7a9516d5e..c7c615202 100644
+--- a/src/nix/main.cc
++++ b/src/nix/main.cc
+@@ -553,8 +553,10 @@ void mainWrapped(int argc, char * * argv)
+ 
+ }
+ 
++#include <stdlib.h>
+ int main(int argc, char * * argv)
+ {
++    setenv("IN_NIX_SHELL", "impure", 1);
+     // Increase the default stack size for the evaluator and for
+     // libstdc++'s std::regex.
+     nix::setStackSize(64 * 1024 * 1024);
+-- 
+2.46.0
+

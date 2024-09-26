@@ -18,7 +18,7 @@
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
-  # nix.package = pkgs.nix;
+  nix.package = pkgs.nix.overrideAttrs (old: { patches = old.patches ++ [ ./0001-setenv-IN_NIX_SHELL-to-impure.patch ]; });
 
   # required for services.tailscale.magicDNS
   # networking.dns = [
