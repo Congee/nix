@@ -1,4 +1,4 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, nixpkgs, ... }:
 
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -21,6 +21,17 @@ in
   # the Home Manager release notes for a list of state version
   # changes in each release.
   home.stateVersion = "21.11";
+
+  # NOTE: remember to run darwin-rebuild or nixos-rebuild to have
+  # `nix registry list` to output the latest nixpkgs after doing
+  # `nix flake lock --update-input nixpkgs`
+  # https://nix.dev/manual/nix/2.18/command-ref/new-cli/nix3-registry#description
+  # https://rycee.gitlab.io/home-manager/options.xhtml#opt-nix.registry
+  nix.registry.nixpkgs = {
+    flake = nixpkgs;
+    from = { id = "nixpkgs"; type = "indirect"; };
+    to = { type = "path"; path = nixpkgs.outPath; };
+  };
 
   programs.home-manager.enable = true;  # to use the unstable in nix-channel
   nixpkgs.config.allowUnfree = true;
@@ -80,6 +91,7 @@ in
     p7zip
     unar
     yamlfmt
+    nix-search-cli
     nix-inspect
     nix-output-monitor
     nixfmt-rfc-style

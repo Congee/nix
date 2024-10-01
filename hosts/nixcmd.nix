@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, pkgs, ... }:
 
 {
   nix = {
@@ -7,17 +7,7 @@
       keep-outputs = true
       keep-derivations = true
     '';
-    # Make `nix search nixpkgs#hello` use caches. `nix registry list` shows
-    # by default `global flake:nixpkgs github:NixOS/nixpkgs/nixpkgs-unstable`
-    # in which the `nixpkgs` is frequently pulled. It results in more bandwidth
-    # and cache misses.
-    #
-    # See https://github.com/NixOS/nixpkgs/issues/151533#issuecomment-999894356
-    # NOTE: remember to run darwin-rebuild or nixos-rebuild to have
-    # `nix registry list` to output the latest nixpkgs after doing
-    # `nix flake lock --update-input nixpkgs`
-    registry.nixpkgs.flake = inputs.nixpkgs;
-    nixPath = [ "nixpkgs=${inputs.nixpkgs}" ];
+    package = pkgs.nix.overrideAttrs (old: { patches = old.patches ++ [ ./0001-setenv-IN_NIX_SHELL-to-impure.patch ]; });
 
     # Binary Cache for Haskell.nix
     settings.trusted-public-keys = [

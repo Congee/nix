@@ -4,7 +4,7 @@
   inputs = {
     nur.url                             = "github:nix-community/NUR";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-23.11";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-24.05";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
@@ -38,7 +38,7 @@
             nixpkgs.config.permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];
           }
         ];
-
+        extraSpecialArgs = { inherit nixpkgs; };
       };
       wsl = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
@@ -67,6 +67,7 @@
             ];
           }
         ];
+        extraSpecialArgs = { inherit nixpkgs; };
       };
     };
     desktop = self.homeConfigurations.desktop.activationPackage;
