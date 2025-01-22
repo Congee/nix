@@ -405,20 +405,26 @@ return {
           desc = "Format buffer",
         },
       },
+      --- @module 'conform'
+      --- @type conform.setupOpts
       opts = {
-          formatters_by_ft = {
-            lua = { "stylua" },
-            vue = { { "prettierd", "prettier" } },
-            javascript = { 'clang_format' },
-            typescript = { 'clang_format' },
-            python = { 'isort' },
-            yaml = { command = 'yamlfmt', args = { '-i', '-n' } },
-            ["*"] = { "trim_whitespace" },
-          },
+        default_format_opts = { lsp_format = 'prefer', },
+        formatters_by_ft = {
+          lua = { "stylua" },
+          vue = { "prettierd", "prettier" },
+          javascript = { 'clang_format' },
+          typescript = { 'prettierd', 'prettier' },
+          python = { 'isort' },
+          yaml = { command = 'yamlfmt', args = { '-i', '-n' } },
+          ["*"] = { "trim_whitespace" },
+        },
       },
       init = function()
-        -- overrides formatexpr=v:lua.vim.lsp.formatexpr()
-        vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+        vim.api.nvim_create_autocmd('FileType', {
+          callback = function(args)
+            vim.api.nvim_buf_set_option(args.buf, "formatexpr", "v:lua.require'conform'.formatexpr({'timeout_ms': 1000})")
+          end
+        });
       end,
       lazy = true,
       event = { "BufWritePre" },
