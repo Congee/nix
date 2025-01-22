@@ -1,8 +1,8 @@
 -- Pull in the wezterm API
-local wezterm = require("wezterm")
+local wezterm = require("wezterm") --[[@as Wezterm]]
 
 -- This will hold the configuration.
-local config = wezterm.config_builder()
+local config = wezterm.config_builder();
 
 -- This is where you actually apply your config choices
 
@@ -20,6 +20,7 @@ config.unix_domains = {
 config.default_gui_startup_args = { "connect", "unix" }
 config.default_prog = { 'zsh', '--login' }
 
+config.max_fps = 120
 -- For example, changing the color scheme:
 config.color_scheme = "nightfox"
 -- config.default_cursor_style = "BlinkingBlock"
@@ -372,6 +373,14 @@ config.keys = {
 		mods = "LEADER",
 		action = "TogglePaneZoomState",
 	},
+  { key = 'Tab', mods = 'CTRL', action = wezterm.action.DisableDefaultAssignment },
+  { key = 'Tab', mods = 'SHIFT|CTRL', action = wezterm.action.DisableDefaultAssignment },
+}
+
+config.key_tables = {
+  search_mode = {
+    { key = '[', mods = 'CTRL', action = wezterm.action.CopyMode 'Close' },
+  }
 }
 
 -- and finally, return the configuration to wezterm
