@@ -74,6 +74,7 @@ fpath=(
   ~/.local/share/zsh/site-functions  # volatile
   $fpath  # placed at last to be overridden
 )
+autoload -Uz $fpath[1]/*
 
 typeset -U module_path
 module_path=($module_path)

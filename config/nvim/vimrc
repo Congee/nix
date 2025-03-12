@@ -20,6 +20,7 @@ highlight VertSplit  guibg=#303030
 if has("mac") | hi Normal guibg=None | endif  " background transparency
 set cmdheight=0
 set laststatus=0  " with cmdheight=0
+set messagesopt=hit-enter,history:2000
 set shiftwidth=4
 set softtabstop=4
 set expandtab

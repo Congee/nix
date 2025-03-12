@@ -17,9 +17,16 @@
     cmp = log --left-right --graph --oneline --cherry
     cp = cherry-pick
     prunelocal = !"git branch --verbose | fgrep '[gone]' | awk '{print $1}' | xargs --no-run-if-empty git branch -D"
+    # It translates to `sh -c '${cmd} "$@"' '${cmd}' args`. So, came the trailing `#`
+    # https://stackoverflow.com/a/41305925/1641838
+    fixup = !"git commit --fixup=$1 && git rebase --committer-date-is-author-date --autostash --autosquash --rebase-merges $1~1 #"
+[rerere]
+    enabled = true
+    autoupdate = true
 [merge]
     tool = vimdiff
     ff = true
+    conflictstyle = zdiff3
 [pull]
     ff = true
 [mergetool]
@@ -33,19 +40,28 @@
     prompt = true
 [diff]
     tool = vimdiff
+    mnemonicprefix = true
+    colormoved = true
+    renames = true
+    algorithm = histogram
 [delta]
     features = villsau  # theme of unified view. use "chameleon" for split view
+[tag]
+    sort = version:refname
 [core]
     hooksPath = ~/.config/git/hooks
     trustctime = false
     ; attributesfile = ~/.gitattributes
     # pager = delta --dark
+[rebase]
+    updaterefs = true
 [gpg]
     format = ssh
 [gpg "ssh"]
     allowedSignersFile = ~/.ssh/allowed_signers
 [commit]
     gpgsign = true
+    verbose = true
 [cola]
     spellcheck = false
 [filter "lfs"]
