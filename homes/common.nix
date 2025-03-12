@@ -252,6 +252,9 @@ in
   home.activation.fpath = lib.hm.dag.entryAfter ["wrieBoundary"] ''
     mkdir -p ${config.xdg.dataHome}/zsh/site-functions
   '';
+  xdg.dataFile."zsh/site-functions/_git-fixup".text = ''
+    _git-fixup() { _arguments '1:commit:__git_recent_commits' }
+  '';
 
   programs.dircolors.enable = true;
 
