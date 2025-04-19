@@ -3,8 +3,8 @@
 
   inputs = {
     nur.url                             = "github:nix-community/NUR";
-    nixpkgs.url                         = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url                         = "github:NixOS/nixpkgs/nixos-unstable";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-24.11";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
@@ -12,7 +12,6 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     darwin.url                          = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows       = "nixpkgs";
-    nixseparatedebuginfod.url           = "github:symphorien/nixseparatedebuginfod";
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
   };
@@ -90,21 +89,8 @@
       modules = [
         {
           nixpkgs.overlays = [
-            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) docker_24; })
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) nix; })
             (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
-            (_: prev: {  # https://github.com/NixOS/nixpkgs/issues/97855#issuecomment-1075818028
-              nixos-option = let
-                # consider --impure with bultins.getEnv "HOME"
-                prefix = ''(import ${inputs.flake-compat} { src = /home/cwu/nix; }).defaultNix.nixosConfigurations.blackbox'';
-              in prev.runCommandNoCC "nixos-option" { buildInputs = [ prev.makeWrapper ]; } ''
-                makeWrapper ${prev.nixos-option}/bin/nixos-option $out/bin/nixos-option \
-                  --add-flags --config_expr \
-                  --add-flags "\"${prefix}.config\"" \
-                  --add-flags --options_expr \
-                  --add-flags "\"${prefix}.options\""
-            '';
-            })
           ];
           nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (nixos.lib.getName pkg) [
             "steam"
@@ -113,7 +99,6 @@
             "steam-runtime"
           ];
         }
-        inputs.nixseparatedebuginfod.nixosModules.default
         ./hosts/blackbox/configuration.nix
       ];
       specialArgs = { inherit inputs; };

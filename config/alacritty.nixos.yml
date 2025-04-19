@@ -408,8 +408,9 @@ cursor:
   # from `0.0` to `1.0`.
   #thickness: 0.15
 
-# Live config reload (changes require restart)
-live_config_reload: true
+general:
+  # Live config reload (changes require restart)
+  live_config_reload: true
 
 # Shell
 #

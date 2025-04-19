@@ -26,7 +26,7 @@
     enable = true;
     enableExtraSocket = true;
     enableSSHSupport = true;  # implies: programs.ssh.startAgent = true;
-    pinentryFlavor = "tty";
+    pinentryPackage = pkgs.pinentry-curses;
     # TODO: ~/.gnupg/scdaemon.conf
   };
 

@@ -285,6 +285,16 @@ fzf-store() {
     fzf -m --preview-window right:50% --preview 'nix-store -q --tree {}'
 }
 
+upflake() {
+  local url="https://monitoring.nixos.org/prometheus/api/v1/query?query=channel_revision" 
+  local args='.data.result[] | select(.metric.channel=="nixos-unstable") | .metric.revision'
+  local new=$(curl -sL ${url} | jq -r "${args}")
+  local old=$(jq -r ".nodes.nixpkgs.locked.rev" flake.lock)
+
+  sed -i s/$old/$new/ flake.lock
+  echo "$old -> $new"
+}
+
 ptpython() {
   command ptpython $@;
   local ret=$?

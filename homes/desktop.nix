@@ -18,9 +18,9 @@ in
   home.packages = with pkgs; [
 
     # wayland
-    waybar
+    unstable.waybar
     wayfire
-    unstable.wcm  # wayfire config manager
+    wayfirePlugins.wcm  # wayfire config manager
     # XXX: wofi does not pick up envs from ~/.pam_environment 😠
     (symlinkJoin {
       name = "wofi";
@@ -47,22 +47,24 @@ in
     imv  # image viewer
     wayvnc
     wf-recorder
-    gnome.nautilus
-    gnome.zenity  # --color-selection
+    nautilus
+    zenity  # --color-selection
     kanshi  # display configuration tool
     greetd.tuigreet  # display/login manager
     handlr xdg-utils  # xdg-open
     xvfb-run
     procs psmisc  # pstree, fuser
     progress
-    lshw hardinfo
+    lshw hardinfo2
     ltrace
     trace-cmd kernelshark
     weechat
     mold
+    libtree
     bind  # dig
-    iw wirelesstools  # iwconfig
+    iw wirelesstools impala  # iwconfig
 
+    inotify-tools
     powertop
     wavemon  # wifi signal strength
     pciutils  # lspci
@@ -75,9 +77,9 @@ in
 
     nerdctl
     buildkit
-
+    pinentry
     wl-clipboard
-    goldendict
+    # goldendict-ng
     evolution
     element-desktop
 
@@ -94,15 +96,14 @@ in
     spotify
     spicetify-cli
     postman
-    octant
     obsidian
-    # insomnia
     charles
     zoom-us
     mpv
     (writeScriptBin "whereami" ''${geoclue2}/libexec/geoclue-2.0/demos/where-am-i "$@"'')
 
-    (nerdfonts.override { fonts = [ "CascadiaCode" "CodeNewRoman" ]; })
+    nerd-fonts.caskaydia-cove
+    nerd-fonts.code-new-roman
     # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
     droidcam
 
@@ -156,6 +157,7 @@ in
   programs.obs-studio.plugins = [pkgs.obs-studio-plugins.wlrobs];
 
   programs.waybar.enable = true;
+  programs.waybar.package = pkgs.unstable.waybar;
   programs.waybar.systemd.enable = false;
   xdg.configFile."waybar".source = ln ../config/waybar;
 

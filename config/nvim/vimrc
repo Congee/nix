@@ -5,12 +5,7 @@ let g:loaded_python_provider = 1
 
 let g:vimsyn_embed = 'l'
 
-" 😢 causes wezterm clutter
-" https://github.com/wez/wezterm/issues/4607#issuecomment-1831628722
-set notermsync
-
 set termguicolors
-set background=dark
 highlight MatchParen cterm=bold ctermbg=none ctermfg=magenta guibg=NONE guifg=Magenta
 
 set mouse=a
@@ -43,8 +38,6 @@ vnoremap <Leader>c :OSCYank<CR>
 " This is very annoying when I accidentally hit it
 " https://stackoverflow.com/questions/24983372/what-does-ctrlspace-do-in-vim
 inoremap <C-Space> <Nop>
-
-set pastetoggle=<Leader>p
 
 augroup file_type
   au!

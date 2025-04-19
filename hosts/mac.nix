@@ -8,6 +8,7 @@
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [
+    pkgs.cacert
     pkgs.home-manager
     pkgs.mpv
   ];
@@ -15,9 +16,6 @@
   # Use a custom configuration.nix location.
   # $ darwin-rebuild switch -I darwin-config=$HOME/.config/nixpkgs/darwin/configuration.nix
   # environment.darwinConfig = "$HOME/.config/nixpkgs/darwin/configuration.nix";
-
-  # Auto upgrade nix package and the daemon service.
-  services.nix-daemon.enable = true;
 
   # required for services.tailscale.magicDNS
   # networking.dns = [
@@ -28,7 +26,6 @@
   #   "2001:4860:4860::8888"
   #   "2001:4860:4860::8844"
   # ];
-  # services.tailscale.magicDNS.enable = true;
   services.tailscale.enable = true;
 
   # Create /etc/bashrc that loads the nix-darwin environment.
@@ -37,7 +34,7 @@
   programs.gnupg.agent.enableSSHSupport = true;
 
   # `auth sufficient pam_tid.so`
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
@@ -49,16 +46,14 @@
   homebrew.enable = true;  # still have to manually install homebrew
   homebrew.global.brewfile = true;
   homebrew.casks = [
-    # removed Al Dente for BatFi
+    "battery"
     # need to figure out how to install proprietary apps
     # might also give Energiza Pro a try
-    "audacity"
-    "dbeaver-community"
-    "dozer"  # "jordanbaird-ice"
+    "monokle"
+    "cloudflare-warp"
+    # "jordanbaird-ice"
     "firefox"
-    "gas-mask"  # hosts.txt manager
     "itsycal"
-    "musicbrainz-picard"
     "obsidian"
     "orbstack"
     "rapidapi"

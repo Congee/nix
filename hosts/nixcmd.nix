@@ -2,13 +2,14 @@
 
 {
   nix = {
+    enable = true;
     settings.trusted-users = [ "@admin" "@wheel" ];
     extraOptions = ''
       experimental-features = nix-command flakes
       keep-outputs = true
       keep-derivations = true
     '';
-    package = pkgs.nix.overrideAttrs (old: { patches = old.patches ++ [ ./0001-setenv-IN_NIX_SHELL-to-impure.patch ]; });
+    # package = pkgs.nix.overrideAttrs (old: { patches = old.patches ++ [ ./0001-setenv-IN_NIX_SHELL-to-impure.patch ]; });
 
     # Binary Cache for Haskell.nix
     settings.trusted-public-keys = [

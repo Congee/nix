@@ -38,8 +38,6 @@ in
   home.packages = with pkgs; [
     leetcode-cli
 
-    nur.sncli
-
     exiftool
     qrencode
     difftastic
@@ -58,10 +56,8 @@ in
     croc
     unzip
     binutils  # ar for libluajit.a
-    lua-language-server
-    luajit
-    luajitPackages.luarocks
     socat
+    websocat
     ccache
     # racket
     python3
@@ -73,11 +69,10 @@ in
     curlie xh
     lsd
     dogdns
-    (gitstatus.overrideAttrs (_: _: { doInstallCheck = false;}))  # fails on mac
+    doggo
+    gitstatus
     git-fire git-imerge # git-trim
     gh
-    awscli2
-    aws-vault
     sl
     gti
     cmatrix
@@ -92,10 +87,10 @@ in
     unar
     yamlfmt
     nix-search-cli
+    nix-weather
     nix-inspect
     nix-output-monitor
     nixfmt-rfc-style
-    nil
     nix-index
     nix-tree
     nix-diff  # diff .drv files
@@ -120,7 +115,26 @@ in
     cargo-generate
     cargo-show-asm
     cargo-expand
-    rust-analyzer
+    ra-multiplex
+    # (ra-multiplex.overrideAttrs(drv: rec {
+    #   name = "ra-multiplex";
+    #   version = "0.2.5";
+    #   src = pkgs.fetchFromGitHub {
+    #     owner = "pr2502";
+    #     repo = name;
+    #     rev = "v${version}";
+    #     hash = "sha256-aBrn9g+MGXLAsOmHqw1Tt6NPFGJTyYv/L9UI/vQU4i8=";
+    #   };
+    #   cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
+    #     name = "${name}-${version}-verndor.tar.gz";
+    #     inherit src;
+    #     outputHash = "sha256-RWheS0ureDj0mVubPlXGprRoZcv4cqfy4XmIgeLFNFw=";
+    #   });
+    #   postInstall = ''
+    #       wrapProgram $out/bin/ra-multiplex \
+    #       --suffix PATH : ${lib.makeBinPath [ rust-analyzer ]}
+    #   '';
+    # }))
     # gdb
     # gdbgui
     scc
@@ -134,19 +148,53 @@ in
     rbw
     yt-dlp-light
     ffmpeg
+    timg # imgcat abstraction
     # llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
-    clang-tools
-    stylua
-    buf-language-server
     shellcheck
     jwt-cli
+
+    # vscode-langservers-extracted # json-lsp bin/vscode-json-languageserver
+    ansible-language-server
+    # autopep8
+    bash-language-server
+    biome
+    buf
+    clang-tools
+    docker-compose-language-service
+    dockerfile-language-server-nodejs
+    eslint_d
+    docker-language-server
+    golangci-lint-langserver
+    gopls
+    harper
+    helm-ls
+    vscode-langservers-extracted # html-lsp bin/vscode-html-language-server
+    lua-language-server luajit luajitPackages.luarocks
+    markdownlint-cli2
+    mesonlsp
+    nil
+    # pyright
+    ruff
+    ra-multiplex
+
+    stylua
+    typescript-language-server
+    nodePackages_latest."@vue/language-server"
+    # nodePackages_latest."some-sass-language-server"
+    vim-language-server
+    yaml-language-server
+
+    # ◍ markdownlint (keywords: markdown)
+
 
     skaffold
     # hadolint  # lint Dockerfile
     rancher
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
+    k9s
+    kustomize
     helmfile
     kubectl
     k9s
@@ -164,6 +212,9 @@ in
     tmate
     tmux
     tmuxinator
+    zsh-forgit # for completions
+    # zsh-completions
+    zsh-nix-shell
   ];
 
   xdg.enable = true;
@@ -171,8 +222,6 @@ in
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
-
-  home.file.".snclirc".source = ln ../config/.snclirc;
 
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;
@@ -202,7 +251,7 @@ in
       file = "zsh-completions.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/zsh-users/zsh-completions";
-        rev = "7b8bb64cbb2014de66204b800bdac9ea149b6932";
+        rev = "e5507e0d0c8879f960f4b8e7c6ddb813608d95ab";
       };
     }
     {
@@ -210,7 +259,7 @@ in
       file = "forgit.plugin.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/wfxr/forgit";
-        rev = "8ca463b5c69e95ed100dd66e1134427319cf407c";
+        rev = "aec8b1f2b5b53f668fb07c48e8333f728a35004c";
       };
     }
     {
@@ -218,7 +267,7 @@ in
       file = "gitstatus.prompt.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/romkatv/gitstatus";
-        rev = "4b47ca047be1d482dbebec7279386a9365b946c6";
+        rev = "44504a24b1b999a4f56ff74c75b8215bdcadee1f";
       };
     }
     {
@@ -226,15 +275,7 @@ in
       file = "async.zsh";
       src = builtins.fetchGit {
         url = "https://github.com/mafredri/zsh-async";
-        rev = "3ba6e2d1ea874bfb6badb8522ab86c1ae272923d";
-      };
-    }
-    {
-      name = "zsh-nix-shell";
-      file = "nix-shell.plugin.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/chisui/zsh-nix-shell";
-        rev = "af6f8a266ea1875b9a3e86e14796cadbe1cfbf08";
+        rev = "ee1d11b68c38dec24c22b1c51a45e8a815a79756";
       };
     }
   ];
@@ -271,6 +312,7 @@ in
     auto_sync = false;
     update_check = false;
     style = "compact";
+    keys.prefix = "s";
   };
   programs.atuin.flags = [
     "--disable-up-arrow"
@@ -289,9 +331,8 @@ in
   # Need this environment to build some native stuff
   # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   programs.neovim.enable = true;
-  programs.neovim.package = pkgs.neovim.overrideAttrs (old: {
-    runtimeDependencies = old.runtimeDependencies or [] ++ [ pkgs.llvmPackages_latest.clang ];
-  });
+  programs.neovim.package = pkgs.neovim;
+  programs.neovim.extraPackages = [pkgs.llvmPackages_latest.clang];
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = true;
@@ -323,7 +364,11 @@ in
     };
     includes = [
       { path = ../config/git/config; }
-      { path = builtins.toString (builtins.fetchGit "https://github.com/dandavison/delta") + "/themes.gitconfig"; }
+      { path = builtins.toString (builtins.fetchGit {
+        url = "https://github.com/dandavison/delta";
+        rev = "42da5adab68c46277e20757f7a1f3b68eb874b0e";
+        # ref = "refs/tags/0.18.2";
+      }) + "/themes.gitconfig"; }
     ];
     attributes = lib.splitString "\n" (builtins.readFile ../config/git/gitattributes);
   };

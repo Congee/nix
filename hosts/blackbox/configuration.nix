@@ -7,7 +7,6 @@
 let
   # xanmod has a problem with cgroups for k3s
   linuxPackages = pkgs.linuxPackages;
-  corefreq = config.boot.kernelPackages.callPackage ./corefreq.nix { };
 in
 {
   imports =
@@ -18,20 +17,14 @@ in
     ];
 
   hardware.bluetooth.enable = true;
-  hardware.opengl.enable = true;
-  hardware.opengl.driSupport = true;
+  hardware.graphics.enable = true;
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Droidcam
-  boot.extraModulePackages = [ linuxPackages.v4l2loopback corefreq ];
-  boot.kernelModules = [ "v4l2loopback" "snd-aloop" "corefreqk" "binder_linux" ];
-  boot.extraModprobeConfig = ''
-    # 2 for droidcam hw=2,1,0
-    options snd_aloop index=2
-  '';
+  boot.extraModulePackages = [];
+  boot.kernelModules = [ "corefreqk" ];
   boot.kernelPackages = linuxPackages;
 
   boot.crashDump.enable = true;
@@ -43,12 +36,12 @@ in
   boot.tmp.useTmpfs = true;
 
   # will be available next
-  # programs.droidcam.enable = true;
+  programs.corefreq.enable = true;
 
   networking.hostName = "blackbox"; # Define your hostname.
   # NOTE: nmcli does not really connect to a fixed bssid
   # See https://unix.stackexchange.com/a/612469/195575
-  networking.wireless.iwd.enable = false;
+  networking.wireless.iwd.enable = true;
   # man iwd.config(5)
   networking.wireless.iwd.settings = {
     Settings = { Hidden = true; };
@@ -75,7 +68,7 @@ in
 
   fonts.packages = with pkgs; [
     noto-fonts
-    noto-fonts-cjk
+    noto-fonts-cjk-sans
     noto-fonts-emoji
   ];
 
@@ -103,11 +96,11 @@ in
   services.preload.enable = true;
 
   virtualisation.libvirtd.enable = true;
+  system.tools.nixos-option.enable = false;
   environment.systemPackages = with pkgs; [
+    iwd # iwctl
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
-    corefreq
-    nixos-option
     virt-manager
   ];
   programs.adb.enable = true;
@@ -117,7 +110,7 @@ in
   programs.dconf.enable = true;
   programs.xwayland.enable = true;  # xcb (Qt), chromium and electron
 
-  programs.steam.enable = true;
+  programs.steam.enable = false;
   programs.steam.remotePlay.openFirewall = true;
   programs.steam.dedicatedServer.openFirewall = true;
 
@@ -129,7 +122,8 @@ in
   ];
 
   services.avahi.enable = true;
-  services.avahi.nssmdns = true;
+  services.avahi.nssmdns4 = true;
+  services.avahi.nssmdns6 = true;
   services.avahi.publish.enable = true;
   services.avahi.publish.addresses = true;
   services.avahi.publish.userServices = true;
@@ -164,7 +158,7 @@ in
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
   security.pam.services.greetd.sshAgentAuth = true;
-  security.pam.enableSSHAgentAuth = true;
+  security.pam.sshAgentAuth.enable = true;
 
   security.tpm2.enable = true;
   security.tpm2.abrmd.enable = true;
@@ -216,7 +210,6 @@ in
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
 
-  systemd.packages = [ corefreq ];
   # rootless k3s isn't ready yet.
   # rootlesskit --net=slirp4netns --copy-up=/etc --disable-host-loopback buildkitd --addr unix://$XDG_RUNTIME_DIR/buildkit/rootless --containerd-worker-addr /run/k3s/containerd/containerd.sock
   systemd.sockets.buildkit = {
@@ -260,7 +253,6 @@ in
   ];
 
   virtualisation.docker.enable = true;
-  virtualisation.docker.package = pkgs.docker_24;
   virtualisation.docker.daemon.settings = {
     containerd = "/run/containerd/containerd.sock";
     containerd-namespace = "k8s.io";

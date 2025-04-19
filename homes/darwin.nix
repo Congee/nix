@@ -10,13 +10,17 @@ in
   ];
 
   home.packages = with pkgs; [
+    dbeaver-bin
+    hidden-bar
     plistwatch
-    (nerdfonts.override { fonts = [ "CodeNewRoman" ]; })
+    # nerd-fonts.code-new-roman
     swiftdefaultapps # swda getUTIs | rg -i mpv
     wireshark
     mtr
+    stats
     mas
-    docker_26 docker-credential-helpers
+    docker docker-credential-helpers
+    oxker
     pinentry_mac
     # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     swift-format
