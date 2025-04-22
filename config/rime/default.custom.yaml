@@ -1,6 +1,6 @@
 patch:
   schema_list:
-    - schema: double_pinyin # 自然码
+    - schema: rime_frost_double_pinyin          # 自然码双拼
   engine:
     filters:
       - simplifier
@@ -8,40 +8,11 @@ patch:
   switcher/hotkeys:
     - "Control+grave" # 注意是control+`，不是command+`
   switcher/save_options:
-    - full_shape
-    - ascii_punct
-    - simplification
-    - zh_hans
     - emoji_suggestion
   menu/page_size: 9
   show_notifications_when: appropriate
-  ascii_composer: # 设置caps、shift、control等键的作用
-    good_old_caps_lock: true # 若为true，caps只切换大小写
-    switch_key:
-      Shift_L: commit_code
-      Shift_R: noop
-      Control_L: noop
-      Control_R: noop
-      Caps_Lock: commit_code
-      Eisu_toggle: clear
-  preset_color_schemes:
-    grayscale:
-      name: Simple
-      author: Congee
-      back_color: 0xFFFFFF
-      border_color: 0xFFFFFF
-      text_color: 0xFFFFFF
-      hilited_text_color: 0x84440DD
-        # hilited_text_color: 0xFFFFFF
-      hilited_back_color: 0xDDDDDD
-      hilited_candidate_text_color: 0x000000
-      hilited_candidate_back_color: 0xFFFFFF
-      # candidate_text_color: 0xFFFFFF
-      candidate_text_color: 0x3EDDC8
-      comment_text_color: 0xFFFFFF
   style:
     color_scheme: grayscale
-    text_orientation: vertical
     corner_radius: 10
 
   key_binder/bindings: # 设置哪些键可以翻页，需要哪个取消注释即可

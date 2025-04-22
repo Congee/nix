@@ -21,19 +21,7 @@ in
     unstable.waybar
     wayfire
     wayfirePlugins.wcm  # wayfire config manager
-    # XXX: wofi does not pick up envs from ~/.pam_environment 😠
-    (symlinkJoin {
-      name = "wofi";
-      paths = [ wofi ];
-      buildInputs = [ makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/wofi \
-          --set GTK_IM_MODULE "fcitx" \
-          --set QT_IM_MODULE "fcitx" \
-          --set SDL_IM_MODULE "fcitx" \
-          --set XMODIFIERS "@im=fcitx"
-      '';
-    })
+    wofi
     swaynotificationcenter  # notifacation daemon
     gtk-layer-shell
     aml  # vnc server
@@ -117,20 +105,16 @@ in
   ];
 
   i18n.inputMethod.enabled = "fcitx5";
-  i18n.inputMethod.fcitx5.addons = with pkgs; [ fcitx5-rime fcitx5-with-addons ];
-  pam.sessionVariables = {
-    # actually cannot be picked up by wofi 😠
-    GTK_IM_MODULE="fcitx";
-    QT_IM_MODULE="fcitx";
-    SDL_IM_MODULE="fcitx";
-    XMODIFIERS="@im=fcitx";
-  };
-  xdg.configFile."fcitx5/conf/classicui.conf".source = ln "${config.home.homeDirectory}/nix/config/fcitx5/conf/classicui.conf";
-  home.file.".local/share/fcitx5/rime/default.custom.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/default.custom.yaml";
-  home.file.".local/share/fcitx5/rime/double_pinyin.custom.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/double_pinyin.custom.yaml";
-  home.file.".local/share/fcitx5/rime/double_pinyin.schema.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/double_pinyin.schema.yaml";
-  home.file.".local/share/fcitx5/rime/emoji.schema.yaml".source = ln "${config.home.homeDirectory}/nix/config/rime/emoji.schema.yaml";
-  home.file.".local/share/fcitx5/themes/Nord-Dark".source = ln "${config.home.homeDirectory}/nix/config/fcitx5/themes/fcitx5-nord/Nord-Dark";
+  i18n.inputMethod.fcitx5.addons = with pkgs; [
+    # git clone --depth 1 https://github.com/gaboolic/rime-frost ~/.local/share/fcitx5/rime
+    # rime-data # default for debugging
+    fcitx5-rime
+    fcitx5-nord
+  ];
+  i18n.inputMethod.fcitx5.waylandFrontend = false;
+  xdg.configFile."fcitx5/profile".source = ln ../config/fcitx5/profile;
+  xdg.configFile."fcitx5/conf/classicui.conf".source = ln ../config/fcitx5/conf/classicui.conf;
+  home.file.".local/share/fcitx5/rime/default.custom.yaml".source = ln ../config/rime/default.custom.yaml;
 
   home.file.".zshrc.linux".source = ln ../config/.zshrc.linux;
 
@@ -181,7 +165,6 @@ in
   };
 
   programs.chromium.enable = true;
-  programs.chromium.commandLineArgs = [ "--ozone-platform-hint=auto" ];
   programs.chromium.extensions = [
     { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
     { id = "laankejkbhbdhmipfmgcngdelahlfoji"; }  # stayfocused
