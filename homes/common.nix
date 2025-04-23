@@ -213,8 +213,6 @@ in
     tmux
     tmuxinator
     zsh-forgit # for completions
-    # zsh-completions
-    zsh-nix-shell
   ];
 
   xdg.enable = true;
@@ -249,43 +247,36 @@ in
     {
       name = "zsh-completions";
       file = "zsh-completions.plugin.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/zsh-users/zsh-completions";
-        rev = "e5507e0d0c8879f960f4b8e7c6ddb813608d95ab";
-      };
+      src = "${pkgs.zsh-completions.overrideAttrs (final: prev: { postFixup = ''
+        ln -s $out/share/zsh/site-functions $out/share/zsh/src
+        install -D --target-directory=$out/share/zsh zsh-completions.plugin.zsh
+      ''; } )}/share/zsh";
     }
     {
       name = "forgit";
       file = "forgit.plugin.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/wfxr/forgit";
-        rev = "aec8b1f2b5b53f668fb07c48e8333f728a35004c";
-      };
+      src = "${pkgs.zsh-forgit}/share/zsh/zsh-forgit";
     }
     {
       name = "gitstatus";
       file = "gitstatus.prompt.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/romkatv/gitstatus";
-        rev = "44504a24b1b999a4f56ff74c75b8215bdcadee1f";
-      };
+      src = "${pkgs.gitstatus}/share/gitstatus";
     }
     {
-      name = "zsh-async";
-      file = "async.zsh";
-      src = builtins.fetchGit {
-        url = "https://github.com/mafredri/zsh-async";
-        rev = "ee1d11b68c38dec24c22b1c51a45e8a815a79756";
-      };
+      name = "zsh-nix-shell";
+      file = "nix-shell.plugin.zsh";
+      src = "${pkgs.zsh-nix-shell}/share/zsh-nix-shell";
     }
   ];
   # programs.mcfly.enable = true;
   programs.zsh.enableCompletion = false;  # the nix-zsh-completions is too old;
-  programs.zsh.initExtraBeforeCompInit = "autoload -U compinit && compinit";
-  programs.zsh.initExtra = builtins.concatStringsSep "\n" [
-    "${builtins.readFile ../config/.zshrc}"
-    # it's already set but not inherited to home-manager zsh
-    ''export GPG_TTY="$(tty)"''
+  programs.zsh.initContent = lib.mkMerge [
+    (lib.mkOrder 850 "autoload -U compinit && compinit")
+    (lib.mkOrder 1200 (builtins.concatStringsSep "\n" [
+      "${builtins.readFile ../config/.zshrc}"
+      # it's already set but not inherited to home-manager zsh
+      ''export GPG_TTY="$(tty)"''
+    ]))
   ];
   # tmux new sessions do not source .zshrc which is for an _interactive_ shell.
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
