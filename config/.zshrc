@@ -117,8 +117,8 @@ alias hp='http_proxy=http://127.0.0.1:8123'
 alias pyinstrument='python3 -m pyinstrument'
 alias pylab='ipython --profile=common --pylab'
 alias highlight='highlight --out-format=xterm256 --style=molokai --tab=2'
-alias urlquote='python -c "import urllib, sys; print urllib.quote(sys.argv[1])"'
-alias urlunquote='python -c "import urllib, sys; print urllib.unquote(sys.argv[1])"'
+alias urlquote='python -c "import urllib, sys; print(urllib.quote(sys.argv[1]))"'
+alias urlunquote='python -c "import urllib, sys; print(urllib.unquote(sys.argv[1]))"'
 
 case $OSTYPE in
   darwin*)
