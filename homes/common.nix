@@ -148,6 +148,7 @@ in
     rbw
     yt-dlp-light
     ffmpeg
+    imagemagick
     timg # imgcat abstraction
     # llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
@@ -171,7 +172,7 @@ in
     helm-ls
     vscode-langservers-extracted # html-lsp bin/vscode-html-language-server
     lua-language-server luajit luajitPackages.luarocks
-    markdownlint-cli2
+    markdownlint-cli2 mermaid-cli
     mesonlsp
     nil
     # pyright

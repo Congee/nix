@@ -57,7 +57,10 @@ augroup file_type
   au FileType haskell hi Type      guifg=#61afef
   au FileType nasm,applescript,cmake,make setlocal omnifunc=syntaxcomplete#Complete
   au FileType cpp setlocal makeprg="cmake --build build"
-  au FileType markdown setlocal textwidth=78 spell
+  " TODO: sync stdpath('data')/site/spell/en.utf-8.add{,.spl}
+  au FileType markdown setlocal textwidth=78 spell spelllang=en_us,cjk
+  au FileType markdown setlocal foldlevel=2 foldmethod=indent
+  au FileType markdown nnoremap <silent> zgr :exe ':spellrare ' .. expand('<cWORD>')<CR>
   au FileType scheme inoreabbrev lambda λ
   au FileType go setlocal noexpandtab
   au FileType rust setlocal colorcolumn=100

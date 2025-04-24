@@ -81,6 +81,8 @@ _G.treesitter_ft_mod = {
   vue             = 'vue',
   yaml            = 'yaml',
   zig             = 'zig',
+  markdown        = 'markdown',
+  markdown_inline = 'markdown_inline',
 };
 
 --- @module 'lazy'
@@ -253,6 +255,7 @@ return {
     --- @module 'snacks'
     --- @type snacks.Config
     opts = {
+      image = { enabled = true },
       picker = {
         enabled = true,
         layout = {
@@ -412,13 +415,15 @@ return {
   {
     'obsidian-nvim/obsidian.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = {
-      dir = "~/OneDrive/Apps/remotely-save/obsidian",
-      use_advanced_uri = true,
-      completion = { nvim_cmp = false },
-    },
-    config = function() vim.wo.conceallevel = 2 end,
-    lazy = true,
+    config = function()
+      vim.wo.conceallevel = 2;
+      require('obsidian').setup({
+        dir = "~/OneDrive/Apps/remotely-save/Obsidian",
+        use_advanced_uri = true,
+        completion = { nvim_cmp = false },
+        picker = { name = 'snacks.pick' },
+      })
+    end,
     ft = "markdown",
   },
   {
@@ -1140,11 +1145,13 @@ return {
   {
     "nvim-neotest/neotest",
     dependencies = {
+      "nvim-neotest/nvim-nio",
       "nvim-neotest/neotest-python",
       "nvim-neotest/neotest-vim-test",
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim"
     },
+    enabled = false,
     config = function()
       require('neotest').setup({
         adapters = {
@@ -1155,15 +1162,17 @@ return {
         }
       });
     end,
-    lazy = true,
-    ft = { "vim", "python" },
+    ft = { "python" },
   },
   { 'qvalentin/helm-ls.nvim', lazy = true, ft = 'helm', opts = {} },
   -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
   { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    build = function()
+      vim.env.ALL_EXTENSIONS = 1;
+      vim.cmd('TSUpdate');
+    end,
     config = function() require('nvim-treesitter.configs').setup({
       modules = {},
       sync_install = false,

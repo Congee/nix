@@ -84,34 +84,30 @@ return {
   },
 
   lua_ls = {
-    cmd = { vim.env.HOME .. '/.nix-profile/bin/lua-language-server' },
     settings = {
       Lua = {
         hint = { enable = true },
       },
     },
   },
-  buf_ls = {
-    cmd = { vim.env.HOME .. '/.nix-profile/bin/bufls' },
-  },
+  buf_ls = { },
 
   sourcekit = {
-    cmd = { 'sourcekit-lsp' },
     filetypes = {'swift', 'objective-c', 'objective-cpp'},
     root_dir = lspconfig.util.root_pattern('Package.swift', '.git'),
     single_file_support = true,
   },
   clangd = {
-    cmd = { 'clangd' },
     handlers = lsp_status.extensions.clangd.setup(),
     init_options = {
       clangdFileStatus = true,
     },
     meson = false,
   },
+  -- TODO: try artempyanykh/marksman when my obsidian.md is complex enough
   harper_ls = {
-    cmd = { 'harper-ls' },
+    enabled = false, -- builtin spell is good enough so far
     filetypes = { 'markdown' },
-    init_options = {},
+    root_markers = {},
   },
 }
