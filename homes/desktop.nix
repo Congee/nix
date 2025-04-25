@@ -62,6 +62,7 @@ in
     tlaplus
     tlaplusToolbox
     # losslesscut-bin
+    sqlite
 
     nerdctl
     buildkit
@@ -75,14 +76,11 @@ in
     wsudo
     wireshark
     termshark
-    scrcpy
     # tdesktop  # telegram
     musescore
     thunderbird
     qq
     slack
-    spotify
-    spicetify-cli
     postman
     obsidian
     charles
@@ -92,8 +90,6 @@ in
 
     nerd-fonts.caskaydia-cove
     nerd-fonts.code-new-roman
-    # pacmd load-module module-alsa-source device=hw:2,1,0 source_properties=device.description=droidcam
-    droidcam
 
     glib
     # FIXME: No schemas installed https://github.com/NixOS/nixpkgs/issues/72282
