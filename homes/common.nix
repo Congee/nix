@@ -161,6 +161,7 @@ in
     bash-language-server
     biome
     buf
+    basedpyright
     clang-tools
     docker-compose-language-service
     dockerfile-language-server-nodejs
@@ -221,6 +222,44 @@ in
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
+
+  programs.kitty.enable = true;
+  programs.kitty.theme = "One Dark";
+  programs.kitty.extraConfig = ''
+    include custom.conf
+
+    font_family CodeNewRoman Nerd Font Mono
+    font_size 15.0
+    background_opacity 0.85
+    hide_window_decorations yes
+    close_on_child_death yes
+    macos_quit_when_last_window_closed yes
+
+    map ctrl+s>n next_tab
+    map ctrl+s>ctrl+n next_tab
+    map ctrl+s>p previous_tab
+    map ctrl+s>ctrl+p previous_tab
+
+    tab_bar_style custom
+    watcher ~/.config/kitty/watcher.py
+  '';
+  xdg.configFile."kitty/pyproject.toml".text = ''
+    [tool.basedpyright]
+    include = []
+    exclude = []
+
+    reportUnusedImport = false
+    reportMissingModuleSource = false
+    reportUnusedParameter = false
+
+    executionEnvironments = [
+      { root = ".", extraPaths = [ "${pkgs.kitty.src}" ] }
+    ]
+  '';
+  xdg.configFile."kitty/watcher.py".source = ln ../config/kitty/watcher.py;
+  xdg.configFile."kitty/tab_bar.py".source = ln ../config/kitty/tab_bar.py;
+  xdg.configFile."kitty/custom.conf".source = ln ../config/kitty/custom.conf;
+  xdg.configFile."kitty/startup_session".source = ln ../config/kitty/startup_session;
 
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;

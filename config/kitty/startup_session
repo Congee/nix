@@ -1,0 +1,13 @@
+launch zsh
+
+new_tab note
+cd ~/OneDrive/Apps/remotely-save/Obsidian
+launch vi TODO.md
+
+new_tab work
+launch --location=hsplit --window-title=exec
+launch --location=vsplit --window-title=compose
+launch --location=vsplit --window-title=log
+launch --location=vsplit --window-title=shell
+
+new_tab
