@@ -1,0 +1,18 @@
+launch --title personal zsh
+
+new_tab note
+launch --cwd ~/OneDrive/Apps/remotely-save/Obsidian zsh -c 'vi TODO.md; zsh -i'
+
+new_tab dev
+launch --title dev --cwd ~/dev/speedify/speedify-subs-mgmt-v2/ zsh
+
+new_tab docker
+layout splits
+cd ~/dev/speedify/speedify-subs-mgmt-v2/
+launch --var window=first --window-title=log
+launch --location=hsplit --window-title=tunnel --hold zsh -c 'cloudflared tunnel run'
+launch --location=vsplit --window-title=compose zsh -c '[ $(uname) = Darwin ] && orb; zsh -i'
+focus_matching_window var:window=first
+launch --location=vsplit --window-title=shell
+
+new_tab

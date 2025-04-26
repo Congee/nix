@@ -1,16 +1,54 @@
 local pid = vim.fn.getpid()
 local in_wezterm = os.getenv('WEZTERM_PANE') ~= nil
+local in_kitty = os.getenv('KITTY_LISTEN_ON') ~= nil
+
+local kitty_pipe = (function()
+  local env = os.getenv('KITTY_LISTEN_ON')
+  if env == nil then return function() return nil end end
+  local addr = string.sub(env, 6, -1) -- remove 'unix:'
+  local pipe = vim.uv.new_pipe(true);
+  if pipe == nil then return function() return nil end end
+
+  vim.api.nvim_create_autocmd('VimLeave', {
+    callback = function() pipe:close() end
+  });
+  return function()
+    if pipe:is_writable() then return pipe end
+
+    pipe:connect(addr);
+    return pipe;
+  end
+end)();
 
 ---@param statusline? { str: string, width: integer, hilights: { group: vim.api.keyset.hl_info, start: integer }[] }
 local function send(statusline)
-  local msg = vim.fn.json_encode(statusline and { pid = pid, statusline = statusline })
-  local template = '\x1b]1337;SetUserVar=vim=%s\a';
-  local osc = template:format(vim.base64.encode(msg));
-  vim.api.nvim_chan_send(vim.v.stderr, osc)
+  if in_kitty then
+    local action = {
+      cmd = 'set-user-vars',
+      version = { 0, 41, 1 },
+      no_response = true,
+      payload = {
+        var = {
+          'vim=' .. vim.fn.json_encode({ pid = pid, statusline = statusline }),
+          'time=' .. vim.fn.strftime('%T'),
+        },
+        match = 'all',
+      },
+    };
+
+    local msg = vim.fn.json_encode(statusline and action)
+    local osc = ('\x1bP@kitty-cmd%s\x1b\\'):format(msg)
+    kitty_pipe():write(osc)
+  elseif in_wezterm then
+    local msg = vim.fn.json_encode(statusline and { pid = pid, statusline = statusline })
+    local template = '\x1b]1337;SetUserVar=vim=%s\a';
+    local osc = template:format(vim.base64.encode(msg));
+    vim.api.nvim_chan_send(vim.v.stderr, osc)
+  end
 end
 
 local function do_update()
-  if not in_wezterm then return end
+  if not in_wezterm and not in_kitty then return end
 
   --- @type { highlights: { group: string, start: integer }[], str: string, width: integer }
   local stl = vim.api.nvim_eval_statusline(vim.o.stl, { highlights = true })

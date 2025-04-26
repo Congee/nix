@@ -3,6 +3,39 @@
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
   nur = pkgs.nur.repos.congee;
+  kitty_resize = pkgs.stdenvNoCC.mkDerivation {
+    name = "kitty_resize";
+    version = "0";
+    src =pkgs.fetchFromGitHub {
+      owner = "mrjones2014";
+      repo = "smart-splits.nvim";
+      rev = "v2.0.1";
+      hash = "sha256-Zxcd3VUdelhMIT7OZ32OcMfeALT+r5l6O9G1e8CaHFI=";
+    };
+    phases = [ "unpackPhase" "buildPhase" ];
+    buildPhase = ''
+      mkdir $out
+      cp $src/kitty/*.py $out/
+    '';
+  };
+  kitty_search = pkgs.stdenvNoCC.mkDerivation {
+    name = "kitty_search";
+    version = "0";
+    src =pkgs.fetchFromGitHub {
+      owner = "trygveaa";
+      repo = "kitty-kitten-search";
+      rev = "0760138";
+      hash = "sha256-egisza7V5dWplRYHIYt4bEQdqXa4E7UhibyWJAup8as=";
+    };
+    phases = [ "unpackPhase" "buildPhase" ];
+    buildPhase = ''
+      mkdir $out
+      cp $src/search.py $src/scroll_mark.py $out/
+
+      sed -i 's/kitty.typing/kitty.typing_compat/' $out/search.py
+      sed -i 's|@|@", "--to=unix:/tmp/kitty.socket|g' $out/search.py
+    '';
+  };
 in
 {
   manual.manpages.enable = false;
@@ -161,6 +194,7 @@ in
     bash-language-server
     biome
     buf
+    basedpyright
     clang-tools
     docker-compose-language-service
     dockerfile-language-server-nodejs
@@ -221,6 +255,37 @@ in
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
+
+  programs.kitty.enable = true;
+  programs.kitty.darwinLaunchOptions = [
+    "--single-instance"
+    "--override=allow_remote_control=socket-only"
+    "--listen-on=unix:/tmp/kitty.socket"
+    "--session=~/.config/kitty/startup_session"
+  ];
+  # https://github.com/kovidgoyal/kitty-themes/tree/master/themes
+  programs.kitty.themeFile = "OneDark-Pro";
+  programs.kitty.extraConfig = builtins.readFile ../config/kitty/kitty.conf;
+  xdg.configFile."kitty/pyproject.toml".text = ''
+    [tool.basedpyright]
+    include = []
+    exclude = []
+
+    reportUnusedImport = false
+    reportMissingModuleSource = false
+    reportUnusedParameter = false
+
+    executionEnvironments = [
+      { root = ".", extraPaths = [ "${pkgs.kitty.src}" ] }
+    ]
+  '';
+  xdg.configFile."kitty/search.py".source = ln "${kitty_search}/search.py";
+  xdg.configFile."kitty/scroll_mark.py".source = ln "${kitty_search}/scroll_mark.py";
+  xdg.configFile."kitty/neighboring_window.py".source = ln "${kitty_resize}/neighboring_window.py";
+  xdg.configFile."kitty/relative_resize.py".source = ln "${kitty_resize}/relative_resize.py";
+  xdg.configFile."kitty/watcher.py".source = ln ../config/kitty/watcher.py;
+  xdg.configFile."kitty/tab_bar.py".source = ln ../config/kitty/tab_bar.py;
+  xdg.configFile."kitty/startup_session".source = ln ../config/kitty/startup_session;
 
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;

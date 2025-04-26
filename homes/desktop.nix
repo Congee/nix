@@ -128,6 +128,8 @@ in
   # services.kanshi.enable = true;
   # services.kanshi.systemdTarget = "graphical.target";
 
+  services.cliphist.enable = true;
+
   # pdf
   programs.zathura.enable = true;
   programs.zathura.package = pkgs.zathura;
