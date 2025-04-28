@@ -997,6 +997,10 @@ return {
           if client and client.server_capabilities.definitionProvider then
             vim.api.nvim_buf_set_option(args.buf, "tagfunc", "v:lua.vim.lsp.tagfunc")
           end
+
+          if client and client:supports_method('textDocument/documentColor') then
+            vim.lsp.document_color.enable(true, args.buf, { style = 'foreground' })
+          end
         end
       });
 
