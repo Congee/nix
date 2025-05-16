@@ -10,7 +10,7 @@
     fetch = fetch --all --prune
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --boundary
     co = checkout
-    meh = commit --amend --no-edit
+    meh = ! env GIT_AUTHOR_DATE='$(git log --no-walk --format=%ad)' git commit --amend --no-edit
     who = shortlog -sn
     frebase = !"git rebase --committer-date-is-author-date --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
     lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
