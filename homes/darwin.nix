@@ -18,10 +18,11 @@ in
     wireshark
     mtr
     stats
-    mas
     docker docker-credential-helpers
     oxker
+    macmon
     pinentry_mac
+    applesauce
     # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     swift-format
     (pkgs.writeShellScriptBin "ggrep" "exec -a $0 ${gnugrep}/bin/grep $@")

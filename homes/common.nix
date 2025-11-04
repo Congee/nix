@@ -96,7 +96,7 @@ in
     python3
     nodejs
     yarn
-    duf gdu dua du-dust # nix-du
+    duf gdu dua dust # nix-du
     bottom btop gtop
     procs
     curlie xh
@@ -196,8 +196,9 @@ in
     buf
     basedpyright
     clang-tools
+    ctop
     docker-compose-language-service
-    dockerfile-language-server-nodejs
+    dockerfile-language-server
     eslint_d
     docker-language-server
     golangci-lint-langserver
@@ -215,8 +216,9 @@ in
 
     stylua
     typescript-language-server
-    nodePackages_latest."@vue/language-server"
-    # nodePackages_latest."some-sass-language-server"
+    vtsls vue-language-server
+    nur.some-sass-language-server
+    emmylua-ls
     vim-language-server
     yaml-language-server
 
@@ -225,14 +227,12 @@ in
 
     skaffold
     # hadolint  # lint Dockerfile
-    rancher
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
     k9s
     kustomize
     helmfile
     kubectl
-    k9s
     dive
     # kubectl-tree
     # kompose
@@ -256,6 +256,10 @@ in
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
 
+  # https://github.com/philocalyst/infat
+  # https://apple.stackexchange.com/questions/49447/revert-filetype-association
+  # https://stackoverflow.com/questions/16943819/where-do-uti-come-from
+  # defaults read com.apple.LaunchServices/com.apple.launchservices.secure
   programs.kitty.enable = true;
   programs.kitty.darwinLaunchOptions = [
     "--single-instance"
@@ -393,6 +397,7 @@ in
   programs.neovim.withPython3 = true;
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = true;
+  xdg.configFile."nvim".source = ln "${config.home.homeDirectory}/.nix/config/nvim";
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -411,12 +416,12 @@ in
   home.file.".ssh/config".source = ln ../config/ssh/config;
   home.file.".ssh/allowed_signers".source = ln ../config/ssh/allowed_signers;
 
+  programs.difftastic.enable = true;
+  programs.difftastic.options.background = "dark";
+  programs.difftastic.options.color = "always";
   programs.git = {
     enable = true;
-    difftastic.enable = true;
-    difftastic.background = "dark";
-    difftastic.color = "always";
-    extraConfig = {
+    settings = {
       core.pager = "${pkgs.less}/bin/less -XF";
     };
     includes = [

@@ -1,7 +1,7 @@
 launch --title personal zsh
 
 new_tab note
-launch --cwd ~/OneDrive/Apps/remotely-save/Obsidian zsh -c 'vi TODO.md; zsh -i'
+launch --cwd ~/OneDrive/Apps/remotely-save/Obsidian zsh -c 'vi TODO.md'
 
 new_tab dev
 launch --title dev --cwd ~/dev/speedify/speedify-subs-mgmt-v2/ zsh
