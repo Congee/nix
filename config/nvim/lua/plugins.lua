@@ -245,7 +245,36 @@ return {
     lazy = true,
     event = 'VeryLazy',
   },
-
+  {
+    "dmtrKovalenko/fff.nvim",
+    dependencies = { 'assistcontrol/readline.nvim' },
+    -- build = "nix run .#release",
+    opts = {},
+    keys = {
+      {
+        "<C-P>", -- try it if you didn't it is a banger keybinding for a picker
+        function()
+          require("fff").find_files() -- or find_in_git_root() if you only want git files
+          local keys = {
+            ["<c-k>"] = function() require('readline').kill_line() end,
+            ["<c-f>"] = '<Right>',
+            ["<a-f>"] = function() require('readline').forward_word() end,
+            ["<a-d>"] = function() require('readline').kill_word() end,
+            ["<c-d>"] = '<Delete>',
+            ["<c-b>"] = '<Left>',
+            ["<c-a>"] = function() require('readline').beginning_of_line() end,
+            ["<c-u>"] = function() require('readline').backward_kill_line() end,
+          };
+          local buf = require('fff.picker_ui').state.input_buf;
+          local opts = { buffer = buf, noremap = true, silent = true };
+          for key, action in pairs(keys) do
+            vim.keymap.set('i', key, action, opts)
+          end
+        end,
+        desc = "Open file picker",
+      },
+    },
+  },
   {
     "folke/snacks.nvim",
     dependencies = {
@@ -279,9 +308,10 @@ return {
     keys = {
       -- goodby 'gennaro-tedesco/nvim-peekup',
       { '""', function() Snacks.picker.registers() end, desc = "Registers" },
-      { '<C-P>', function() Snacks.picker.smart() end, desc = "Smart Find Files" },
+      -- { '<C-P>', function() Snacks.picker.smart() end, desc = "Smart Find Files" },
       { [[<C-\>]], function() Snacks.picker() end, desc = "Snacks Picker" },
       { '<LocalLeader>d', function() Snacks.picker.diagnostics() end, desc = "Diagnostics" },
+      { '<Leader>/', function() Snacks.picker.grep() end, desc = "Live Grep" },
     },
   },
   {
