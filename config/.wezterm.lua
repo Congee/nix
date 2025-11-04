@@ -18,9 +18,13 @@ config.unix_domains = {
 -- domain on startup.
 -- If you prefer to connect manually, leave out this line.
 config.default_gui_startup_args = { "connect", "unix" }
-config.default_prog = { 'zsh', '--login' }
+-- config.default_prog = { 'zsh', '--login' }
+config.mux_enable_ssh_agent = false
 
-config.max_fps = 120
+-- https://github.com/wez/wezterm/issues/4052#issuecomment-2004400745
+-- Ignored in Wayland https://www.reddit.com/r/neovim/comments/1gthknw/comment/lxmh601
+config.max_fps = 255
+config.animation_fps = 60
 -- For example, changing the color scheme:
 config.color_scheme = "nightfox"
 -- config.default_cursor_style = "BlinkingBlock"
@@ -165,20 +169,16 @@ end
 ---@param start string
 local function startswith(str, start) return str:sub(1, #start) == start end;
 
----@class Group
----@field fg? string|number
----@field bold? boolean
-
 ---@class Highlight
----@field group Group
----@field start number
+---@field group vim.api.keyset.hl_info
+---@field start integer
 
 ---@class StatusLine
 ---@field str string
----@field width number Display width of the statusline.
+---@field width integer Display width of the statusline.
 ---@field highlights Highlight[]
 
----@param group Group
+---@param group vim.api.keyset.hl_info
 ---@param text string
 local function parse_item(group, text)
   -- TODO: parse all attributes https://neovim.io/doc/user/builtin.html#synIDattr()
@@ -209,8 +209,8 @@ function table.merge(lhs, rhs)
 end
 
 ---@param s string
----@param i number
----@param j number
+---@param i integer
+---@param j integer
 function utf8.sub(s, i, j)
 	i = utf8.offset(s, i)
 	j = utf8.offset(s, j + 1) - 1
@@ -244,8 +244,9 @@ local function parse(stl, right_lo, max_left)
 end
 
 wezterm.on("update-status", function(gui_window, pane)
-  ---@type StatusLine?
-  local statusline = wezterm.json_parse(pane:get_user_vars().statusline or 'null');
+  --- @type { statusline: StatusLine?, pid: integer }?
+  local vim = wezterm.json_parse(pane:get_user_vars().vim);
+
   local tabs = gui_window:mux_window():tabs();
   local mid_width = 0;
   for idx, tab in ipairs(tabs) do
@@ -256,17 +257,21 @@ wezterm.on("update-status", function(gui_window, pane)
   local tab_width = gui_window:active_tab():get_size().cols;
   local max_left = tab_width / 2 - mid_width / 2;
 
-  if statusline == nil then
+  if vim == nil or wezterm.procinfo.get_info_for_pid(vim.pid) == nil then
     gui_window:set_left_status(wezterm.pad_left(' ', max_left))
     gui_window:set_right_status('')
     return;
   end
 
-  local left_hi, right_lo = gap_statusline(statusline.str);
-  local left_status, right_status = parse(statusline, right_lo, max_left);
+  local left_hi, right_lo = gap_statusline(vim.statusline.str);
+  local left_status, right_status = parse(vim.statusline, right_lo, max_left);
 
 	gui_window:set_left_status(wezterm.format(left_status))
 	gui_window:set_right_status(wezterm.format(right_status))
+end)
+
+wezterm.on('user-var-changed', function(window, pane, name, value)
+  if name == 'vim' then wezterm.emit('update-status') end
 end)
 
 wezterm.on('augment-command-palette', function(window, pane)
@@ -373,14 +378,45 @@ config.keys = {
 		mods = "LEADER",
 		action = "TogglePaneZoomState",
 	},
+	{
+		key = ":",
+		mods = "LEADER",
+		action = wezterm.action.ActivateCommandPalette,
+	},
   { key = 'Tab', mods = 'CTRL', action = wezterm.action.DisableDefaultAssignment },
   { key = 'Tab', mods = 'SHIFT|CTRL', action = wezterm.action.DisableDefaultAssignment },
+
+  { key = '[', mods = 'LEADER', action = wezterm.action.Search {CaseSensitiveString = ''} },
+  {
+    key = "X",
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action_callback(function (window, pane)
+      window:perform_action(wezterm.action.ActivateCopyMode, pane)
+      window:perform_action(wezterm.action.CopyMode 'ClearPattern', pane)
+    end),
+  },
+  {
+    key = ',',
+    mods = 'LEADER',
+    action = wezterm.action.PromptInputLine {
+      description = 'Enter new name for tab',
+      action = wezterm.action_callback(function (window, pane, line)
+        if line then window:active_tab():set_title(line) end
+      end),
+    },
+  },
 }
 
 config.key_tables = {
   search_mode = {
-    { key = '[', mods = 'CTRL', action = wezterm.action.CopyMode 'Close' },
-  }
+    { key = 'Escape', mods = 'NONE', action = wezterm.action.Multiple{ 'ScrollToBottom', { CopyMode =  'Close' } } },
+    { key = '[',      mods = 'CTRL', action = wezterm.action.Multiple{ 'ScrollToBottom', { CopyMode =  'Close' } } },
+    { key = 'u',      mods = 'CTRL', action = wezterm.action.CopyMode 'ClearPattern' },
+    { key = 'r',      mods = 'CTRL', action = wezterm.action.CopyMode 'CycleMatchType' },
+    { key = 'p',      mods = 'CTRL', action = wezterm.action.CopyMode 'PriorMatch' },
+    { key = 'n',      mods = 'CTRL', action = wezterm.action.CopyMode 'NextMatch' },
+    { key = 'Enter',  mods = 'NONE', action = wezterm.action.CopyMode 'NextMatch' },
+  },
 }
 
 -- and finally, return the configuration to wezterm

@@ -22,7 +22,7 @@ end)();
 
 ---@param statusline? { str: string, width: integer, hilights: { group: vim.api.keyset.hl_info, start: integer }[] }
 local function send(statusline)
-  if in_kitty then
+  if in_kitty and false then
     local action = {
       cmd = 'set-user-vars',
       version = { 0, 41, 1 },
