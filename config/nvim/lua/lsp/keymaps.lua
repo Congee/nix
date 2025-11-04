@@ -11,7 +11,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
             vim.cmd('Man '..vim.fn.expand('<cword>'))
         elseif vim.fn.expand('%:t') == 'Cargo.toml' and package.loaded.crates ~= nil and require('crates').popup_available() then
             require('crates').show_popup()
-        elseif package.loaded.hover then
+        elseif package.loaded.hover then  -- lewis6991/hover.nvim
             require('hover').hover({ bufnr = bufnr }) --- @diagnostic disable-line: missing-fields
         else
             vim.lsp.buf.hover()
@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gD', picker.lsp_declarations, opts)
     vim.keymap.set('n', 'gd', picker.lsp_definitions, opts)
     vim.keymap.set('n', 'gT', picker.lsp_type_definitions, opts)
-    vim.keymap.set('n', 'gi', picker.lsp_implementations, opts)
+    vim.keymap.set('n', 'gI', picker.lsp_implementations, opts)
     vim.keymap.set('n', 'gr', picker.lsp_references, opts)
     vim.keymap.set('n', 'K', show_documentation, opts)
     if vim.bo.filetype == 'rust' then
@@ -44,6 +44,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.diagnostic.jump({ count = 1, severity = vim.diagnostic.severity.WARN, float = true })
     end, opts)
     vim.keymap.set('n', '[e', function()
+      -- FIXME: float does not close on diving into another buffer. upstream issue
+      -- Well, the new buffer may be a split window for which persisting the float
+      -- makes sense. The new buffer may take up the entire screen in which the
+      -- flaot no longer makes sense.
       vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.ERROR, float = true })
     end, opts)
     vim.keymap.set('n', ']e', function()
