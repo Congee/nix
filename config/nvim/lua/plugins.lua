@@ -817,7 +817,7 @@ return {
     opts = {
       lsp = {
         auto_attach = true,
-        preference = { 'volar', 'ts_ls' }, -- later be higher
+        preference = { 'vue_ls' }, -- later be higher
       },
       navic_lazy_update_context = true,
     },
@@ -909,8 +909,7 @@ return {
           'score', 'kind', 'label',
           --- @type blink.cmp.SortFunction
           [4] = function (a, b)
-            local client = vim.lsp.get_client_by_id(a.client_id);
-            if client and client.name ~= 'lua_ls' then return true end
+            if a.client_name ~= 'lua_ls' then return nil end
 
             local aunderscore = a.label:find('^_') ~= nil;
             local bunderscore = b.label:find('^_') ~= nil;
@@ -920,7 +919,7 @@ return {
             elseif not aunderscore and bunderscore then
               return false;
             else
-              return table.sort({ a.label, b.label })
+              return a.label < b.label
             end
           end
         },
@@ -948,6 +947,17 @@ return {
         ghost_text = { enabled = true },
       },
       sources = {
+        transform_items = function(_, items)
+          return vim.tbl_filter(
+            function(item)
+              if item.client_name == 'vtsls' then
+                return item.kind ~= require("blink.cmp.types").CompletionItemKind.Property
+              else
+                return item end
+            end,
+            items
+          );
+        end,
         default = {
           'lazydev',
           'lsp',
@@ -958,6 +968,10 @@ return {
           'ultisnips',
         },
         providers = {
+          lsp = {
+            name = 'lsp',
+            module = 'blink.cmp.sources.lsp',
+          },
           lazydev = {
             name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 4,
           },
@@ -966,6 +980,9 @@ return {
           },
           ultisnips = {
             name = 'ultisnips', module = 'blink.compat.source',
+          },
+          sshconfig = {
+            name = 'sshconfig', module = 'blink.compat.source',
           },
         },
       },

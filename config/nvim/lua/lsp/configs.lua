@@ -10,39 +10,53 @@ return {
   nil_ls = {},
   bashls = {},
   dockerls = {},
-  docker_compose_language_service = {},
   html = {},
   ansiblels = {},
   gopls = {},
   vimls = {},
   mesonlsp = {},
-  somesass_ls = {},
-  volar = {}, -- The hybrid mode is broken from nvim-lspconfig
-  ts_ls = {
-    init_options = {
-      plugins = {
-        {
-          name = "@vue/typescript-plugin",
-          location = vim.fs.dirname(vim.uv.fs_realpath(vim.fn.exepath('vue-language-server'))) .. '/../lib/node_modules/@vue/language-server/node_modules/@vue/typescript-plugin',
-          languages = { "javascript", "typescript", "vue" },
+  somesass_ls = {
+    settings = {
+      somesass = {
+        css = { completion = { includeFromCurrentDocument = true } },
+        scss = { completion = { includeFromCurrentDocument = true } },
+      },
+    },
+  },
+
+  vtsls = {
+    settings = {
+      vtsls = {
+        tsserver = {
+          logVerbosity = 'verbose',
+          globalPlugins = {
+            {
+              name = '@vue/typescript-plugin',
+              location = vim.fn.resolve(vim.fn.fnamemodify(vim.fn.exepath('vue-language-server'), ':h')) .. "/../lib/language-tools/packages/language-server",
+              languages = { "vue" },
+              configNamespace = 'typescript',
+            }
+          }
         },
       },
     },
-    filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx", 'vue' },
+    filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
   },
+  vue_ls = {},
 
+  docker_compose_language_service = {}, -- FIXME
   yamlls = {
     settings = {
       redhat = { telemetry = { enabled = false } },
       yaml = {
         customTags = {
           "!vault scalar",
-          -- "!reset scalar",
-          -- "!reset sequence",
-          -- "!reset mapping",
-          -- "!override scalar",
-          -- "!override mapping",
-          -- "!override sequence",
+          "!reset scalar",
+          "!reset sequence",
+          "!reset mapping",
+          "!override scalar",
+          "!override mapping",
+          "!override sequence",
         },
         -- Schemas https://www.schemastore.org
         schemas = {
