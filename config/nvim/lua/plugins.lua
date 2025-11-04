@@ -1141,6 +1141,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
       "MunifTanjim/nui.nvim",
+      "s1n7ax/nvim-window-picker",
     },
     lazy = true,
     event = 'VeryLazy',
@@ -1154,6 +1155,7 @@ return {
           }
         },
         filesystem = {
+          follow_current_file = { enabled = true },
           window = {
             mappings = {
               ["[c"] = "prev_git_modified",
