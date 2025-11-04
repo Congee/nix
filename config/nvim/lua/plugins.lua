@@ -497,7 +497,6 @@ return {
   -- use 'jbyuki/instant.nvim'  -- coediting
 
   -- https://github.com/rhysd/conflict-marker.vim
-  -- https://github.com/christoomey/vim-conflicted
   -- https://github.com/akinsho/git-conflict.nvim
   {
     'rhysd/conflict-marker.vim',
@@ -505,9 +504,35 @@ return {
     event = 'VeryLazy',
     config = function()
       vim.g.conflict_marker_enable_highlight = 0;
-      vim.g.conflict_marker_enable_matchit = 0;
+      vim.g.conflict_marker_enable_matchit = 1;
       vim.g.conflict_marker_enable_mappings = 0;
     end,
+    keys = {
+      {
+        '<LocalLeader>ct',
+        function() vim.cmd [[ ConflictMarkerThemselves ]] end,
+        mode = 'n',
+        desc = "ConflictMarkerThemselves",
+      },
+      {
+        '<LocalLeader>co',
+        function() vim.cmd [[ ConflictMarkerOurselves ]] end,
+        mode = 'n',
+        desc = "ConflictMarkerOurselves",
+      },
+      {
+        '<LocalLeader>cb',
+        function() vim.cmd [[ ConflictMarkerBoth ]] end,
+        mode = 'n',
+        desc = "ConflictMarkerBoth",
+      },
+      {
+        '<LocalLeader>cn',
+        function() vim.cmd [[ ConflictMarkerNone ]] end,
+        mode = 'n',
+        desc = "ConflictMarkerNone",
+      },
+    },
   },
   {
     'tpope/vim-fugitive',
