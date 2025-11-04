@@ -250,12 +250,11 @@ return {
     "folke/snacks.nvim",
     dependencies = {
       'assistcontrol/readline.nvim',
-      'nvim-telescope/telescope.nvim',
     },
     --- @module 'snacks'
     --- @type snacks.Config
     opts = {
-      image = { enabled = true },
+      image = { doc = { inline = false } },
       picker = {
         enabled = true,
         layout = {
@@ -294,7 +293,7 @@ return {
     },
     --- @module 'octo'
     --- @type OctoConfig
-    --- @diagnostic disable: missing-fields
+    --- @diagnostic disable-next-line: missing-fields
     opts = {
       default_to_projects_v2 = true,
       picker = 'snacks',
@@ -382,7 +381,7 @@ return {
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
         callback = function(args)
-          vim.api.nvim_buf_set_option(args.buf, "formatexpr", "v:lua.require'conform'.formatexpr({'timeout_ms': 1000})")
+          vim.api.nvim_set_option_value("formatexpr", "v:lua.require'conform'.formatexpr({'timeout_ms': 1000})", { buf = args.buf })
         end
       });
     end,
@@ -413,17 +412,37 @@ return {
     end
   },
   {
+    "MeanderingProgrammer/render-markdown.nvim",
+    --- @module 'render-markdown'
+    --- @type render.md.Config
+    --- @diagnostic disable: missing-fields
+    opts = {
+      completions = { blink = { enabled = true } },
+      image = {},
+    },
+    --- @diagnostic enable: missing-fields
+  },
+  {
     'obsidian-nvim/obsidian.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      vim.wo.conceallevel = 2;
-      require('obsidian').setup({
-        dir = "~/OneDrive/Apps/remotely-save/Obsidian",
-        use_advanced_uri = true,
-        completion = { nvim_cmp = false },
-        picker = { name = 'snacks.pick' },
-      })
-    end,
+    ---@module 'obsidian'
+    ---@type obsidian.config
+    opts = {
+      ui = { enable = false },  -- render-markdown.nvim instaed
+      workspaces = {
+        {
+          name = "Obsidian",
+          path = "~/OneDrive/Apps/remotely-save/Obsidian",
+        },
+      },
+      attachments = {
+        img_folder = "~/assets/images",
+      },
+      legacy_commands = false,
+      open = { use_advanced_uri = true },
+      completion = { nvim_cmp = false },
+      picker = { name = 'snacks.pick' },
+    };
     ft = "markdown",
   },
   {
@@ -530,7 +549,7 @@ return {
     dependencies = 'nvim-lua/plenary.nvim',
     --- @module 'gitsigns'
     --- @type Gitsigns.Config
-    --- @diagnostic disable: missing-fields
+    --- @diagnostic disable-next-line: missing-fields
     opts = {
       -- Options passed to nvim_open_win
       preview_config = {
@@ -854,6 +873,7 @@ return {
         { path = "wezterm-types", mods = { "wezterm" } },
       },
     },
+    --- @diagnostic enable: missing-fields
   },
   {
     'saghen/blink.compat',
@@ -1001,7 +1021,6 @@ return {
     -- event = { 'BufReadPre', 'BufNewFile' },
     opts = { inlay_hints = { enabled = true } },
     config = function()
-      require('lsp.keymaps')
 
       for server, config in pairs(require('lsp.configs')) do
         -- vim.lsp.config(server, config);
@@ -1023,6 +1042,7 @@ return {
       });
 
       vim.cmd 'LspStart'; -- to be VeryLazy
+      require('lsp.keymaps')
     end
   },
   {
@@ -1094,7 +1114,7 @@ return {
   },
   {
     'akinsho/bufferline.nvim',
-    dependencies = 'famiu/bufdelete.nvim',
+    dependencies = 'folke/snacks.nvim',
     config = function()
       local sidebar = 'neo-tree';
       require('bufferline').setup {
@@ -1119,7 +1139,7 @@ return {
             end
           end,
           middle_mouse_command = function(bufnr)
-            require('bufdelete').bufdelete(bufnr, true)
+            require('snacks.bufdelete').delete(bufnr)
           end,
           right_mouse_command = function() end,
           indicator = { style = "none" },
@@ -1150,7 +1170,7 @@ return {
         if vim.bo.filetype == sidebar then
           vim.api.nvim_win_close(0, false)
         else
-          require('bufdelete').bufdelete(0, true)
+          require('snacks.bufdelete').delete()
         end
       end, { silent = true })
       vim.keymap.set('n', '<M-n>', ':bnext<CR>', { silent = true })
