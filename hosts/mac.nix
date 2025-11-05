@@ -56,12 +56,16 @@
     "itsycal"
     "obsidian"
     "orbstack"
+    "pearcleaner"
     "rapidapi"
+    "raycast"
     "rectangle"
     "red-canary-mac-monitor"  # replaces dtruss
     "secretive"
-    "sekey"
-    "stats"
+    "selfcontrol"
+    "swiftdefaultappsprefpane"
+    "zed"
+    "moonlight"
   ];
   # This is painfully slow
   homebrew.masApps = if true then { } else {
@@ -80,6 +84,7 @@
 
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
+  system.defaults.finder.FXDefaultSearchScope = "SCcf"; # current folder
   system.defaults.dock.autohide = true;
   system.defaults.dock.show-recents = false;
   system.defaults.trackpad.Clicking = true;
@@ -98,6 +103,6 @@
   # https://apple.stackexchange.com/a/360610/167199
   # https://superuser.com/questions/526183/remove-applications-from-location-services-in-security-privacy-on-mac-os-x-10
   system.defaults.CustomUserPreferences = {
-    "com.apple.mail" = { "com.apple.mail.DisableInlineAttachmentViewing" = true; };
+    "com.apple.mail" = {};
   };
 }
