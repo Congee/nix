@@ -285,6 +285,7 @@ in
   home.file.".tmuxinator.yml".source = ln ../config/.tmuxinator.yml;
 
   programs.zsh.enable = true;
+  programs.zsh.dotDir = config.home.homeDirectory;
   programs.zsh.plugins = [
     # OMG this is sick, aggresive
     # {
