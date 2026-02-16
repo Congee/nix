@@ -98,10 +98,27 @@ return {
     }
   },
 
-  lua_ls = {
+  emmylua_ls = {
     settings = {
       Lua = {
-        hint = { enable = true },
+        runtime = {
+          version = "LuaJIT",
+          requirePattern = {
+            "lua/?.lua",
+            "lua/?/init.lua",
+            "?/lua/?.lua",
+            "?/lua/?/init.lua"
+          },
+        },
+        workspace = {
+          library = {
+            "$VIMRUNTIME",
+            "$LLS_Addons/luvit",
+            "$HOME/.local/share/nvim/lazy",
+            -- table.unpack(vim.api.nvim_get_runtime_file("lua/*.lua", true)),
+          },
+          ignoreGlobs = { "**/*_spec.lua" },
+        },
       },
     },
   },
