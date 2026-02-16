@@ -1007,13 +1007,14 @@ return {
   {
     'saghen/blink.cmp',
     version = '*',
+    dependencies = { "fang2hou/blink-copilot" },
     build = 'nix run .#build-plugin',
     lazy = true,
     keys = {
       {
         '<C-x><C-o>',
         function()
-          require('blink.cmp').show({ providers = { 'lsp', 'snippets' } })
+          require('blink.cmp').show({ providers = { 'lsp', 'snippets', 'copilot' } })
           require('blink.cmp').show_documentation()
           require('blink.cmp').hide_documentation()
         end,
@@ -1034,15 +1035,31 @@ return {
       keymap = {
         preset = 'default',
         ['<C-space>'] = {},
+        ['<C-l>'] = {},
         ['<C-p>'] = { 'select_prev', 'fallback' },
         ['<C-n>'] = { 'select_next', 'fallback' },
-        ['<C-e>'] = { 'hide', 'fallback' },
+        ['<C-e>'] = { 'cancel', 'fallback' },
         ['<C-y>'] = { 'select_and_accept', 'fallback' },
       },
       cmdline = {
         keymap = {
           preset = 'cmdline',
-          ['<Tab>'] = { 'show_and_insert', 'select_next', 'fallback' },
+          -- FIXME: 1st candidate cannot be selected easily
+          ['<Tab>'] = {
+            function (opts)
+              local list = require('blink.cmp.completion.list')
+
+              -- If the candidate list has been filtered down to exactly one item, accept it.
+              if #list.items == 1 then
+                vim.schedule(function() list.accept({ index = 1, callback = opts and opts.callback }) end)
+                return true
+              end
+
+              return opts.show(opts);
+            end,
+            'select_next',
+            'fallback',
+          },
           ['<S-Tab>'] = { 'select_prev', 'fallback' },
         }
       },
@@ -1126,6 +1143,12 @@ return {
           },
           sshconfig = {
             name = 'sshconfig', module = 'blink.compat.source',
+          },
+          copilot = {
+            name = "copilot",
+            module = "blink-copilot",
+            async = true,
+            score_offset = 4,
           },
         },
       },

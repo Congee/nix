@@ -191,6 +191,7 @@ in
     # vscode-langservers-extracted # json-lsp bin/vscode-json-languageserver
     ansible-language-server
     # autopep8
+    copilot-language-server
     bash-language-server
     biome
     buf

@@ -44,6 +44,7 @@ return {
   },
   vue_ls = {},
 
+  copilot = { settings = { telemetry = { telemetryLevel = "off" } } },
   docker_compose_language_service = {}, -- FIXME
   yamlls = {
     settings = {
