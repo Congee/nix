@@ -518,6 +518,11 @@ return {
     opts = {},
   },
   {
+    'LionyxML/gitlineage.nvim',
+    opts = {},
+    event = 'VeryLazy',
+  },
+  {
     'rhysd/git-messenger.vim',
     keys = { '<leader>gm', '<cmd>GitMessenger<cr>' },
     config = function() vim.g.git_messenger_include_diff = "current" end
