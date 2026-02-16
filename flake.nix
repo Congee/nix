@@ -5,16 +5,20 @@
     nur.url                             = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows          = "nixpkgs";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-25.05";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-25.11";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
     # home-manager.url                    = "github:Congee/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
-    darwin.url                          = "github:lnl7/nix-darwin";
+    darwin.url                          = "github:nix-darwin/nix-darwin";
     darwin.inputs.nixpkgs.follows       = "nixpkgs";
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
+
+    angrr.url                           = "github:linyinfeng/angrr";
+    angrr.inputs.nixpkgs.follows        = "nixpkgs";
+    angrr.inputs.flake-compat.follows   = "flake-compat";
   };
 
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
@@ -107,7 +111,10 @@
 
     darwinConfigurations.mac = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
-      modules = [ ./hosts/mac.nix ];
+      modules = [
+        inputs.angrr.darwinModules.angrr
+        ./hosts/mac.nix
+      ];
       specialArgs = { inherit inputs; };
     };
     inherit (self.darwinConfigurations) mac;

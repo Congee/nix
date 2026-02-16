@@ -28,6 +28,10 @@
   # ];
   services.tailscale.enable = true;
 
+  # Delete old nix-direnv roots
+  services.angrr.enable = true;
+  services.angrr.period = "1month";
+
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina
   programs.gnupg.agent.enable = true;
