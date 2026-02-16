@@ -210,7 +210,6 @@ in
     # hadolint  # lint Dockerfile
     # for k3s + helm without sudo `kubectl config view --raw >~/.kube/config`
     kubernetes-helm  # kept for zsh-completion
-    k9s
     kustomize
     helmfile
     kubectl
@@ -232,6 +231,25 @@ in
   ];
 
   xdg.enable = true;
+
+  programs.k9s.enable = true;
+  programs.k9s.plugins = {
+    #--- Create debug container for selected pod in current namespace
+    # See https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/#ephemeral-container
+    debug = {
+      shortCut = "Shift-D";
+      description = "Add debug container";
+      dangerous = true;
+      scopes = [ "containers" ];
+      command = "kubectl";
+      background = false;
+      confirm = true;
+      args = [
+        "-c"
+        ''kubectl debug -it --context $CONTEXT -n=$NAMESPACE $POD --target=$NAME --image=nicolaka/netshoot:v0.14 --profile=sysadmin --share-processes -- bash''
+      ];
+    };
+  };
 
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
