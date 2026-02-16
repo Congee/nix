@@ -953,6 +953,58 @@ return {
     opts = {},
   },
   {
+    'NickvanDyke/opencode.nvim',
+    dependencies = {
+      -- Recommended for `ask()` and `select()`.
+      -- Required for default `toggle()` implementation.
+      { "folke/snacks.nvim", opts = { input = {}, terminal = {} } },
+    },
+    config = function()
+      ---@module 'opencode'
+      ---@type opencode.Opts
+      vim.g.opencode_opts = {
+        provider = { cmd = "opencode --continue" },
+      };
+    end,
+    event = 'VeryLazy',
+  },
+  { -- Next Edit Suggestions from ollama
+    -- https://www.reddit.com/r/neovim/comments/1nueuch/sidekicknvim_ai_cli_tools_and_copilots_next_edit/
+    "folke/sidekick.nvim",
+    enabled = true,
+    lazy = true,
+    keys = {
+      {
+        "<c-y>",
+        function()
+          -- if there is a next edit, jump to it, otherwise apply it if any
+          if not require("sidekick").nes_jump_or_apply() then
+            return "<c-y>" -- fallback to normal tab
+          end
+        end,
+        expr = true,
+        desc = "Goto/Apply Next Edit Suggestion",
+      },
+      {
+        "<c-.>",
+        function() require("sidekick.cli").toggle() end,
+        desc = "Sidekick Toggle",
+        mode = { "n", "t", "i", "x" },
+      },
+    },
+    --- @type sidekick.Config
+    opts = {
+      cli = {
+        --- @type sidekick.win.Opts
+        win = {
+          keys = {
+            prompt = { '<D-p>', 'prompt' },
+          }
+        },
+      },
+    },
+  },
+  {
     'saghen/blink.cmp',
     version = '*',
     build = 'nix run .#build-plugin',
