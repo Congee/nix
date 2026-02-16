@@ -148,26 +148,7 @@ in
     cargo-generate
     cargo-show-asm
     cargo-expand
-    ra-multiplex
-    # (ra-multiplex.overrideAttrs(drv: rec {
-    #   name = "ra-multiplex";
-    #   version = "0.2.5";
-    #   src = pkgs.fetchFromGitHub {
-    #     owner = "pr2502";
-    #     repo = name;
-    #     rev = "v${version}";
-    #     hash = "sha256-aBrn9g+MGXLAsOmHqw1Tt6NPFGJTyYv/L9UI/vQU4i8=";
-    #   };
-    #   cargoDeps = drv.cargoDeps.overrideAttrs (lib.const {
-    #     name = "${name}-${version}-verndor.tar.gz";
-    #     inherit src;
-    #     outputHash = "sha256-RWheS0ureDj0mVubPlXGprRoZcv4cqfy4XmIgeLFNFw=";
-    #   });
-    #   postInstall = ''
-    #       wrapProgram $out/bin/ra-multiplex \
-    #       --suffix PATH : ${lib.makeBinPath [ rust-analyzer ]}
-    #   '';
-    # }))
+    lspmux
     # gdb
     # gdbgui
     scc
@@ -213,7 +194,6 @@ in
     nil
     # pyright
     ruff
-    ra-multiplex
 
     stylua
     typescript-language-server

@@ -29,6 +29,22 @@ in
     (pkgs.writeShellScriptBin "gsed" "exec -a $0 ${gnused}/bin/sed $@")
   ];
 
+  # home.file."Library/Application Support/lspmux/config.toml".text = ''
+  #   pass_environment = [ "PATH" ]
+  #   log_filters = "trace"
+  # '';
+
+ launchd.agents.lspmux = {
+    enable = true;
+    config = {
+      ProgramArguments = [ "${config.home.homeDirectory}/.nix-profile/bin/lspmux" "server" ];
+      StandardErrorPath = "/tmp/lspmux.err";
+      StandardOutPath = "/tmp/lspmux.out";
+      RunAtLoad = true;
+      KeepAlive = true;
+    };
+  };
+
   home.activation.gsettings = lib.hm.dag.entryAfter ["writeBoundary"] ''
     # The system ncurses 5.7 is too old to have terminfo of tmux-256color
     find $HOME/.terminfo -name tmux-256color -delete 2>/dev/null || true
