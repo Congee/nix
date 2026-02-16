@@ -1385,6 +1385,11 @@ return {
     lazy = true,
     event = 'UIEnter',
   },
+  {
+    'nmac427/guess-indent.nvim',
+    opts = {},
+    event = 'InsertEnter',
+  },
 
   {
     'windwp/nvim-autopairs',
