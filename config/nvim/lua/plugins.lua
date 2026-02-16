@@ -1107,17 +1107,6 @@ return {
         ghost_text = { enabled = true },
       },
       sources = {
-        transform_items = function(_, items)
-          return vim.tbl_filter(
-            function(item)
-              if item.client_name == 'vtsls' then
-                return item.kind ~= require("blink.cmp.types").CompletionItemKind.Property
-              else
-                return item end
-            end,
-            items
-          );
-        end,
         default = {
           'lazydev',
           'lsp',
@@ -1131,6 +1120,17 @@ return {
           lsp = {
             name = 'lsp',
             module = 'blink.cmp.sources.lsp',
+            transform_items = function(_, items)
+              return vim.tbl_filter(
+                function(item)
+                  if item.client_name == 'vtsls' then
+                    return item.kind ~= require("blink.cmp.types").CompletionItemKind.Property
+                  else
+                    return item end
+                end,
+                items
+              );
+            end,
           },
           lazydev = {
             name = 'LazyDev', module = 'lazydev.integrations.blink', score_offset = 4,
