@@ -40,13 +40,6 @@ _G.trace = function(object)
   return object
 end
 
----Pretty print lua table
-function _G.dump(...)
-  local objects = vim.tbl_map(vim.inspect, { ... })
-  assert(objects ~= nil)
-  print(table.unpack(objects))
-end
-
 if _VERSION == "Lua 5.1" or _VERSION == "LuaJIT" then
   ---@diagnostic disable: deprecated
   table.unpack = unpack
