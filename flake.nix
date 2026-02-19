@@ -16,6 +16,9 @@
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
 
+    opencode.url                        = "github:anomalyco/opencode";
+    opencode.inputs.nixpkgs.follows     = "nixpkgs";
+
     angrr.url                           = "github:linyinfeng/angrr";
     angrr.inputs.nixpkgs.follows        = "nixpkgs";
     angrr.inputs.flake-compat.follows   = "flake-compat";
@@ -65,6 +68,7 @@
           ./homes/darwin.nix
           {
             nixpkgs.overlays = [
+              inputs.opencode.overlays.default
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
