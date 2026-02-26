@@ -687,18 +687,15 @@ return {
     event = "VeryLazy",
   },
   {
-    'SirVer/ultisnips', -- TODO: try LuaSnip + cmp_luasnip
+    'L3MON4D3/LuaSnip',
     dependencies = { 'honza/vim-snippets' },
     config = function()
-      vim.g.UltiSnipsListSnippets        = "<c-tab>"
-      vim.g.UltiSnipsJumpForwardTrigger  = "<tab>"
-      vim.g.UltiSnipsJumpBackwardTrigger = "<s-tab>"
-      vim.g.snips_author                 = "Congee"
+      require("luasnip.loaders.from_snipmate").lazy_load()
+      require("luasnip.loaders.from_lua").lazy_load({ paths = { vim.fn.stdpath("config") .. "/lua/snippets" } })
     end,
     lazy = true,
-    event = "VeryLazy",
+    event = "InsertEnter",
   },
-
   {
     'neomake/neomake',
     config = function()
