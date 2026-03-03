@@ -94,7 +94,10 @@ in
     ccache
     # racket
     python3
-    nodejs
+    nodejs pnpm bun
+    opencode
+    claude-monitor
+    (claude-code-bun.override { bunBinName = "claude"; })
     yarn
     duf gdu dua dust # nix-du
     bottom btop gtop

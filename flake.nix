@@ -19,6 +19,9 @@
     opencode.url                        = "github:anomalyco/opencode";
     opencode.inputs.nixpkgs.follows     = "nixpkgs";
 
+    claude-code-nix.url                     = "github:sadjow/claude-code-nix";
+    claude-code-nix.inputs.nixpkgs.follows  = "nixpkgs";
+
     angrr.url                           = "github:linyinfeng/angrr";
     angrr.inputs.nixpkgs.follows        = "nixpkgs";
     angrr.inputs.flake-compat.follows   = "flake-compat";
@@ -35,6 +38,7 @@
           {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
+              inputs.claude-code-nix.overlays.default
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
@@ -69,6 +73,7 @@
           {
             nixpkgs.overlays = [
               inputs.opencode.overlays.default
+              inputs.claude-code-nix.overlays.default
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
