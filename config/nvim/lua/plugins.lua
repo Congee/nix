@@ -989,13 +989,27 @@ return {
         mode = { "n", "t", "i", "x" },
       },
     },
+    config = function(_, opts)
+      require("sidekick").setup(opts)
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "sidekick_terminal",
+        callback = function(ev)
+          vim.keymap.set("t", "<ScrollWheelLeft>", "<Nop>", { buffer = ev.buf })
+          vim.keymap.set("t", "<ScrollWheelRight>", "<Nop>", { buffer = ev.buf })
+          vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+            buffer = ev.buf,
+            command = "startinsert",
+          })
+        end,
+      })
+    end,
     --- @type sidekick.Config
     opts = {
       cli = {
         --- @type sidekick.win.Opts
         win = {
           split = { width = vim.o.columns >= 260 and 120 or 80 },
-          keys = { prompt = { '<c-,>', 'prompt' } }
+          keys = { prompt = { '<c-,>', 'prompt' } },
         },
       },
     },
