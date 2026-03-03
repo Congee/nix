@@ -994,9 +994,8 @@ return {
       cli = {
         --- @type sidekick.win.Opts
         win = {
-          keys = {
-            prompt = { '<D-p>', 'prompt' },
-          }
+          split = { width = vim.o.columns >= 260 and 120 or 80 },
+          keys = { prompt = { '<c-,>', 'prompt' } }
         },
       },
     },
