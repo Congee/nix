@@ -24,16 +24,16 @@ let
     src =pkgs.fetchFromGitHub {
       owner = "trygveaa";
       repo = "kitty-kitten-search";
-      rev = "0760138";
-      hash = "sha256-egisza7V5dWplRYHIYt4bEQdqXa4E7UhibyWJAup8as=";
+      rev = "992c1f3";
+      hash = "sha256-Xy4dH2fzEQmKfqhmotVDEszuTqoISONGNfC1yfcdevs=";
     };
     phases = [ "unpackPhase" "buildPhase" ];
     buildPhase = ''
       mkdir $out
       cp $src/search.py $src/scroll_mark.py $out/
 
-      sed -i 's/kitty.typing/kitty.typing_compat/' $out/search.py
       sed -i 's|@|@", "--to=unix:/tmp/kitty.socket|g' $out/search.py
+      sed -i 's|loop.loop(handler)|loop.loop(handler)\n    call_remote_control(["resize-window", "--self", "--axis=reset"])|' $out/search.py
     '';
   };
 in
