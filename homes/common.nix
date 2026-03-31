@@ -6,11 +6,11 @@ let
   kitty_resize = pkgs.stdenvNoCC.mkDerivation {
     name = "kitty_resize";
     version = "0";
-    src =pkgs.fetchFromGitHub {
+    src = pkgs.fetchFromGitHub {
       owner = "mrjones2014";
       repo = "smart-splits.nvim";
-      rev = "v2.0.1";
-      hash = "sha256-Zxcd3VUdelhMIT7OZ32OcMfeALT+r5l6O9G1e8CaHFI=";
+      rev = "v2.0.5";
+      hash = "sha256-EqnSGTyADvIpHxN3jZxwetENdqv/XUossUzrEvLHHMk=";
     };
     phases = [ "unpackPhase" "buildPhase" ];
     buildPhase = ''
@@ -76,12 +76,13 @@ in
     difftastic
     delta
     expect
-    man-pages
+    # man-pages
     pandoc
     gnumake
     moreutils # sponge
+    up
     jo
-    jq
+    jiq
     yq
     tree
     fd
@@ -93,22 +94,28 @@ in
     websocat
     ccache
     # racket
-    python3
+    python3 uv
+    nur.rsql
+    supabase-cli stripe-cli
     nodejs pnpm bun
     opencode
     claude-monitor
-    (claude-code-bun.override { bunBinName = "claude"; })
+    llm-agents.beads-rust
+    llm-agents.beads-viewer
+    nur.skills
+    llm-agents.agent-browser
+    pngpaste
     yarn
+    nur.sentry sentry-cli
     duf gdu dua dust # nix-du
-    bottom btop gtop
+    bottom btop
+    bandwhich
     procs
     curlie xh
     lsd
-    dogdns
     doggo
     gitstatus
-    git-fire git-imerge # git-trim
-    gh
+    git-fire git-imerge git-trim git-machete
     sl
     gti
     cmatrix
@@ -118,7 +125,7 @@ in
     fortune
     file
     zip
-    zbar  # qrcode
+    # zbar  # qrcode
     p7zip
     unar
     yamlfmt
@@ -126,7 +133,7 @@ in
     nix-weather
     nix-inspect
     nix-output-monitor
-    nixfmt-rfc-style
+    nixfmt
     nix-index
     nix-tree
     nix-diff  # diff .drv files
@@ -156,12 +163,12 @@ in
     # gdbgui
     scc
     navi # cheat sheet
-    # haskellPackages.stack
-    haskellPackages.cabal-install
-    haskellPackages.ghc
-    # haskellPackages.haskell-language-server
-    haskellPackages.implicit-hie
-    haskellPackages.hoogle
+    # # haskellPackages.stack
+    # haskellPackages.cabal-install
+    # haskellPackages.ghc
+    # # haskellPackages.haskell-language-server
+    # haskellPackages.implicit-hie
+    # haskellPackages.hoogle
     rbw
     yt-dlp-light
     ffmpeg
@@ -173,7 +180,6 @@ in
     jwt-cli
 
     # vscode-langservers-extracted # json-lsp bin/vscode-json-languageserver
-    ansible-language-server
     # autopep8
     copilot-language-server
     bash-language-server
@@ -181,6 +187,7 @@ in
     buf
     basedpyright
     clang-tools
+    zig zls
     ctop
     docker-compose-language-service
     dockerfile-language-server
@@ -193,7 +200,7 @@ in
     vscode-langservers-extracted # html-lsp bin/vscode-html-language-server
     lua-language-server luajit luajitPackages.luarocks
     markdownlint-cli2 mermaid-cli
-    mesonlsp
+    # mesonlsp
     nil
     # pyright
     ruff
@@ -202,6 +209,7 @@ in
     typescript-language-server
     vtsls vue-language-server
     nur.some-sass-language-server
+    nur.pruner
     emmylua-ls
     vim-language-server
     yaml-language-server
@@ -223,7 +231,7 @@ in
 
     flac
     shntool
-    cuetools
+    # cuetools
 
     act # run github actions locally
 
@@ -234,6 +242,76 @@ in
   ];
 
   xdg.enable = true;
+
+  services.ollama.enable = false;
+
+  programs.claude-code = {
+    enable = true;
+    package = pkgs.claude-code-bun.override { bunBinName = "claude"; };
+    settings = {
+      includeCoAuthoredBy = false;
+      effortLevel = "high";
+      permissions = {
+        defaultMode = "default";
+        additionalDirectories = [ "/nix" ];
+        allow = [
+          # context-mode
+          "mcp__plugin_context-mode_context-mode__ctx_search"
+          "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index"
+          # claude-mem
+          "mcp__plugin_claude-mem_mcp-search__search"
+          "mcp__plugin_claude-mem_mcp-search__get_observations"
+          "mcp__plugin_claude-mem_mcp-search__timeline"
+          # git
+          "Bash(git clone:*)"
+          "Bash(git add:*)"
+          "Bash(git commit:*)"
+          "Bash(git push:*)"
+          "Bash(git checkout:*)"
+          "Bash(git branch:*)"
+          "Bash(git stash:*)"
+          "Bash(git log:*)"
+          "Bash(git rm:*)"
+          # gh
+          "Bash(gh api:*)"
+          "Bash(gh repo:*)"
+          "Bash(gh search:*)"
+          # general
+          "Bash(ls:*)"
+          "Bash(echo:*)"
+          "Bash(grep:*)"
+          "Bash(open:*)"
+          "WebSearch"
+          # beads
+          "Bash(br:*)"
+          "Bash(ACTOR=:*)"
+          "Bash(skills find:*)"
+          "Bash(skills list:*)"
+        ];
+      };
+      statusLine = {
+        type = "command";
+        command = "bash ${config.home.homeDirectory}/.claude/statusline-command.sh";
+      };
+      enabledPlugins = {
+        "typescript-lsp@claude-plugins-official" = true;
+        "rust-analyzer-lsp@claude-plugins-official" = true;
+        "figma@claude-plugins-official" = true;
+        "claude-mem@thedotmack" = true;
+        "frontend-design@claude-plugins-official" = true;
+        "context-mode@claude-context-mode" = true;
+        "lua-lsp@claude-plugins-official" = true;
+        "stripe@claude-plugins-official" = true;
+        "claude-md-management@claude-plugins-official" = true;
+        "commit-commands@claude-plugins-official" = true;
+        "skill-creator@claude-plugins-official" = true;
+        "feature-dev@claude-plugins-official" = true;
+        "clangd-lsp@claude-plugins-official" = true;
+        "swift-lsp@claude-plugins-official" = true;
+        "code-review@claude-plugins-official" = true;
+      };
+    };
+  };
 
   programs.k9s.enable = true;
   programs.k9s.plugins = {
@@ -257,6 +335,7 @@ in
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
+  # programs.direnv.config = { global = { load_dotenv = true; }; };
 
   # https://github.com/philocalyst/infat
   # https://apple.stackexchange.com/questions/49447/revert-filetype-association
@@ -363,7 +442,7 @@ in
 
   programs.dircolors.enable = true;
 
-  programs.broot.enable = true;
+  programs.broot.enable = false;
   programs.readline.enable = true;
   programs.eza.enable = true;
   programs.zsh.shellAliases = { e = "${pkgs.eza}/bin/eza"; };
@@ -438,6 +517,8 @@ in
     attributes = lib.splitString "\n" (builtins.readFile ../config/git/gitattributes);
   };
   xdg.configFile."git/hooks".source = ln ../config/git/hooks;
+  programs.gh.enable = true;
+  programs.gh.extensions = [ nur.gh-clean-notifications ];
 
   xdg.dataFile."helm/plugins/helm-diff".source = "${pkgs.kubernetes-helmPlugins.helm-diff}/helm-diff";
   xdg.dataFile."helm/plugins/helm-secrets".source = "${pkgs.kubernetes-helmPlugins.helm-secrets}/helm-secrets";
