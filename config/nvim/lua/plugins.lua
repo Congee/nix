@@ -785,71 +785,11 @@ return {
     opts = { complete = { cmp = { enabled = true } } },
   },
   {
-    'mrcjkb/rustaceanvim',  -- vxpm/ferris.nvim
-    ft = { 'rust' },
-    lazy = false,
-    dependencies = { 'mfussenegger/nvim-dap' },
-    config = function()
-      local exe = vim.fn.resolve(vim.fn.exepath('codelldb'))
-      local dir = vim.fn.fnamemodify(exe, ':h')
-      local lib = vim.fn.resolve(dir .. '/../lldb/lib/liblldb.so')
-      vim.g.rustaceanvim = {
-        tools = {
-          hover_actions = {
-            replace_builtin_hover = false,
-          },
-        },
-
-        ---@type rustaceanvim.lsp.ClientOpts | vim.lsp.Config
-        server = {
-          on_init = function(client, _)
-            vim.print('on_init')
-          end,
-          capabilities = vim.lsp.protocol.make_client_capabilities(),
-          settings = {
-            ['rust-analyzer'] = {
-              files = { excludeDirs = { ".direnv" } },
-              rustfmt = {
-                -- require `rustfmt` binary
-                overrideCommand = { "rustfmt", "--" },
-                rangeFormatting = { enable = true },
-                extraArgs = { "+nightly" },
-              },
-              cargo = { buildScripts = { enable = true } }
-            },
-          },
-        },
-        dap = {
-          -- calling require('rustaceanvim.dap') here cause recursion
-          -- so, copy the code
-          -- https://github.com/mrcjkb/rustaceanvim/blob/a355a08d566aaac33374e24b12009cbe0f6a5b90/lua/rustaceanvim/dap.lua#L32-L46
-          adapter = {
-            type = 'server',
-            host = '127.0.0.1',
-            port = '${port}',
-            executable = {
-              command = 'codelldb',
-              args = { '--liblldb', lib, '--port', '${port}' }
-            },
-          }
-        },
-      };
-
-      vim.lsp.config('rust-analyzer', vim.g.rustaceanvim.server);
-    end
-  },
-  {
     "andrewferrier/debugprint.nvim",
     version = "*",
     lazy = true,
     event = 'VeryLazy',
     opts = {},
-  },
-  {
-    'saecki/crates.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    event = { "BufRead Cargo.toml" },
-    opts = { complete = { cmp = { enabled = true } } },
   },
   {
     'mfussenegger/nvim-dap',

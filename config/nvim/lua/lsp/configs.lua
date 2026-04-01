@@ -44,6 +44,21 @@ return {
   },
   vue_ls = {},
 
+  rust_analyzer = {
+    settings = {
+      ['rust-analyzer'] = {
+        files = { excludeDirs = { ".direnv" } },
+        rustfmt = {
+          -- require `rustfmt` binary
+          overrideCommand = { "rustfmt", "--" },
+          rangeFormatting = { enable = true },
+          extraArgs = { "+nightly" },
+        },
+        cargo = { buildScripts = { enable = true } }
+      },
+    }
+  },
+
   copilot = { settings = { telemetry = { telemetryLevel = "off" } } },
   docker_compose_language_service = {}, -- FIXME
   yamlls = {
