@@ -15,6 +15,9 @@
 # setopt xtrace promptsubst
 # }}}
 
+# Disable the log builtin, so we don't conflict with /usr/bin/log
+disable log
+
 # Cross Platform .zshrc
 # {{{ ENV
 # I don't know why `chsh' doesn't work.
