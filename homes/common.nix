@@ -275,9 +275,10 @@ in
   };
 
   programs.direnv.enable = true;
+  # https://github.com/NixOS/nixpkgs/issues/507531
+  programs.direnv.package = pkgs.direnv.overrideAttrs (_: { doCheck = false; });
   programs.direnv.nix-direnv.enable = true;
   programs.direnv.enableZshIntegration = true;
-  # programs.direnv.config = { global = { load_dotenv = true; }; };
 
   # https://github.com/philocalyst/infat
   # https://apple.stackexchange.com/questions/49447/revert-filetype-association
