@@ -30,12 +30,12 @@ in
     (pkgs.writeShellScriptBin "timeout" ''exec ${pkgs.perl}/bin/perl -e 'alarm shift; exec @ARGV' "$@"'')
   ];
 
-  # home.file."Library/Application Support/lspmux/config.toml".text = ''
-  #   pass_environment = [ "PATH" ]
-  #   log_filters = "trace"
-  # '';
+  home.file."Library/Application Support/lspmux/config.toml".text = ''
+    pass_environment = [ "PATH" ]
+    log_filters = "trace"
+  '';
 
- launchd.agents.lspmux = {
+  launchd.agents.lspmux = {
     enable = true;
     config = {
       ProgramArguments = [ "${config.home.homeDirectory}/.nix-profile/bin/lspmux" "server" ];
