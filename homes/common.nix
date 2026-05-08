@@ -87,6 +87,7 @@ in
     tree
     fd
     ripgrep
+    ast-grep
     croc
     unzip
     binutils  # ar for libluajit.a
@@ -245,72 +246,11 @@ in
 
   services.ollama.enable = false;
 
+  programs.codex.package = pkgs.llm-agents.codex;
+  programs.codex.enable = true;
   programs.claude-code = {
     enable = true;
-    package = pkgs.claude-code-bun.override { bunBinName = "claude"; };
-    settings = {
-      includeCoAuthoredBy = false;
-      effortLevel = "high";
-      permissions = {
-        defaultMode = "default";
-        additionalDirectories = [ "/nix" ];
-        allow = [
-          # context-mode
-          "mcp__plugin_context-mode_context-mode__ctx_search"
-          "mcp__plugin_context-mode_context-mode__ctx_fetch_and_index"
-          # claude-mem
-          "mcp__plugin_claude-mem_mcp-search__search"
-          "mcp__plugin_claude-mem_mcp-search__get_observations"
-          "mcp__plugin_claude-mem_mcp-search__timeline"
-          # git
-          "Bash(git clone:*)"
-          "Bash(git add:*)"
-          "Bash(git commit:*)"
-          "Bash(git push:*)"
-          "Bash(git checkout:*)"
-          "Bash(git branch:*)"
-          "Bash(git stash:*)"
-          "Bash(git log:*)"
-          "Bash(git rm:*)"
-          # gh
-          "Bash(gh api:*)"
-          "Bash(gh repo:*)"
-          "Bash(gh search:*)"
-          # general
-          "Bash(ls:*)"
-          "Bash(echo:*)"
-          "Bash(grep:*)"
-          "Bash(open:*)"
-          "WebSearch"
-          # beads
-          "Bash(br:*)"
-          "Bash(ACTOR=:*)"
-          "Bash(skills find:*)"
-          "Bash(skills list:*)"
-        ];
-      };
-      statusLine = {
-        type = "command";
-        command = "bash ${config.home.homeDirectory}/.claude/statusline-command.sh";
-      };
-      enabledPlugins = {
-        "typescript-lsp@claude-plugins-official" = true;
-        "rust-analyzer-lsp@claude-plugins-official" = true;
-        "figma@claude-plugins-official" = true;
-        "claude-mem@thedotmack" = true;
-        "frontend-design@claude-plugins-official" = true;
-        "context-mode@claude-context-mode" = true;
-        "lua-lsp@claude-plugins-official" = true;
-        "stripe@claude-plugins-official" = true;
-        "claude-md-management@claude-plugins-official" = true;
-        "commit-commands@claude-plugins-official" = true;
-        "skill-creator@claude-plugins-official" = true;
-        "feature-dev@claude-plugins-official" = true;
-        "clangd-lsp@claude-plugins-official" = true;
-        "swift-lsp@claude-plugins-official" = true;
-        "code-review@claude-plugins-official" = true;
-      };
-    };
+    package = pkgs.llm-agents.claude-code;
   };
 
   programs.k9s.enable = true;

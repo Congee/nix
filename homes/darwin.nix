@@ -27,6 +27,7 @@ in
     swift-format
     (pkgs.writeShellScriptBin "ggrep" "exec -a $0 ${gnugrep}/bin/grep $@")
     (pkgs.writeShellScriptBin "gsed" "exec -a $0 ${gnused}/bin/sed $@")
+    (pkgs.writeShellScriptBin "timeout" ''exec ${pkgs.perl}/bin/perl -e 'alarm shift; exec @ARGV' "$@"'')
   ];
 
   # home.file."Library/Application Support/lspmux/config.toml".text = ''

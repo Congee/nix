@@ -19,9 +19,6 @@
     opencode.url                        = "github:anomalyco/opencode";
     opencode.inputs.nixpkgs.follows     = "nixpkgs";
 
-    claude-code-nix.url                     = "github:sadjow/claude-code-nix";
-    claude-code-nix.inputs.nixpkgs.follows  = "nixpkgs";
-
     llm-agents.url                      = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows   = "nixpkgs";
 
@@ -42,7 +39,6 @@
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
               inputs.opencode.overlays.default
-              inputs.claude-code-nix.overlays.default
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
@@ -78,7 +74,6 @@
           {
             nixpkgs.overlays = [
               inputs.opencode.overlays.default
-              inputs.claude-code-nix.overlays.default
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
