@@ -61,6 +61,7 @@ return {
 
   copilot = { settings = { telemetry = { telemetryLevel = "off" } } },
   docker_compose_language_service = {}, -- FIXME
+  tombi = {},
   yamlls = {
     settings = {
       redhat = { telemetry = { enabled = false } },

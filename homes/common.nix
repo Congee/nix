@@ -101,6 +101,7 @@ in
     nodejs pnpm bun
     opencode
     claude-monitor
+    nur.engram
     llm-agents.beads-rust
     llm-agents.beads-viewer
     nur.skills
@@ -142,7 +143,6 @@ in
     manix
     patchelf
     lsof
-    xh
     watchexec
     exercism
     litecli
@@ -159,6 +159,7 @@ in
     cargo-generate
     cargo-show-asm
     cargo-expand
+    cargo-deny
     lspmux
     # gdb
     # gdbgui
@@ -174,7 +175,7 @@ in
     yt-dlp-light
     ffmpeg
     imagemagick
-    timg # imgcat abstraction
+    viu # imgcat abstraction
     # llvmPackages_latest.clang also ships this binary but bin/cc is in
     # conflict with gcc/*/bin/cc
     shellcheck
@@ -214,6 +215,7 @@ in
     emmylua-ls
     vim-language-server
     yaml-language-server
+    tombi
 
     # ◍ markdownlint (keywords: markdown)
 
@@ -244,7 +246,7 @@ in
 
   xdg.enable = true;
 
-  services.ollama.enable = false;
+  programs.nh.enable = true;
 
   programs.codex.package = pkgs.llm-agents.codex;
   programs.codex.enable = true;
