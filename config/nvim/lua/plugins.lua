@@ -874,14 +874,15 @@ return {
     ft = "lua", -- only load on lua files
     --- @module 'lazydev'
     --- @type lazydev.Config
-    --- @diagnostic disable: missing-fields
     opts = {
+      --- @diagnostic disable: missing-fields
       library = {
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
         { path = "wezterm-types", mods = { "wezterm" } },
+        { path = 'nvim-lspconfig', words = { 'lspconfig' } },
       },
+      --- @diagnostic enable: missing-fields
     },
-    --- @diagnostic enable: missing-fields
   },
   {
     'saghen/blink.compat',

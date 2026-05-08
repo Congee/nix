@@ -43,6 +43,7 @@ return {
     filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
   },
   vue_ls = {},
+  zls = {},
 
   rust_analyzer = {
     settings = {
@@ -114,34 +115,43 @@ return {
     }
   },
 
-  emmylua_ls = {
+  lua_ls = {
     settings = {
       Lua = {
-        runtime = {
-          version = "LuaJIT",
-          requirePattern = {
-            "lua/?.lua",
-            "lua/?/init.lua",
-            "?/lua/?.lua",
-            "?/lua/?/init.lua"
-          },
-        },
-        workspace = {
-          library = {
-            "$VIMRUNTIME",
-            "$LLS_Addons/luvit",
-            "$HOME/.local/share/nvim/lazy",
-            -- table.unpack(vim.api.nvim_get_runtime_file("lua/*.lua", true)),
-          },
-          ignoreGlobs = { "**/*_spec.lua" },
-        },
+        hint = { enable = true },
       },
     },
   },
+
+  -- emmylua_ls = {
+  --   settings = {
+  --     ---@schema https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json
+  --     Lua = {
+  --       runtime = {
+  --         version = "LuaJIT",
+  --         requirePattern = {
+  --           "lua/?.lua",
+  --           "lua/?/init.lua",
+  --           "?/lua/?.lua",
+  --           "?/lua/?/init.lua"
+  --         },
+  --       },
+  --       workspace = {
+  --         library = {
+  --           "$VIMRUNTIME",
+  --           "$LLS_Addons/luvit",
+  --           "$HOME/.local/share/nvim/lazy",
+  --           -- table.unpack(vim.api.nvim_get_runtime_file("lua/*.lua", true)),
+  --         },
+  --         ignoreGlobs = { "**/*_spec.lua" },
+  --       },
+  --     },
+  --   },
+  -- },
   buf_ls = { },
 
   sourcekit = {
-    filetypes = {'swift', 'objective-c', 'objective-cpp'},
+    filetypes = {'swift', 'objc', 'objcpp'},
     root_dir = lspconfig.util.root_pattern('Package.swift', '.git'),
     single_file_support = true,
   },
