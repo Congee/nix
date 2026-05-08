@@ -466,7 +466,7 @@ in
   };
   xdg.configFile."git/hooks".source = ln ../config/git/hooks;
   programs.gh.enable = true;
-  programs.gh.extensions = [ nur.gh-clean-notifications ];
+  programs.gh.extensions = [ nur.gh-image pkgs.gh-stack ];
 
   xdg.dataFile."helm/plugins/helm-diff".source = "${pkgs.kubernetes-helmPlugins.helm-diff}/helm-diff";
   xdg.dataFile."helm/plugins/helm-secrets".source = "${pkgs.kubernetes-helmPlugins.helm-secrets}/helm-secrets";
