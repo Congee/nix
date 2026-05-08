@@ -1104,6 +1104,17 @@ return {
       },
     },
   },
+  {
+    -- Autocorrect words as-you-type.
+    -- Autopeek command range as-you-type.
+    'nvim-mini/mini.cmdline',
+    version = false,
+    dependencies = { 'nvim-mini/mini.nvim' },
+    config = function() require('mini.cmdline').setup({
+      autocomplete = { enable = false }
+    }) end,
+    event = 'VeryLazy',
+  },
   { 'MrcJkb/haskell-tools.nvim', ft = { "haskell" }, },
   {
     'p00f/clangd_extensions.nvim',
