@@ -377,7 +377,7 @@ in
   # .zprofile -> .zshrc -> .zlogin -> .zlogout, in that sourcing order
   home.file.".zlogin".source = ln ../config/.zlogin;
   home.activation.fpath = lib.hm.dag.entryAfter ["wrieBoundary"] ''
-    mkdir -p ${config.xdg.dataHome}/zsh/site-functions
+    run mkdir -p ${config.xdg.dataHome}/zsh/site-functions
   '';
   xdg.dataFile."zsh/site-functions/_git-fixup".text = ''
     _git-fixup() { _arguments '1:commit:__git_recent_commits' }
@@ -419,10 +419,14 @@ in
   programs.neovim.enable = true;
   programs.neovim.package = pkgs.neovim;
   programs.neovim.extraPackages = [pkgs.llvmPackages_latest.clang];
-  programs.neovim.withPython3 = true;
+  programs.neovim.withPython3 = false;
+  programs.neovim.withRuby = false;
   programs.neovim.viAlias = true;
-  programs.neovim.withNodeJs = true;
-  xdg.configFile."nvim".source = ln "${config.home.homeDirectory}/.nix/config/nvim";
+  programs.neovim.withNodeJs = false;
+  programs.neovim.sideloadInitLua = true; # xdg.configFile."nvim/init.lua".enable = false;
+  home.activation.nvim = lib.hm.dag.entryAfter ["wrieBoundary"] ''
+    run ln -sf ${config.home.homeDirectory}/.nix/config/nvim ${config.xdg.configHome}/nvim;
+  '';
 
   programs.bat.enable = true;
   programs.bat.config = {
@@ -433,6 +437,7 @@ in
 
   # pass
   programs.password-store.enable = true;
+  programs.password-store.settings = { PASSWORD_STORE_DIR = "${config.xdg.dataHome}/password-store"; };
   home.sessionVariables = {
     AWS_VAULT_PASS_PASSWORD_STORE_DIR = "${config.xdg.dataHome}/password-store";
     DIRENV_LOG_FORMAT = "";  # quiet direnv
