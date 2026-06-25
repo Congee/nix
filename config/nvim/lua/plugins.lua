@@ -523,9 +523,18 @@ return {
     event = 'VeryLazy',
   },
   {
-    'rhysd/git-messenger.vim',
-    keys = { '<leader>gm', '<cmd>GitMessenger<cr>' },
-    config = function() vim.g.git_messenger_include_diff = "current" end
+    -- Local plugin: git-messenger-style blame popup with a blame-stack that
+    -- walks across renames/refactors, plus a `git log -S` pickaxe fallback.
+    dir = vim.fn.stdpath('config') .. '/pickaxe.nvim',
+    name = 'pickaxe.nvim',
+    main = 'pickaxe',
+    cmd = { 'Pickaxe', 'PickaxeSearch' },
+    keys = {
+      { '<leader>gp', function() require('pickaxe').open() end, desc = 'Pickaxe blame stack' },
+    },
+    --- @module 'pickaxe'
+    --- @type pickaxe.Config
+    opts = {},
   },
 
   -- use 'jbyuki/instant.nvim'  -- coediting

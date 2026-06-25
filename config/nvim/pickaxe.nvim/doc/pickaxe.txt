@@ -1,0 +1,76 @@
+*pickaxe.txt*                    Blame-stack popup with a git log -S fallback
+
+==============================================================================
+INTRODUCTION                                                          *pickaxe*
+
+pickaxe.nvim is a Lua reimplementation of git-messenger.vim's blame popup,
+with a smarter "explore older commits" algorithm:
+
+- It walks a blame *stack*. From the commit that touched the current line it
+  re-blames the parent (`<hash>^`) at the introducing line, and when the file
+  was renamed in that commit it follows the `previous` rev/path reported by
+  blame porcelain. The stack therefore survives renames and refactors that a
+  plain "blame again" would dead-end on.
+- `git blame` is run with `-w -M -C -C` and honors `.git-blame-ignore-revs`
+  when the repository has one.
+- When even the stack loses the trail (heavy refactors), a `git log -S`
+  pickaxe search finds every commit that changed the number of occurrences of
+  the line's text. That fallback is what the plugin is named for.
+
+==============================================================================
+COMMANDS                                                     *pickaxe-commands*
+
+                                                                     *:Pickaxe*
+:Pickaxe        Open the blame popup for the line under the cursor.
+
+                                                               *:PickaxeSearch*
+:PickaxeSearch  Run a `git log -S` pickaxe search for the current line's text
+                and list the matching commits in a scratch split. Works with
+                or without an open popup.
+
+==============================================================================
+MAPPINGS                                                     *pickaxe-mappings*
+
+There is no global mapping by default. Set one via `keymap` in |pickaxe.setup|
+or with your plugin manager (the bundled lazy.nvim spec maps `<leader>gp`).
+
+Inside the popup (buffer-local):
+
+    o, <C-n>    Move to the older blame entry.
+    O, <C-p>    Move to the newer blame entry.
+    d           Toggle the embedded commit diff.
+    p           Pickaxe `git log -S` search for the current line.
+    y           Yank the current commit hash to the + register.
+    ?           Show the key help.
+    q, <Esc>    Close the popup.
+
+`<C-p>` is buffer-local to the popup, so it does not clash with a global
+mapping such as a Telescope picker.
+
+==============================================================================
+SETUP                                                           *pickaxe.setup*
+
+pickaxe.setup({opts})                                                 *setup()*
+
+Merges {opts} over the defaults. All keys are optional: >lua
+
+    require('pickaxe').setup({
+      keymap = false,            -- normal-mode trigger, or e.g. '<leader>gp'
+      blame_args = { '-w', '-M', '-C', '-C' },
+      ignore_revs_file = '.git-blame-ignore-revs',
+      border = 'rounded',
+      width = 92,
+      height = 34,
+      max_diff_lines = 180,
+      show_diff = true,
+      date_format = '%c',        -- os.date() format
+    })
+<
+==============================================================================
+API                                                              *pickaxe-api*
+
+require('pickaxe').open()    Open the popup for the current line.
+require('pickaxe').search()  Pickaxe search for the current line / popup entry.
+require('pickaxe').setup()   Configure the plugin (see |pickaxe.setup|).
+
+ vim:tw=78:ts=8:ft=help:norl:
