@@ -899,22 +899,6 @@ return {
     lazy = true,
     opts = {},
   },
-  {
-    'NickvanDyke/opencode.nvim',
-    dependencies = {
-      -- Recommended for `ask()` and `select()`.
-      -- Required for default `toggle()` implementation.
-      { "folke/snacks.nvim", opts = { input = {}, terminal = {} } },
-    },
-    config = function()
-      ---@module 'opencode'
-      ---@type opencode.Opts
-      vim.g.opencode_opts = {
-        provider = { cmd = "opencode --continue" },
-      };
-    end,
-    event = 'VeryLazy',
-  },
   { -- Next Edit Suggestions from ollama
     -- https://www.reddit.com/r/neovim/comments/1nueuch/sidekicknvim_ai_cli_tools_and_copilots_next_edit/
     "folke/sidekick.nvim",

@@ -16,9 +16,6 @@
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
 
-    opencode.url                        = "github:anomalyco/opencode";
-    opencode.inputs.nixpkgs.follows     = "nixpkgs";
-
     llm-agents.url                      = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows   = "nixpkgs";
 
@@ -38,7 +35,6 @@
           {
             # on being new: overlay > unstable > stable
             nixpkgs.overlays = [
-              inputs.opencode.overlays.default
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
@@ -73,7 +69,6 @@
           ./homes/darwin.nix
           {
             nixpkgs.overlays = [
-              inputs.opencode.overlays.default
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default

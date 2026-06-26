@@ -99,7 +99,6 @@ in
     nur.rsql
     supabase-cli stripe-cli
     nodejs pnpm bun
-    opencode
     claude-monitor
     nur.engram
     llm-agents.beads-rust
