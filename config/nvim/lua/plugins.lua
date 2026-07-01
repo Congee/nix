@@ -232,12 +232,6 @@ return {
       ]]
     end
   },
-
-  {
-    'qxxxb/vim-searchhi',
-    lazy = true,
-    event = 'VeryLazy',
-  },
   {
     "dmtrKovalenko/fff.nvim",
     dependencies = { 'assistcontrol/readline.nvim' },
@@ -501,12 +495,6 @@ return {
     event = 'VeryLazy',
   },
   {
-    'tpope/vim-dadbod', -- for SQL. TODO: help exrc
-    dependencies = 'kristijanhusak/vim-dadbod-ui',
-    lazy = true,
-    cmd = "DB",
-  },
-  {
     'dhruvasagar/vim-table-mode',
     lazy = true,
     event = 'VeryLazy',
@@ -516,11 +504,6 @@ return {
     lazy = true,
     event = 'VeryLazy',
     opts = {},
-  },
-  {
-    'LionyxML/gitlineage.nvim',
-    opts = {},
-    event = 'VeryLazy',
   },
   {
     -- Local plugin: git-messenger-style blame popup with a blame-stack that
@@ -582,12 +565,6 @@ return {
     lazy = true,
     event = "VeryLazy",
   },
-  {
-    'cohama/agit.vim',
-    lazy = true,
-    cmd = 'Agit',
-  },
-
   -- The default netrw#BrowseX() is broken. It always opens `file:///...` in
   -- vim despite netrw#CheckIfRemote() returns 1.
   --
@@ -801,52 +778,6 @@ return {
     opts = {},
   },
   {
-    'mfussenegger/nvim-dap',
-    dependencies = {
-      'nvim-telescope/telescope-dap.nvim',
-      'nvim-telescope/telescope.nvim',
-      'nvim-neotest/nvim-nio',
-      'rcarriga/nvim-dap-ui',
-    },
-    config = function()
-      -- local dap, dapui = require("dap"), require("dapui")
-      -- require('telescope').load_extension('dap')
-      -- dapui.setup()
-      --
-      -- dap.listeners.after.event_initialized["dapui_config"] = function()
-      --   dapui.open()
-      -- end
-      -- dap.listeners.before.event_terminated["dapui_config"] = function()
-      --   dapui.close()
-      -- end
-      -- dap.listeners.before.event_exited["dapui_config"] = function()
-      --   dapui.close()
-      -- end
-      --
-      -- vim.keymap.set('n', '<Leader>db', function() dap.toggle_breakpoint() end)
-      -- vim.keymap.set('n', '<Leader>dr', function() dap.repl.open() end)
-      -- vim.keymap.set('n', '<Leader>dl', function() dap.run_last() end)
-      -- vim.keymap.set({'n', 'v'}, '<Leader>dh', function()
-      --   require('dap.ui.widgets').hover()
-      -- end)
-      -- vim.keymap.set({'n', 'v'}, '<Leader>dp', function()
-      --   require('dap.ui.widgets').preview()
-      -- end)
-      -- vim.keymap.set('n', '<Leader>df', function()
-      --   local widgets = require('dap.ui.widgets')
-      --   widgets.centered_float(widgets.frames)
-      -- end)
-      -- vim.keymap.set('n', '<Leader>ds', function()
-      --   local widgets = require('dap.ui.widgets')
-      --   widgets.centered_float(widgets.scopes)
-      -- end)
-
-    end,
-    enabled = false,
-    lazy = true,
-    event = 'VeryLazy',
-  },
-  {
     'SmiteshP/nvim-navic',
     dependencies = { 'neovim/nvim-lspconfig' },
     event = 'LspAttach',
@@ -898,55 +829,6 @@ return {
     event = 'LspAttach',
     lazy = true,
     opts = {},
-  },
-  { -- Next Edit Suggestions from ollama
-    -- https://www.reddit.com/r/neovim/comments/1nueuch/sidekicknvim_ai_cli_tools_and_copilots_next_edit/
-    "folke/sidekick.nvim",
-    enabled = true,
-    lazy = true,
-    keys = {
-      {
-        "<c-y>",
-        function()
-          -- if there is a next edit, jump to it, otherwise apply it if any
-          if not require("sidekick").nes_jump_or_apply() then
-            return "<c-y>" -- fallback to normal tab
-          end
-        end,
-        expr = true,
-        desc = "Goto/Apply Next Edit Suggestion",
-      },
-      {
-        "<c-.>",
-        function() require("sidekick.cli").toggle() end,
-        desc = "Sidekick Toggle",
-        mode = { "n", "t", "i", "x" },
-      },
-    },
-    config = function(_, opts)
-      require("sidekick").setup(opts)
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = "sidekick_terminal",
-        callback = function(ev)
-          vim.keymap.set("t", "<ScrollWheelLeft>", "<Nop>", { buffer = ev.buf })
-          vim.keymap.set("t", "<ScrollWheelRight>", "<Nop>", { buffer = ev.buf })
-          vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
-            buffer = ev.buf,
-            command = "startinsert",
-          })
-        end,
-      })
-    end,
-    --- @type sidekick.Config
-    opts = {
-      cli = {
-        --- @type sidekick.win.Opts
-        win = {
-          split = { width = vim.o.columns >= 260 and 120 or 80 },
-          keys = { prompt = { '<c-,>', 'prompt' } },
-        },
-      },
-    },
   },
   {
     'saghen/blink.cmp',
@@ -1158,28 +1040,6 @@ return {
       })
     end,
     lazy = true,
-  },
-  {
-    -- TODO: remove noice once https://github.com/neovim/neovim/issues/25718 is resolved
-    --
-    -- regarding the issue of very long output from :messages
-    -- noice.nvim is too intrusive.
-    -- https://github.com/neovim/neovim/pull/5189 would be btter
-    'folke/noice.nvim',
-    event = 'LspAttach',
-    opts = {
-      cmdline = { enabled = false },
-      messages = { enabled = false },
-      popupmenu = { enabled = false },
-      notify = { enabled = false },
-      smart_move = { enabled = false },
-      lsp = {
-        progress = { enabled = false },
-        hover = { enabled = true, opts = { border = 'none' } },
-        signature = { enabled = false },
-        message = { enabled = false },
-      }
-    }
   },
   {
     'nvim-neo-tree/neo-tree.nvim',
