@@ -12,13 +12,34 @@ local state = { win = nil, buf = nil }
 -- reopened popup shows the same commit as a just-wiped one.
 local buf_seq = 0
 
---- @param epoch integer|nil
+--- Parse git's "+HHMM"/"-HHMM" tz offset into seconds (0 when absent/malformed).
+--- @param tz string|nil
+--- @return integer
+local function tz_offset(tz)
+  local sign, hh, mm = (tz or ''):match('^([+-])(%d%d)(%d%d)$')
+  if not sign then
+    return 0
+  end
+  local secs = tonumber(hh) * 3600 + tonumber(mm) * 60
+  return sign == '-' and -secs or secs
+end
+
+--- Render a commit timestamp in the commit's own recorded timezone (not the
+--- viewer's), with the offset appended — e.g. "Wed Jun 25 14:58:00 2026 -0500".
+--- @param epoch integer|nil  UTC seconds reported by git.
+--- @param tz string|nil      Git tz offset like "-0500".
 --- @return string
-local function format_time(epoch)
+local function format_time(epoch, tz)
   if not epoch then
     return 'unknown date'
   end
-  return os.date(config.options.date_format, epoch) --[[@as string]]
+  -- `!` makes os.date treat the (offset-shifted) epoch as UTC, so the result is
+  -- the commit's local wall-clock time regardless of the viewer's timezone.
+  local stamp = os.date('!' .. config.options.date_format, epoch + tz_offset(tz)) --[[@as string]]
+  if tz and tz ~= '' then
+    return stamp .. ' ' .. tz
+  end
+  return stamp
 end
 
 --- Append a block (body/diff) to `lines`, separated from the previous content by
@@ -67,10 +88,10 @@ local function build_lines(entry, index, has_older, show_diff)
   end
 
   if entry.committer_time and entry.author_time and entry.committer_time ~= entry.author_time then
-    headers[#headers + 1] = { 'Author Date', format_time(entry.author_time) }
-    headers[#headers + 1] = { 'Committer Date', format_time(entry.committer_time) }
+    headers[#headers + 1] = { 'Author Date', format_time(entry.author_time, entry.author_tz) }
+    headers[#headers + 1] = { 'Committer Date', format_time(entry.committer_time, entry.committer_tz) }
   else
-    headers[#headers + 1] = { 'Date', format_time(entry.author_time) }
+    headers[#headers + 1] = { 'Date', format_time(entry.author_time, entry.author_tz) }
   end
 
   local header_width = 0
@@ -100,7 +121,9 @@ end
 --- @return integer width, integer height
 local function popup_size(lines)
   local width = math.min(config.options.width, math.max(50, vim.o.columns - 8))
-  local height = math.min(config.options.height, math.max(12, vim.o.lines - 6), math.max(12, #lines))
+  -- Fit the height to the content (#lines), capped by the configured max and the
+  -- available rows — no artificial floor, so short popups don't pad with blanks.
+  local height = math.max(1, math.min(config.options.height, vim.o.lines - 6, #lines))
   return width, height
 end
 
