@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           GitHub Notifications: Bulk Done for Merged/Closed
 // @namespace      https://github.com/Congee/nix
-// @version        1.0.0
+// @version        1.0.1
 // @description    Adds a button to github.com/notifications that scans EVERY page of the current inbox view (not just the first), finds notifications whose PR was merged/closed or whose issue was closed, and marks them all as Done in one shot. GitHub's built-in "select all" only covers the 25 rows of the current page, forcing you to repeat the selection page by page.
 // @author         Congee
 // @homepageURL    https://github.com/Congee/nix
@@ -72,8 +72,11 @@
   }
 
   // ─── Page fetching & parsing ────────────────────────────────────────────
+  // Firefox runs this script in Violentmonkey's sandbox (GitHub's CSP blocks
+  // page injection), and the sandbox's fetch() has no document base URL, so
+  // relative URLs throw "not a valid URL" — always fetch absolute URLs.
   async function fetchDoc(url) {
-    const res = await fetch(url, {
+    const res = await fetch(new URL(url, location.href).href, {
       credentials: 'same-origin',
       headers: { Accept: 'text/html' },
     });
@@ -98,7 +101,8 @@
   // is a next page, and as a disabled <button> when there is not.
   function nextPageUrl(doc) {
     for (const a of doc.querySelectorAll('a[href*="after="]')) {
-      if (a.textContent.trim().toLowerCase() === 'next') return a.getAttribute('href');
+      if (a.textContent.trim().toLowerCase() === 'next')
+        return new URL(a.getAttribute('href'), location.href).href;
     }
     return null;
   }
@@ -109,7 +113,7 @@
     const visited = new Set(); // guards against cursor loops
     const found = new Map(); // id → kind
     let archiveForm = null;
-    let url = location.pathname + location.search; // respect the current filter/query
+    let url = location.href; // respect the current filter/query
     let pages = 0;
 
     while (url && pages < CONFIG.maxPages && !visited.has(url)) {
