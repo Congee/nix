@@ -1178,7 +1178,13 @@ return {
     dependencies = { 'neovim-treesitter/treesitter-parser-registry' },
     build = ':TSUpdate',
     lazy = false, -- the main branch does not support lazy-loading
-    config = function()
+    config = function(plugin)
+      -- registry queries reference queries-only base languages via
+      -- `; inherits:` (typescript -> ecma), but those have no registry entry
+      -- and the plugin never puts its bundled fallbacks on the rtp; append
+      -- them last so they only fill gaps
+      vim.opt.rtp:append(plugin.dir .. '/runtime')
+
       -- async; no-op for languages that are already installed
       require('nvim-treesitter').install(vim.tbl_values(_G.treesitter_ft_mod))
 
