@@ -22,6 +22,7 @@ in
     oxker
     macmon
     pinentry_mac
+    pngpaste  # darwin-only; was in common.nix but unavailable on linux
     applesauce
     # (writeScriptBin "realpath" ''${coreutils}/bin/realpath "$@"'')
     swift-format

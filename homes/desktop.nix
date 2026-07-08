@@ -66,7 +66,7 @@ in
 
     nerdctl
     buildkit
-    pinentry
+    pinentry-gnome3
     wl-clipboard
     # goldendict-ng
     evolution
@@ -152,7 +152,11 @@ in
 
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
-  home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.nixos.yml;
+  # Generated (not a live symlink) so the hardcoded home path stays out of git:
+  # @HOME@ is substituted with the real home directory at build time.
+  home.file.".config/alacritty/alacritty.yml".text =
+    builtins.replaceStrings [ "@HOME@" ] [ config.home.homeDirectory ]
+      (builtins.readFile ../config/alacritty.nixos.yml);
 
   home.sessionVariables = {
     # https://github.com/NixOS/nixpkgs/issues/91218#issuecomment-822142127
@@ -169,7 +173,7 @@ in
   ];
 
   programs.firefox.enable = true;
-  programs.firefox.package = pkgs.firefox-wayland;
+  programs.firefox.package = pkgs.firefox;
   programs.firefox.profiles.default = {
     id = 0;  # means default
     isDefault = true;  # also sets to default if id is not 0

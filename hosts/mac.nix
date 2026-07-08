@@ -1,10 +1,14 @@
-{ lib, config, pkgs, inputs, ... }:
+{ lib, config, pkgs, inputs, username, ... }:
 
 {
 
   imports = [
     ./nixcmd.nix
   ];
+
+  # nix-darwin's multi-user migration: user-scoped options (homebrew,
+  # launchd.user.agents, system.defaults.*) now require system.primaryUser.
+  system.primaryUser = username;
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = [
@@ -46,7 +50,7 @@
 
   # Homebrew looks for `git` only from a few places. We have to make sure our
   # `git` is used.
-  # ln -s /Users/cwu/.nix-profile/bin/git $HOMEBREW_PREFIX/bin/
+  # ln -s "$HOME/.nix-profile/bin/git" $HOMEBREW_PREFIX/bin/
   homebrew.enable = true;  # still have to manually install homebrew
   homebrew.global.brewfile = true;
   homebrew.casks = [

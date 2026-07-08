@@ -359,7 +359,7 @@ bell:
   #
   command:
     program: pw-play
-    args: ["/home/cwu/Music/Funk.aiff"]
+    args: ["@HOME@/Music/Funk.aiff"]
 
 #selection:
   # This string contains all characters that are used as separators for

@@ -1,14 +1,14 @@
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 {
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.cwu = {
+  users.users.${username} = {
     isNormalUser = true;
     shell = pkgs.zsh;  # per user
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
   };
-  users.groups.realtime.members = [ "cwu" ];  # for rtkit
+  users.groups.realtime.members = [ username ];  # for rtkit
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget

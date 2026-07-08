@@ -258,6 +258,18 @@
         "type": "github"
       }
     },
+    "identity": {
+      "flake": false,
+      "locked": {
+        "path": "./identity.default.nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "./identity.default.nix",
+        "type": "path"
+      },
+      "parent": []
+    },
     "lib-aggregate": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -459,38 +471,18 @@
         "type": "github"
       }
     },
-    "opencode": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1778301067,
-        "narHash": "sha256-Jpp+YKrlw0OcOL55Pk11Lg+DNFJJMxWBbz/ZIHrSz48=",
-        "owner": "anomalyco",
-        "repo": "opencode",
-        "rev": "b2baddcd378e45ed366a45ee07db896eca6b8ff9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "anomalyco",
-        "repo": "opencode",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "angrr": "angrr",
         "darwin": "darwin",
         "flake-compat": "flake-compat",
         "home-manager": "home-manager",
+        "identity": "identity",
         "llm-agents": "llm-agents",
         "neovim-nightly": "neovim-nightly",
         "nixos": "nixos",
         "nixpkgs": "nixpkgs_2",
         "nur": "nur",
-        "opencode": "opencode",
         "wayland": "wayland"
       }
     },

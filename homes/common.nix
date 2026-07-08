@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nixpkgs, ... }:
+{ config, pkgs, lib, nixpkgs, username, ... }:
 
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
@@ -41,8 +41,8 @@ in
   manual.manpages.enable = false;
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
-  home.username = "cwu";
-  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/cwu" else "/home/cwu";
+  home.username = username;
+  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
   # xdg.configFile."nixpkgs/home.nix".source = ln ./home.nix;
 
   # This value determines the Home Manager release that your
@@ -105,7 +105,6 @@ in
     llm-agents.beads-viewer
     nur.skills
     llm-agents.agent-browser
-    pngpaste
     yarn
     nur.sentry sentry-cli
     duf gdu dua dust # nix-du
@@ -368,7 +367,7 @@ in
   programs.zsh.initContent = lib.mkMerge [
     (lib.mkOrder 850 "autoload -U compinit && compinit")
     (lib.mkOrder 1200 (builtins.concatStringsSep "\n" [
-      "${builtins.readFile ../config/.zshrc}"
+      (builtins.replaceStrings [ "@USERNAME@" ] [ username ] (builtins.readFile ../config/.zshrc))
       # it's already set but not inherited to home-manager zsh
       ''export GPG_TTY="$(tty)"''
     ]))

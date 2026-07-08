@@ -69,7 +69,7 @@ in
   fonts.packages = with pkgs; [
     noto-fonts
     noto-fonts-cjk-sans
-    noto-fonts-emoji
+    noto-fonts-color-emoji
   ];
 
   # Select internationalisation properties.
@@ -92,8 +92,7 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
-  services.nixseparatedebuginfod.enable = true;
-  services.preload.enable = true;
+  services.nixseparatedebuginfod2.enable = true;
 
   virtualisation.libvirtd.enable = true;
   system.tools.nixos-option.enable = false;

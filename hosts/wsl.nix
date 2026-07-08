@@ -1,8 +1,8 @@
-{ lib, pkgs, config, modulesPath, ... }:
+{ lib, pkgs, config, modulesPath, username, ... }:
 
 with lib;
 let
-  defaultUser = "cwu";
+  defaultUser = username;
   syschdemd = import ./syschdemd.nix { inherit lib pkgs config defaultUser; };
 in
 {

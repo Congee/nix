@@ -22,9 +22,18 @@
     angrr.url                           = "github:linyinfeng/angrr";
     angrr.inputs.nixpkgs.follows        = "nixpkgs";
     angrr.inputs.flake-compat.follows   = "flake-compat";
+
+    # Out-of-tree identity (username). The committed default is a placeholder;
+    # keep your real username outside the repo and select it per-invocation with:
+    #   --override-input identity path:$HOME/.secrets/identity.nix
+    identity.url                        = "path:./identity.default.nix";
+    identity.flake                      = false;
   };
 
-  outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs: {
+  outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs:
+  let
+    username = (import inputs.identity).username;
+  in {
     # home-manager
     homeConfigurations = {
       desktop = home-manager.lib.homeManagerConfiguration {
@@ -46,7 +55,7 @@
             nixpkgs.config.permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];
           }
         ];
-        extraSpecialArgs = { inherit nixpkgs; };
+        extraSpecialArgs = { inherit nixpkgs username; };
       };
       wsl = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."x86_64-linux";
@@ -55,12 +64,14 @@
           ./homes/wsl.nix
           {
             nixpkgs.overlays = [
-              inputs.nur.overlay
+              inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
+              inputs.llm-agents.overlays.default
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
         ];
+        extraSpecialArgs = { inherit nixpkgs username; };
       };
       mac = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages."aarch64-darwin";
@@ -76,7 +87,7 @@
             ];
           }
         ];
-        extraSpecialArgs = { inherit nixpkgs; };
+        extraSpecialArgs = { inherit nixpkgs username; };
       };
     };
     desktop = self.homeConfigurations.desktop.activationPackage;
@@ -111,7 +122,7 @@
         }
         ./hosts/blackbox/configuration.nix
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs username; };
     };
 
     darwinConfigurations.mac = darwin.lib.darwinSystem {
@@ -120,7 +131,7 @@
         inputs.angrr.darwinModules.angrr
         ./hosts/mac.nix
       ];
-      specialArgs = { inherit inputs; };
+      specialArgs = { inherit inputs username; };
     };
     inherit (self.darwinConfigurations) mac;
   };

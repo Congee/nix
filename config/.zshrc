@@ -422,7 +422,7 @@ my_prompt() {
   local host_info
   [[ -n $SSH_CONNECTION ]] && host_info="$USER${red_at}$HOST "
 
-  if [[ $USER == "CC" || $USER == "congee" || $USER == "cwu" ]]; then
+  if [[ $USER == "CC" || $USER == "congee" || $USER == "@USERNAME@" ]]; then
     local nix_logo="%{$fg[blue]%} %{$reset_color%}"
     local nix_prompt
     [[ -n $IN_NIX_SHELL ]] && nix_prompt="${nix_logo}" || nix_prompt=""
