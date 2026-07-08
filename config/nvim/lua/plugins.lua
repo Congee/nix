@@ -442,6 +442,13 @@ return {
     opts = {
       completions = { blink = { enabled = true } },
       image = {},
+      overrides = {
+        buftype = {
+          -- LSP hover/signature floats: keep rendering + conceal on the
+          -- cursor line (anti_conceal=false also presets concealcursor=nvic)
+          nofile = { anti_conceal = { enabled = false } },
+        },
+      },
     },
     --- @diagnostic enable: missing-fields
   },
