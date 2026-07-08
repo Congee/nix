@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           GitHub Notifications: Bulk Done for Merged/Closed
 // @namespace      https://github.com/Congee/nix
-// @version        1.0.1
+// @version        1.0.2
 // @description    Adds a button to github.com/notifications that scans EVERY page of the current inbox view (not just the first), finds notifications whose PR was merged/closed or whose issue was closed, and marks them all as Done in one shot. GitHub's built-in "select all" only covers the 25 rows of the current page, forcing you to repeat the selection page by page.
 // @author         Congee
 // @homepageURL    https://github.com/Congee/nix
@@ -181,13 +181,16 @@
       font: '12px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
     });
 
+    const logWrap = document.createElement('div');
+    logWrap.style.display = 'none';
+    logWrap.style.position = 'relative';
+
     const logEl = document.createElement('div');
     Object.assign(logEl.style, {
-      display: 'none',
       maxWidth: '320px',
       maxHeight: '120px',
       overflowY: 'auto',
-      padding: '6px 10px',
+      padding: '6px 24px 6px 10px',
       borderRadius: '6px',
       whiteSpace: 'pre-line',
       background: 'var(--bgColor-default, var(--color-canvas-default, #fff))',
@@ -196,12 +199,42 @@
       boxShadow: '0 3px 12px rgba(0,0,0,.25)',
     });
 
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.textContent = '×';
+    closeBtn.title = 'Dismiss';
+    Object.assign(closeBtn.style, {
+      position: 'absolute',
+      top: '1px',
+      right: '4px',
+      padding: '0 4px',
+      border: 'none',
+      background: 'transparent',
+      color: 'var(--fgColor-muted, var(--color-fg-muted, #848d97))',
+      fontSize: '16px',
+      lineHeight: '1.4',
+      cursor: 'pointer',
+    });
+    closeBtn.addEventListener('click', () => {
+      logWrap.style.display = 'none';
+    });
+    logWrap.append(logEl, closeBtn);
+
+    let hideTimer = null;
     const lines = [];
     const log = (msg) => {
-      logEl.style.display = 'block';
+      clearTimeout(hideTimer);
+      logWrap.style.display = 'block';
       lines.push(msg);
       logEl.textContent = lines.slice(-8).join('\n');
       logEl.scrollTop = logEl.scrollHeight;
+    };
+    // Benign endings fade on their own; errors stay until dismissed via ×.
+    const scheduleHide = () => {
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => {
+        logWrap.style.display = 'none';
+      }, 10000);
     };
 
     const btn = document.createElement('button');
@@ -222,6 +255,7 @@
       btn.disabled = true;
       btn.style.opacity = '.6';
       lines.length = 0;
+      let sticky = false;
       try {
         const query = new URLSearchParams(location.search).get('query') || '';
         if (query.includes('is:done')) log('note: this is the Done view — these are already Done');
@@ -252,14 +286,16 @@
         await sleep(800);
         location.reload();
       } catch (err) {
+        sticky = true;
         log(`error: ${err.message}`);
       } finally {
         btn.disabled = false;
         btn.style.opacity = '1';
+        if (!sticky) scheduleHide();
       }
     });
 
-    panel.append(logEl, btn);
+    panel.append(logWrap, btn);
     return panel;
   }
 
