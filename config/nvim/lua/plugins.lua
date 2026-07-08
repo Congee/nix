@@ -441,6 +441,7 @@ return {
     --- @diagnostic disable: missing-fields
     opts = {
       completions = { blink = { enabled = true } },
+      code = { style = 'normal' },  -- remove ``` langeuage indicator on hover
       image = {},
       overrides = {
         buftype = {
