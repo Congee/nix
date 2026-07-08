@@ -215,6 +215,7 @@ in
     vim-language-server
     yaml-language-server
     tombi
+    tree-sitter
 
     # ◍ markdownlint (keywords: markdown)
 

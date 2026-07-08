@@ -119,7 +119,7 @@ return {
   -- },
   {
     'lukas-reineke/indent-blankline.nvim',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
+    dependencies = 'neovim-treesitter/nvim-treesitter',
     config = function()
       require('ibl').setup();
       vim.g.indent_blankline_filetype_exclude = { 'help', 'neo-tree' }
@@ -1153,7 +1153,7 @@ return {
       "nvim-neotest/nvim-nio",
       "nvim-neotest/neotest-python",
       "nvim-neotest/neotest-vim-test",
-      "nvim-treesitter/nvim-treesitter",
+      "neovim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim"
     },
     enabled = false,
@@ -1173,32 +1173,80 @@ return {
   -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
   { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
   {
-    'nvim-treesitter/nvim-treesitter',
-    build = function()
-      vim.env.ALL_EXTENSIONS = 1;
-      vim.cmd('TSUpdate');
+    'neovim-treesitter/nvim-treesitter',
+    branch = 'main',
+    dependencies = { 'neovim-treesitter/treesitter-parser-registry' },
+    build = ':TSUpdate',
+    lazy = false, -- the main branch does not support lazy-loading
+    config = function()
+      -- async; no-op for languages that are already installed
+      require('nvim-treesitter').install(vim.tbl_values(_G.treesitter_ft_mod))
+
+      -- ejs buffers use the embedded_template parser
+      -- (was the embedded_template module on the master branch)
+      vim.treesitter.language.register('embedded_template', 'ejs')
+
+      -- highlighting is per-buffer opt-in on the main branch;
+      -- keep the master-branch disable list
+      local no_highlight = {
+        cpp = true, bash = true, python = true,
+        typescript = true, go = true, yaml = true,
+      }
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('user.treesitter', {}),
+        callback = function(ev)
+          local lang = vim.treesitter.language.get_lang(ev.match)
+          if not lang or no_highlight[lang] then return end
+          pcall(vim.treesitter.start, ev.buf, lang)
+        end,
+      })
+
+      -- replaces the master-branch incremental_selection module: gnn selects
+      -- the node under the cursor, then grn grows / grm shrinks the visual
+      -- selection node-wise (scope increment `grc` not carried over)
+      local stacks = {} ---@type table<integer, TSNode[]>
+      local function select_top(stack)
+        local sr, sc, er, ec = stack[#stack]:range()
+        if ec == 0 then er, ec = er - 1, math.max(#vim.fn.getline(er), 1) end
+        if vim.api.nvim_get_mode().mode:match('^[vV\22]') then
+          vim.cmd('normal! \27')
+        end
+        vim.fn.setpos("'<", { 0, sr + 1, sc + 1, 0 })
+        vim.fn.setpos("'>", { 0, er + 1, ec, 0 })
+        vim.cmd('normal! gv')
+      end
+      vim.keymap.set('n', 'gnn', function()
+        local ok, parser = pcall(vim.treesitter.get_parser)
+        if not ok or not parser then return end
+        -- the tree may not be parsed yet (highlighting parses lazily on
+        -- redraw, and may be disabled for this language entirely)
+        local row = vim.api.nvim_win_get_cursor(0)[1]
+        parser:parse({ row - 1, row })
+        local node = vim.treesitter.get_node()
+        if not node then return end
+        local buf = vim.api.nvim_get_current_buf()
+        stacks[buf] = { node }
+        select_top(stacks[buf])
+      end, { desc = 'Start treesitter selection' })
+      vim.keymap.set('x', 'grn', function()
+        local stack = stacks[vim.api.nvim_get_current_buf()]
+        if not stack or #stack == 0 then return end
+        local top = stack[#stack]
+        local parent = top:parent()
+        while parent and vim.deep_equal({ parent:range() }, { top:range() }) do
+          parent = parent:parent()
+        end
+        if not parent then return end
+        stack[#stack + 1] = parent
+        select_top(stack)
+      end, { desc = 'Grow treesitter selection' })
+      vim.keymap.set('x', 'grm', function()
+        local stack = stacks[vim.api.nvim_get_current_buf()]
+        if not stack or #stack <= 1 then return end
+        stack[#stack] = nil
+        select_top(stack)
+      end, { desc = 'Shrink treesitter selection' })
     end,
-    config = function() require('nvim-treesitter.configs').setup({
-      modules = {},
-      sync_install = false,
-      compilers = { "clang++", "zig" },
-      ensure_installed = vim.tbl_values(_G.treesitter_ft_mod),
-      auto_install = false,
-      ignore_install = {'lua'},
-      highlight = {
-        enable = true,
-        disable = { "cpp", "bash", "python", "typescript", "go", "yaml" },
-        additional_vim_regex_highlighting = false,
-      },
-      indent = {
-        enable = true,
-        disable = { "python" },
-      },
-      incremental_selection = { enable = true },
-      embedded_template = { enable = true, }
-    }) end,
-    lazy = true,
-    event = 'UIEnter',
   },
   {
     'nmac427/guess-indent.nvim',
@@ -1216,28 +1264,26 @@ return {
 
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
+    dependencies = 'neovim-treesitter/nvim-treesitter',
     config = function()
-      --- @diagnostic disable: missing-fields
-      require('nvim-treesitter.configs').setup({
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true,
-            keymaps = {
-              ["af"] = "@function.outer",
-              ["if"] = "@function.inner",
-              ["ac"] = "@class.outer",
-              ["ic"] = "@class.inner",
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = { ["<LocalLeader>xp"] = "@parameter.inner" },
-            swap_previous = { ["<LocalLeader>px"] = "@parameter.inner" },
-          },
-        },
+      require('nvim-treesitter-textobjects').setup({
+        select = { lookahead = true },
       })
+      local function select(query)
+        return function()
+          require('nvim-treesitter-textobjects.select').select_textobject(query, 'textobjects')
+        end
+      end
+      local function swap(fn, query)
+        return function() require('nvim-treesitter-textobjects.swap')[fn](query) end
+      end
+      vim.keymap.set({ 'x', 'o' }, 'af', select('@function.outer'))
+      vim.keymap.set({ 'x', 'o' }, 'if', select('@function.inner'))
+      vim.keymap.set({ 'x', 'o' }, 'ac', select('@class.outer'))
+      vim.keymap.set({ 'x', 'o' }, 'ic', select('@class.inner'))
+      vim.keymap.set('n', '<LocalLeader>xp', swap('swap_next', '@parameter.inner'))
+      vim.keymap.set('n', '<LocalLeader>px', swap('swap_previous', '@parameter.inner'))
     end,
     lazy = true,
     event = "VeryLazy",
@@ -1245,48 +1291,20 @@ return {
   {
     "ThePrimeagen/refactoring.nvim",
     dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
+      "lewis6991/async.nvim",
+      "neovim-treesitter/nvim-treesitter",
     },
     opts = {},
     lazy = true,
     event = 'VeryLazy',
   },
   {
-    'nvim-treesitter/nvim-treesitter-refactor',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
-    config = function()
-      --- @diagnostic disable: missing-fields
-      require('nvim-treesitter.configs').setup({
-        refactor = {
-          highlight_current_scope = { enable = false },
-          highlight_definitions = { enable = true },
-          smart_rename = {
-            enable = true,
-            keymaps = {
-              smart_rename = "<LocalLeader>rn",
-            },
-          },
-        },
-      })
-    end,
-    lazy = true,
-    event = "VeryLazy",
-  },
-
-  {
     'andymass/vim-matchup',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
+    dependencies = 'neovim-treesitter/nvim-treesitter',
     lazy = true,
     event = 'VeryLazy',
   },
 
-  -- vim.fn.synstack(...) no longer works under treesitter
-  -- use :TSHighlightCapturesUnderCursor instead
-  {
-    'nvim-treesitter/playground',
-    dependencies = 'nvim-treesitter/nvim-treesitter',
-    lazy = true,
-    event = "VeryLazy",
-  },
+  -- vim.fn.synstack(...) no longer works under treesitter;
+  -- use the builtin :Inspect / :InspectTree / :EditQuery instead
 }
