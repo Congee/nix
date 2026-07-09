@@ -19,7 +19,7 @@ in
     mtr
     stats
     docker docker-credential-helpers
-    # oxker  # help-panel snapshot test asserts a macOS keymap label and fails to build on darwin
+    (pkgs.oxker.overrideAttrs (_: { doCheck = false; })) # help-panel snapshot test asserts a macOS keymap label and fails to build on darwin
     macmon
     pinentry_mac
     pngpaste  # darwin-only; was in common.nix but unavailable on linux
@@ -59,6 +59,10 @@ in
   home.sessionVariables = {
     FONTCONFIG_PATH = "${config.xdg.configHome}/fontconfig";
   };
+
+  programs.chromium.enable = true;
+  programs.chromium.package = pkgs.brave; # .override { commandLineArgs = "--remote-debugging-port=9222"; };
+  programs.chromium.commandLineArgs = [ "--remote-debugging-port=9222" ];
 
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
