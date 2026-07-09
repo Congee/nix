@@ -67,6 +67,29 @@ in
   };
 
   programs.home-manager.enable = true;  # to use the unstable in nix-channel
+
+  # nix-collect-garbage deletes ~/.nix-profile's target: HM standalone installs
+  # home.packages into the default `nix profile` for PATH, but nothing GC-roots
+  # that profile (unlike the home-manager profile), so GC reclaims it and
+  # ~/.nix-profile dangles. Root it here, after installPackages. The added root
+  # (bottom) pins the same user-env ~/.nix-profile resolves to:
+  #
+  #   ~/.nix-profile
+  #     -> ~/.local/state/nix/profiles/profile
+  #       -> profile-N-link
+  #         -> /nix/store/...-user-environment    <- git, lean-ctx, lspmux, ...
+  #   /nix/var/nix/gcroots/auto/<hash>
+  #     -> ~/.local/state/home-manager/gcroots/profile
+  #       -> /nix/store/...-user-environment       (same path; the new GC root)
+  home.activation.rootDefaultProfile = lib.hm.dag.entryAfter [ "installPackages" ] ''
+    profile="$(readlink -f "$HOME/.nix-profile")"
+    if [ -n "$profile" ] && [ -e "$profile" ]; then
+      gcroots="''${XDG_STATE_HOME:-$HOME/.local/state}/home-manager/gcroots"
+      run mkdir -p "$gcroots"
+      run nix-store --realise "$profile" --add-root "$gcroots/profile" > /dev/null
+    fi
+  '';
+
   nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
     leetcode-cli
