@@ -92,18 +92,15 @@ in
     unzip
     binutils  # ar for libluajit.a
     socat
-    websocat
     ccache
     # racket
     python3 uv
-    nur.rsql
     supabase-cli stripe-cli
     nodejs pnpm bun
     claude-monitor
     nur.engram
-    llm-agents.beads-rust
-    llm-agents.beads-viewer
-    nur.skills
+    llm-agents.skills llm-agents.lean-ctx
+    nur.llmster nur.rapid-mlx
     llm-agents.agent-browser
     yarn
     nur.sentry sentry-cli
@@ -209,7 +206,6 @@ in
     typescript-language-server
     vtsls vue-language-server
     nur.some-sass-language-server
-    nur.pruner
     emmylua-ls
     vim-language-server
     yaml-language-server
