@@ -100,7 +100,8 @@ in
     claude-monitor
     nur.engram
     llm-agents.skills llm-agents.lean-ctx
-    nur.llmster nur.rapid-mlx
+    # nur.llmster / nur.rapid-mlx are MLX (Apple-Silicon) tools; not available
+    # on x86_64-linux, so they live in darwin.nix rather than this shared module.
     llm-agents.agent-browser
     yarn
     nur.sentry sentry-cli

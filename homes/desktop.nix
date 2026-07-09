@@ -38,7 +38,7 @@ in
     nautilus
     zenity  # --color-selection
     kanshi  # display configuration tool
-    greetd.tuigreet  # display/login manager
+    tuigreet  # display/login manager (moved out of greetd.* in newer nixpkgs)
     handlr xdg-utils  # xdg-open
     xvfb-run
     procs psmisc  # pstree, fuser

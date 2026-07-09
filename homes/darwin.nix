@@ -21,6 +21,7 @@ in
     docker docker-credential-helpers
     (pkgs.oxker.overrideAttrs (_: { doCheck = false; })) # help-panel snapshot test asserts a macOS keymap label and fails to build on darwin
     macmon
+    nur.llmster nur.rapid-mlx  # MLX (Apple-Silicon) tools; darwin-only, moved from common.nix
     pinentry_mac
     pngpaste  # darwin-only; was in common.nix but unavailable on linux
     applesauce
