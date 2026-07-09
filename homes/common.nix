@@ -196,14 +196,10 @@ in
     buf
     basedpyright
     clang-tools
-    zig zls
     ctop
     docker-compose-language-service
     dockerfile-language-server
-    eslint_d
     docker-language-server
-    golangci-lint-langserver
-    gopls
     harper
     helm-ls
     vscode-langservers-extracted # html-lsp bin/vscode-html-language-server
