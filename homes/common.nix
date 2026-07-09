@@ -426,8 +426,6 @@ in
     "--bind alt-up:preview-top,alt-down:preview-bottom"
   ];
 
-  programs.java.enable = true;
-
   # Need this environment to build some native stuff
   # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   programs.neovim.enable = true;
