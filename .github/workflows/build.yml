@@ -1,0 +1,71 @@
+name: "Build and populate cache"
+
+# Replaces Garnix CI. Builds every flake output on push and pushes the results
+# to the `congee` Cachix cache (the same cache Congee/nur uses), so the Mac and
+# blackbox pull binaries instead of rebuilding.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   CACHIX_AUTH_TOKEN   - required, from `cachix authtoken` / app.cachix.org
+#   CACHIX_SIGNING_KEY  - optional, only if the cache uses a signing key
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # x86_64-linux outputs
+          - os: ubuntu-latest
+            targets: >-
+              .#homeConfigurations.desktop.activationPackage
+              .#homeConfigurations.wsl.activationPackage
+              .#nixosConfigurations.blackbox.config.system.build.toplevel
+          # aarch64-darwin outputs. macos-latest is Apple Silicon and, unlike
+          # Garnix's darwin sandbox, is a real macOS host with loopback, so
+          # agent-browser's `next build` and everything else build unpatched.
+          - os: macos-latest
+            targets: >-
+              .#darwinConfigurations.mac.system
+              .#homeConfigurations.mac.activationPackage
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Free up disk space
+        if: runner.os == 'Linux'
+        # NixOS system closures are large; reclaim space the runner image spends
+        # on toolchains this build never touches.
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost || true
+          sudo docker image prune --all --force || true
+
+      - name: Install nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup cachix
+        uses: cachix/cachix-action@v17
+        with:
+          name: congee
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+          signingKey: '${{ secrets.CACHIX_SIGNING_KEY }}'
+
+      - name: Build configurations
+        # CI builds the committed placeholder identity (username "nixbuilder");
+        # the real username stays out of git. Store paths that don't depend on
+        # the username are shared with local `--override-input identity` builds.
+        run: nix build --no-link --print-build-logs --keep-going ${{ matrix.targets }}
