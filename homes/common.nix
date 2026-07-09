@@ -336,6 +336,12 @@ in
 
   programs.zsh.enable = true;
   programs.zsh.dotDir = config.home.homeDirectory;
+  # dotDir = $HOME makes home-manager's zsh module manage ~/.zprofile itself, so
+  # the WSL NIX_PATH shim must go through profileExtra: a second
+  # home.file.".zprofile" would be a rival manager of ~/.zprofile and collide at
+  # build time ("Error installing file './.zprofile' outside $HOME"). The uname
+  # guard inside makes it a no-op off WSL, so it's harmless on desktop/darwin.
+  programs.zsh.profileExtra = builtins.readFile ../config/.zprofile;
   programs.zsh.plugins = [
     # OMG this is sick, aggresive
     # {

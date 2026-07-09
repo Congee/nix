@@ -1,8 +1,5 @@
 { config, pkgs, lib, ... }:
 
-let
-  ln = config.lib.file.mkOutOfStoreSymlink;
-in
 {
   imports = [
     ./common.nix
@@ -14,5 +11,6 @@ in
     bind  # dig
   ];
 
-  home.file.".zprofile".source = ln ../config/.zprofile;
+  # ~/.zprofile is managed by common.nix via programs.zsh.profileExtra; declaring
+  # it again here would collide with the zsh module's generated ~/.zprofile.
 }

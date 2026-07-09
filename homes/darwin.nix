@@ -71,6 +71,7 @@ in
   programs.wezterm.package = pkgs.wezterm;
   home.file.".config/alacritty/alacritty.yml".source = ln ../config/alacritty.macos.yml;
 
-  home.file.".zprofile".source = ln ../config/.zprofile;
+  # ~/.zprofile is managed by common.nix via programs.zsh.profileExtra; declaring
+  # it again here would collide with the zsh module's generated ~/.zprofile.
   home.file.".zshrc.mac".source = ln ../config/.zshrc.mac;
 }
