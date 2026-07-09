@@ -65,6 +65,11 @@ in
   programs.chromium.package = pkgs.brave; # .override { commandLineArgs = "--remote-debugging-port=9222"; };
   programs.chromium.commandLineArgs = [ "--remote-debugging-port=9222" ];
 
+  # Point oxker at OrbStack's docker socket. $HOME is kept literal (single-quoted
+  # in the generated alias) so it resolves at runtime and the absolute home path
+  # is never baked into the nix store.
+  programs.zsh.shellAliases.oxker = ''oxker --host "unix://$HOME/.orbstack/run/docker.sock"'';
+
   programs.alacritty.enable = true;
   programs.alacritty.package = pkgs.alacritty;
   programs.wezterm.enable = false;
