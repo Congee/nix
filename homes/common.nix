@@ -420,6 +420,7 @@ in
 
   programs.fzf.enable = true;
   programs.fzf.enableZshIntegration = true;
+  programs.fzf.historyWidget.zsh.command = "";
   programs.fzf.defaultOptions = [
     "--bind alt-y:preview-up,alt-e:preview-down"
     "--bind alt-up:preview-top,alt-down:preview-bottom"
