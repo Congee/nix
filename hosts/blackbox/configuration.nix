@@ -101,8 +101,8 @@ in
     git
     at-spi2-core  # pkgs.xdg-desktop-portal-gtk
     virt-manager
+    android-tools  # was programs.adb.enable, removed in nixos-26.05 (systemd 258)
   ];
-  programs.adb.enable = true;
 
   # TODO: move to userland
   # https://github.com/NixOS/nixpkgs/issues/31293
@@ -252,6 +252,8 @@ in
   ];
 
   virtualisation.docker.enable = true;
+  # module default is the insecure 28.5.2; pkgs.docker is the maintained one
+  virtualisation.docker.package = pkgs.docker;
   virtualisation.docker.daemon.settings = {
     containerd = "/run/containerd/containerd.sock";
     containerd-namespace = "k8s.io";

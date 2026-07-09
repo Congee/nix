@@ -5,7 +5,7 @@
     nur.url                             = "github:nix-community/NUR";
     nur.inputs.nixpkgs.follows          = "nixpkgs";
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixos-unstable";
-    nixos.url                           = "github:NixOS/nixpkgs/nixos-25.11";
+    nixos.url                           = "github:NixOS/nixpkgs/nixos-26.05";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
