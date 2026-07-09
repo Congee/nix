@@ -14,7 +14,10 @@
   environment.systemPackages = [
     pkgs.cacert
     pkgs.home-manager
-    pkgs.mpv
+    # mpv's default yt-dlp enables javascriptSupport, which pulls deno ->
+    # rusty_v8 and won't compile V8 from source on darwin. yt-dlp-light has
+    # javascriptSupport disabled, so override it here where mpv is referenced.
+    (pkgs.mpv.override { yt-dlp = pkgs.yt-dlp-light; })
   ];
 
   # Use a custom configuration.nix location.

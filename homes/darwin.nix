@@ -19,7 +19,7 @@ in
     mtr
     stats
     docker docker-credential-helpers
-    oxker
+    # oxker  # help-panel snapshot test asserts a macOS keymap label and fails to build on darwin
     macmon
     pinentry_mac
     pngpaste  # darwin-only; was in common.nix but unavailable on linux

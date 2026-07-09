@@ -33,6 +33,38 @@
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs:
   let
     username = (import inputs.identity).username;
+
+    # Work around an upstream package that fails to *build* (not eval) against
+    # the current nixpkgs pin. Kept minimal so the rest of the closure stays
+    # cache-hit on Cachix. litecli's dep cli-helpers has failing pytest cases
+    # after a Pygments bump; skip its test phase (runtime is unaffected).
+    buildFixes = _: prev: {
+      litecli = prev.litecli.override {
+        python3Packages = prev.python3Packages // {
+          cli-helpers = prev.python3Packages.cli-helpers.overridePythonAttrs (_: {
+            doCheck = false;
+          });
+        };
+      };
+    };
+
+    # desktop-only: on this nixpkgs pin the wayfire stack (wf-config 0.10,
+    # wayfire 0.10.1, incl. its wf-touch subproject) enables doctest unit tests,
+    # but their test binaries link `-ldoctest` while nixpkgs' doctest 2.5.0 is
+    # header-only -> `ld: cannot find -ldoctest`. The libraries themselves build
+    # fine (and older pins built because the tests were gated differently), so
+    # turn the tests off. Affects nixpkgs and the wayland overlay equally; only
+    # the desktop config pulls wayfire. (wcm has no tests; it just needs wayfire.)
+    desktopBuildFixes = _: prev: {
+      wf-config = prev.wf-config.overrideAttrs (o: {
+        doCheck = false;
+        mesonFlags = (o.mesonFlags or [ ]) ++ [ "-Dtests=disabled" ];
+      });
+      wayfire = prev.wayfire.overrideAttrs (o: {
+        doCheck = false;
+        mesonFlags = (o.mesonFlags or [ ]) ++ [ "-Dtests=disabled" "-Dwf-touch:tests=disabled" ];
+      });
+    };
   in {
     # home-manager
     homeConfigurations = {
@@ -48,6 +80,8 @@
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
+              buildFixes
+              desktopBuildFixes
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
@@ -67,6 +101,7 @@
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
+              buildFixes
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
@@ -83,6 +118,7 @@
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
+              buildFixes
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
