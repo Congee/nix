@@ -97,7 +97,7 @@
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
-              inputs.llm-agents.overlays.default
+              inputs.llm-agents.overlays.shared-nixpkgs
               buildFixes
               desktopBuildFixes
               stubOverlay
@@ -119,7 +119,7 @@
             nixpkgs.overlays = [
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
-              inputs.llm-agents.overlays.default
+              inputs.llm-agents.overlays.shared-nixpkgs
               buildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
@@ -137,7 +137,7 @@
             nixpkgs.overlays = [
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
-              inputs.llm-agents.overlays.default
+              inputs.llm-agents.overlays.shared-nixpkgs
               buildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
