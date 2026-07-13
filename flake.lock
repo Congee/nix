@@ -482,8 +482,21 @@
         "nixos": "nixos",
         "nixpkgs": "nixpkgs_2",
         "nur": "nur",
+        "stubs": "stubs",
         "wayland": "wayland"
       }
+    },
+    "stubs": {
+      "flake": false,
+      "locked": {
+        "path": "./stubs.default.nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "./stubs.default.nix",
+        "type": "path"
+      },
+      "parent": []
     },
     "systems": {
       "locked": {

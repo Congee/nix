@@ -28,6 +28,17 @@
     #   --override-input identity path:$HOME/.secrets/identity.nix
     identity.url                        = "path:./identity.default.nix";
     identity.flake                      = false;
+
+    # Per-machine list of package names to replace with an empty no-op (see the
+    # stubOverlay below), so an in-progress nixpkgs bump still builds when a leaf
+    # tool is temporarily broken upstream (e.g. the cctools-ld64 crash on darwin,
+    # nixpkgs #540408). Committed default stubs nothing; put names in the
+    # gitignored ~/.nix/stubs.nix (e.g. `[ "unar" "watchexec" "stats" ]`) and
+    # select it per-invocation (a path override reads the ignored file and stays
+    # pure -> no --impure) with:
+    #   --override-input stubs path:$HOME/.nix/stubs.nix
+    stubs.url                           = "path:./stubs.default.nix";
+    stubs.flake                         = false;
   };
 
   outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs:
@@ -47,6 +58,13 @@
         };
       };
     };
+
+    stubbedPackages = import inputs.stubs;
+    stubOverlay = final: _prev:
+      builtins.listToAttrs (map (name: {
+        inherit name;
+        value = final.runCommandLocal "${name}-stub" { } "mkdir -p $out";
+      }) stubbedPackages);
 
     # desktop-only: on this nixpkgs pin the wayfire stack (wf-config 0.10,
     # wayfire 0.10.1, incl. its wf-touch subproject) enables doctest unit tests,
@@ -82,6 +100,7 @@
               inputs.llm-agents.overlays.default
               buildFixes
               desktopBuildFixes
+              stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
@@ -102,6 +121,7 @@
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
               buildFixes
+              stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
@@ -119,6 +139,7 @@
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.default
               buildFixes
+              stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
           }
