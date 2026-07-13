@@ -123,20 +123,7 @@ in
     claude-monitor
     nur.engram
     llm-agents.skills llm-agents.lean-ctx
-    # nur.llmster / nur.rapid-mlx are MLX (Apple-Silicon) tools; not available
-    # on x86_64-linux, so they live in darwin.nix rather than this shared module.
-    #
-    # agent-browser's dashboard builds Next.js with pnpm_11 + nodejs-slim
-    # directly, so the top-level pnpm override can't reach it. nixpkgs nodejs_24
-    # (24.16.0) still spams unmanaged-fd warnings from worker threads on darwin
-    # (nixpkgs #525627). It's wrapped as `{ pkgs }: pkgs.callPackage ...`, so the
-    # only override surface is pkgs; extend it to swap nodejs-slim (pnpm_11
-    # rebuilds against it via the fixpoint).
-    (llm-agents.agent-browser.override (old: {
-      pkgs = old.pkgs.extend (_: prev: {
-        nodejs-slim = prev.nodejs-slim_latest;
-      });
-    }))
+    agent-browser
     yarn
     nur.sentry sentry-cli
     duf gdu dua dust # nix-du
