@@ -903,7 +903,7 @@ return {
           'score', 'kind', 'label',
           --- @type blink.cmp.SortFunction
           [4] = function (a, b)
-            if a.client_name ~= 'lua_ls' then return nil end
+            if a.client_name ~= 'emmylua_ls' then return nil end
 
             local aunderscore = a.label:find('^_') ~= nil;
             local bunderscore = b.label:find('^_') ~= nil;

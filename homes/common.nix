@@ -212,7 +212,7 @@ in
     docker-language-server
     harper
     helm-ls
-    lua-language-server luajit luajitPackages.luarocks
+    luajit luajitPackages.luarocks
     markdownlint-cli2 mermaid-cli
     # mesonlsp
     nil
