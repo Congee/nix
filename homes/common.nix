@@ -3,6 +3,19 @@
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
   nur = pkgs.nur.repos.congee;
+  # nixpkgs pins luajit_2_1 months behind the v2.1 branch. `self` must be
+  # re-tied (recursively, here), or luajit.pkgs/withPackages keep building
+  # against the old interpreter and nvim links that instead.
+  luajitLatest = pkgs.luajit_2_1.override {
+    self = luajitLatest;
+    version = "2.1.1785763465";  # $(nix build --print-out-paths ...luajit.src)/.relver
+    src = pkgs.fetchFromGitHub {
+      owner = "LuaJIT";
+      repo = "LuaJIT";
+      rev = "1edc3e52b67eaf6ce5f809be8e17d6862594b8bc";
+      hash = "sha256-mcOvVJ7AaoHrbEXxznpOkFoY7Kbd2aWMoOmyx5B4FIg=";
+    };
+  };
   kitty_resize = pkgs.stdenvNoCC.mkDerivation {
     name = "kitty_resize";
     version = "0";
@@ -434,7 +447,8 @@ in
   # Need this environment to build some native stuff
   # nix shell nixpkgs#llvmPackages_14.clang nixpkgs#zig nixpkgs#tree-sitter
   programs.neovim.enable = true;
-  programs.neovim.package = pkgs.neovim;
+  # unwrapped: home-manager wraps it itself, and only it takes `luajit`
+  programs.neovim.package = pkgs.neovim-unwrapped.override { luajit = luajitLatest; };
   programs.neovim.extraPackages = [pkgs.llvmPackages_latest.clang];
   programs.neovim.withPython3 = false;
   programs.neovim.withRuby = false;
