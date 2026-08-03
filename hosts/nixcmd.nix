@@ -18,12 +18,14 @@
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       # own cache: CI (GitHub Actions) builds this flake's configs and pushes here
       "congee.cachix.org-1:OsgAoKCjYNxE0eU32/Acu7tzMeUUqC+iixIX1S9mNyQ="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
     settings.substituters = [
       "https://cache.iog.io/"
       "https://nixpkgs-wayland.cachix.org"
       "https://nix-community.cachix.org/"
       "https://congee.cachix.org"
+      "https://cache.numtide.com"
     ];
   };
 }

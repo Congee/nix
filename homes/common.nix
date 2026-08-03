@@ -212,7 +212,6 @@ in
     docker-language-server
     harper
     helm-ls
-    vscode-langservers-extracted # html-lsp bin/vscode-html-language-server
     lua-language-server luajit luajitPackages.luarocks
     markdownlint-cli2 mermaid-cli
     # mesonlsp
