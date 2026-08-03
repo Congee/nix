@@ -1,25 +1,28 @@
 [push]
     default = simple
+    followtags = true
+[fetch]
+    all = true
+    prune = true
 [advice]
     skippedcherrypicks = true
 [alias]
     exec = ! exec  ;  shell aliases are always executed in the top-level directory
     aliases = config --get-regexp alias
-    push = push --follow-tags
-    authors = shortlog -sn
-    fetch = fetch --all --prune
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --boundary
     co = checkout
     meh = ! env GIT_AUTHOR_DATE='$(git log --no-walk --format=%ad)' git commit --amend --no-edit
     who = shortlog -sn
-    frebase = !"git rebase --committer-date-is-author-date --interactive $(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1)^"
+    # test $c guards a cancelled fzf: empty would fall through to --root and replay everything
+    frebase = !"c=$(git log --pretty=oneline --decorate --abbrev-commit | fzf | cut -d ' ' -f1) && test $c && git rebase --committer-date-is-author-date --interactive $(git rev-parse -q --verify $c^ || echo --root) #"
     lg = log --all --color --graph --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit
     cmp = log --left-right --graph --oneline --cherry
     cp = cherry-pick
-    prunelocal = !"git branch --verbose | fgrep '[gone]' | awk '{print $1}' | xargs --no-run-if-empty git branch -D"
-    # It translates to `sh -c '${cmd} "$@"' '${cmd}' args`. So, came the trailing `#`
-    # https://stackoverflow.com/a/41305925/1641838
-    fixup = !"git commit --fixup=$1 && git rebase --committer-date-is-author-date --autostash --autosquash --rebase-merges $1~1 #"
+    # not `branch -v | grep [gone]`: that also matches a commit subject containing [gone]
+    prunelocal = !"git for-each-ref --format='%(refname:short) %(upstream:track,nobracket)' refs/heads | awk '$2 ~ /^gone$/ { print $1 }' | xargs --no-run-if-empty git branch -D"
+    # resolve the rev up front; HEAD moves after --fixup, so a bare $1~1 lands one commit too shallow
+    # $c~1 is invalid for a root commit, hence the --root fallback
+    fixup = !"c=$(git rev-parse $1) && git commit --fixup=$c && git rebase --committer-date-is-author-date --autostash --autosquash --rebase-merges $(git rev-parse -q --verify $c~1 || echo --root) #"
 [rerere]
     enabled = true
     autoupdate = true
