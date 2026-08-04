@@ -7,36 +7,11 @@
 --- @return string
 _G.hiof = |id, what, mode| -> vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode);
 
---- @generic K, V
---- @param tbl table<K, V>
---- @return K[]
-_G.keys = function(tbl)
-  local ks = {}
-  for k, _ in pairs(tbl) do
-    ks[#ks + 1] = k
-  end
-  return ks;
-end
-
---- @generic K, V
---- @param tbl table<K, V>
---- @return V[]
-_G.values = function(tbl)
-  local vals = {}
-  for _, v in pairs(tbl) do
-    vals[#vals + 1] = v;
-  end
-  return vals
-end
-
+-- vim.print already returns its argument, but typed as `any`
 --- @generic T
---- @param object T
+--- @param x T
 --- @return T
-_G.trace = function(object)
-  local inspect = require('inspect')
-  print(inspect(object));
-  return object
-end
+_G.trace = |x| -> vim.print(x);
 
 if _VERSION == "Lua 5.1" or _VERSION == "LuaJIT" then
   ---@diagnostic disable: deprecated
