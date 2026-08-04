@@ -16,6 +16,21 @@ let
       hash = "sha256-mcOvVJ7AaoHrbEXxznpOkFoY7Kbd2aWMoOmyx5B4FIg=";
     };
   };
+  # The stock lua grammar can't parse the v2.1 syntax extensions, and one ERROR
+  # node costs highlighting for the rest of the file. Same v0.5.0 nvim bundles;
+  # queries live in config/nvim/queries/lua.
+  treeSitterLuaExt = pkgs.tree-sitter.buildGrammar {
+    language = "lua";
+    version = "0.5.0";
+    generate = true;  # the patch touches grammar.js, so src/parser.c is stale
+    patches = [ ./tree-sitter-lua-luajit.patch ];
+    src = pkgs.fetchFromGitHub {
+      owner = "tree-sitter-grammars";
+      repo = "tree-sitter-lua";
+      rev = "v0.5.0";
+      hash = "sha256-VzaaN5pj7jMAb/u1fyyH6XmLI+yJpsTlkwpLReTlFNY=";
+    };
+  };
   kitty_resize = pkgs.stdenvNoCC.mkDerivation {
     name = "kitty_resize";
     version = "0";
@@ -455,6 +470,9 @@ in
   programs.neovim.viAlias = true;
   programs.neovim.withNodeJs = false;
   programs.neovim.sideloadInitLua = true; # xdg.configFile."nvim/init.lua".enable = false;
+  # site/ outranks the parser nvim bundles; `lua` is left out of
+  # _G.treesitter_ft_mod, so :TSUpdate never overwrites this.
+  xdg.dataFile."nvim/site/parser/lua.so".source = "${treeSitterLuaExt}/parser";
   home.activation.nvim = lib.hm.dag.entryAfter ["wrieBoundary"] ''
     run ln -sf ${config.home.homeDirectory}/.nix/config/nvim ${config.xdg.configHome}/nvim;
   '';

@@ -1,0 +1,316 @@
+--- a/grammar.js
++++ b/grammar.js
+@@ -8,18 +8,23 @@
+ // @ts-check
+ 
+ const PREC = {
+-  OR: 1, // or
+-  AND: 2, // and
+-  COMPARE: 3, // < > <= >= ~= ==
+-  BIT_OR: 4, // |
+-  BIT_NOT: 5, // ~
+-  BIT_AND: 6, // &
+-  BIT_SHIFT: 7, // << >>
+-  CONCAT: 8, // ..
+-  PLUS: 9, // + -
+-  MULTI: 10, // * / // %
+-  UNARY: 11, // not # - ~
+-  POWER: 12, // ^
++  LAMBDA: 0, // -> (body extends as far right as possible)
++  // TERNARY must sit strictly between _prefix_expression's prec(1) and OR:
++  // above 1 so a ternary's ':' beats a method call, below OR so `a or b ? c : d`
++  // still groups as `(a or b) ? c : d`.
++  TERNARY: 2, // ?:
++  OR: 3, // or || ??
++  AND: 4, // and &&
++  COMPARE: 5, // < > <= >= ~= == !=
++  BIT_OR: 6, // |
++  BIT_NOT: 7, // ~
++  BIT_AND: 8, // &
++  BIT_SHIFT: 9, // << >> ~>>
++  CONCAT: 10, // ..
++  PLUS: 11, // + -
++  MULTI: 12, // * / // %
++  UNARY: 13, // not ! # - ~
++  POWER: 14, // ^
+ };
+ 
+ const list_seq = (rule, separator, trailing_separator = false) =>
+@@ -51,6 +56,17 @@
+ 
+   word: ($) => $.identifier,
+ 
++  conflicts: ($) => [
++    // `continue` is complete as a statement, so both readings must stay
++    // alive until we know whether a call or index follows.
++    [$.continue_statement, $._contextual_keyword],
++    // A ternary's ':' is indistinguishable from a method call's until the
++    // token after the method name. Upstream's prec(1) on _prefix_expression
++    // pre-empted that split, so it is replaced by explicit conflicts.
++    [$._prefix_expression, $.expression],
++    [$.statement, $._prefix_expression],
++  ],
++
+   rules: {
+     // chunk ::= block
+     chunk: ($) =>
+@@ -96,6 +112,7 @@
+         $.function_call,
+         $.label_statement,
+         $.break_statement,
++        $.continue_statement,
+         $.goto_statement,
+         $.do_statement,
+         $.while_statement,
+@@ -118,10 +135,21 @@
+ 
+     // varlist '=' explist
+     assignment_statement: ($) =>
+-      seq(
+-        alias($._variable_assignment_varlist, $.variable_list),
+-        field('operator', '='),
+-        alias($._variable_assignment_explist, $.expression_list)
++      choice(
++        seq(
++          alias($._variable_assignment_varlist, $.variable_list),
++          field('operator', '='),
++          alias($._variable_assignment_explist, $.expression_list)
++        ),
++        // LuaJIT-Ext: compound assignment; no parallel form
++        seq(
++          field('name', $.variable),
++          field('operator', choice(
++            '+=', '-=', '*=', '/=', '//=', '%=',
++            '&=', '|=', '~=', '<<=', '>>=', '~>>=', '..='
++          )),
++          field('value', $.expression)
++        )
+       ),
+     // varlist ::= var {',' var}
+     _variable_assignment_varlist: ($) =>
+@@ -136,6 +164,9 @@
+     // break
+     break_statement: (_) => 'break',
+ 
++    // LuaJIT-Ext: continue (soft keyword)
++    continue_statement: (_) => 'continue',
++
+     // goto Name
+     goto_statement: ($) => seq('goto', $.identifier),
+ 
+@@ -238,7 +269,13 @@
+         field(
+           'global_declaration',
+           alias($._global_implicit_variable_declaration, $.implicit_variable_declaration)
+-        )
++        ),
++        // LuaJIT-Ext: const declaration
++        field(
++          'const_declaration',
++          alias($._const_function_declaration, $.function_declaration)
++        ),
++        field('const_declaration', alias($._const_variable_declaration, $.variable_declaration))
+       ),
+     // function funcname funcbody
+     function_declaration: ($) =>
+@@ -249,6 +286,18 @@
+     // global function Name funcbody
+     _global_function_declaration: ($) =>
+       seq('global', 'function', field('name', $.identifier), $._function_body),
++    // LuaJIT-Ext: const function Name funcbody
++    _const_function_declaration: ($) =>
++      seq('const', 'function', field('name', $.identifier), $._function_body),
++    // LuaJIT-Ext: const attnamelist ['=' explist]
++    _const_variable_declaration: ($) =>
++      seq(
++        'const',
++        choice(
++          alias($._att_name_list, $.variable_list),
++          alias($._variable_assignment, $.assignment_statement)
++        )
++      ),
+     // funcname ::= Name {'.' Name} [':' Name]
+     _function_name: ($) =>
+       choice(
+@@ -345,7 +394,9 @@
+         $.parenthesized_expression,
+         $.table_constructor,
+         $.binary_expression,
+-        $.unary_expression
++        $.unary_expression,
++        $.ternary_expression,
++        $.lambda_expression
+       ),
+ 
+     // nil
+@@ -381,20 +432,20 @@
+         );
+       }
+ 
+-      const decimal_digits = /[0-9]+/;
++      const decimal_digits = /[0-9][0-9_]*/;
+       const decimal_literal = number_literal(
+         decimal_digits,
+         'e',
+         decimal_digits
+       );
+ 
+-      const hex_digits = /[a-fA-F0-9]+/;
++      const hex_digits = /[a-fA-F0-9][a-fA-F0-9_]*/;
+       const hex_literal = seq(
+         choice('0x', '0X'),
+         number_literal(hex_digits, 'p', decimal_digits)
+       );
+ 
+-      const bin_digits = /[01]+/;
++      const bin_digits = /[01][01_]*/;
+       const bin_literal = seq(
+         choice('0b', '0B'),
+         choice(
+@@ -482,11 +533,18 @@
+ 
+     // prefixexp ::= var | functioncall | '(' exp ')'
+     _prefix_expression: ($) =>
+-      prec(1, choice($.variable, $.function_call, $.parenthesized_expression)),
++      choice($.variable, $.function_call, $.parenthesized_expression),
+ 
+     // var ::=  Name | prefixexp [ exp ] | prefixexp . Name
+     variable: ($) =>
+-      choice($._contextual_keyword, $.identifier, $.bracket_index_expression, $.dot_index_expression),
++      choice(
++        $._contextual_keyword,
++        $.identifier,
++        $.bracket_index_expression,
++        $.dot_index_expression,
++        $.optional_bracket_index_expression,
++        $.optional_dot_index_expression
++      ),
+     // prefixexp [ exp ]
+     bracket_index_expression: ($) =>
+       seq(
+@@ -503,10 +561,41 @@
+         field('field', $.identifier)
+       ),
+ 
++    // LuaJIT-Ext: prefixexp '?.' '[' exp ']'
++    optional_bracket_index_expression: ($) =>
++      seq(
++        field('table', $._prefix_expression),
++        '?.',
++        '[',
++        field('field', $.expression),
++        ']'
++      ),
++    // LuaJIT-Ext: prefixexp '?.' Name
++    optional_dot_index_expression: ($) =>
++      seq(
++        field('table', $._prefix_expression),
++        '?.',
++        field('field', $.identifier)
++      ),
++    // LuaJIT-Ext: prefixexp '?.' ':' Name
++    optional_method_index_expression: ($) =>
++      seq(
++        field('table', $._prefix_expression),
++        '?.',
++        ':',
++        field('method', $.identifier)
++      ),
++
+     // functioncall ::=  prefixexp args | prefixexp ':' Name args
++    // LuaJIT-Ext: the optional '?.' covers f?.(), f?."", f?.{} and obj:m?.()
+     function_call: ($) =>
+       seq(
+-        field('name', choice($._prefix_expression, $.method_index_expression)),
++        field('name', choice(
++          $._prefix_expression,
++          $.method_index_expression,
++          $.optional_method_index_expression
++        )),
++        optional('?.'),
+         field('arguments', $.arguments)
+       ),
+     // prefixexp ':' Name
+@@ -547,16 +636,45 @@
+         field('value', $.expression)
+       ),
+ 
++    // LuaJIT-Ext: a ? b : c
++    ternary_expression: ($) =>
++      prec.right(
++        PREC.TERNARY,
++        seq(
++          field('condition', $.expression),
++          '?',
++          field('consequence', $.expression),
++          ':',
++          field('alternative', $.expression)
++        )
++      ),
++
++    // LuaJIT-Ext: |a, b| -> exp | x -> exp | || -> do block end
++    lambda_expression: ($) =>
++      prec.right(
++        PREC.LAMBDA,
++        seq(
++          field('parameters', choice($.lambda_parameters, $.identifier)),
++          '->',
++          field('body', choice($.expression, $.do_statement))
++        )
++      ),
++    lambda_parameters: ($) => seq('|', optional($._parameter_list), '|'),
++
+     // exp binop exp
+     binary_expression: ($) =>
+       choice(
+         ...[
+           ['or', PREC.OR],
++          ['||', PREC.OR],
++          ['??', PREC.OR],
+           ['and', PREC.AND],
++          ['&&', PREC.AND],
+           ['<', PREC.COMPARE],
+           ['<=', PREC.COMPARE],
+           ['==', PREC.COMPARE],
+           ['~=', PREC.COMPARE],
++          ['!=', PREC.COMPARE],
+           ['>=', PREC.COMPARE],
+           ['>', PREC.COMPARE],
+           ['|', PREC.BIT_OR],
+@@ -564,6 +682,7 @@
+           ['&', PREC.BIT_AND],
+           ['<<', PREC.BIT_SHIFT],
+           ['>>', PREC.BIT_SHIFT],
++          ['~>>', PREC.BIT_SHIFT],
+           ['+', PREC.PLUS],
+           ['-', PREC.PLUS],
+           ['*', PREC.MULTI],
+@@ -600,7 +719,7 @@
+       prec.left(
+         PREC.UNARY,
+         seq(
+-          field('operator', choice('not', '#', '-', '~')),
++          field('operator', choice('not', '!', '#', '-', '~')),
+           field('operand', $.expression),
+         )
+       ),
+@@ -608,9 +727,9 @@
+     // Name
+     identifier: (_) => {
+       const identifier_start =
+-        /[^\p{Control}\s+\-*/%^#&~|<>=(){}\[\];:,.\\'"\d]/;
++        /[^\p{Control}\s+\-*/%^#&~|<>=(){}\[\];:,.?!\\'"\d]/;
+       const identifier_continue =
+-        /[^\p{Control}\s+\-*/%^#&~|<>=(){}\[\];:,.\\'"]*/;
++        /[^\p{Control}\s+\-*/%^#&~|<>=(){}\[\];:,.?!\\'"]*/;
+       return token(seq(identifier_start, identifier_continue));
+     },
+ 
+@@ -629,6 +748,6 @@
+       ),
+ 
+     // only `global` for now
+-    _contextual_keyword: (_) => 'global',
++    _contextual_keyword: (_) => choice('global', 'const', 'continue'),
+   },
+ });
