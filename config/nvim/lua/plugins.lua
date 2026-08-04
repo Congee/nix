@@ -1104,7 +1104,7 @@ return {
       local map = function(key, bufnr)
         local fn = function()
           if vim.bo.filetype ~= sidebar then
-            require('bufferline').go_to_buffer(bufnr, true)
+            require('bufferline').go_to(bufnr, true)
           end
         end
 
