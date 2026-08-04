@@ -98,6 +98,9 @@
               inputs.wayland.overlay
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
+              # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
+              # unmaintained). Stable still ships it, so keep the same look.
+              (_: prev: { inherit (nixos.legacyPackages.${prev.system}) dracula-theme; })
               buildFixes
               desktopBuildFixes
               stubOverlay
@@ -105,7 +108,7 @@
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
             # for goldendict
-            nixpkgs.config.permittedInsecurePackages = [ "qtwebkit-5.212.0-alpha4" ];
+            nixpkgs.config.permittedInsecurePackages = [];
           }
         ];
         extraSpecialArgs = { inherit nixpkgs username; };
@@ -166,10 +169,6 @@
       system = "x86_64-linux";
       modules = [
         {
-          nixpkgs.overlays = [
-            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) nix; })
-            (_: prev: { inherit (nixpkgs.legacyPackages.${prev.system}) gnupg; })
-          ];
           nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (nixos.lib.getName pkg) [
             "steam"
             "steam-run"
