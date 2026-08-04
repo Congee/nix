@@ -619,6 +619,7 @@ return {
           if vim.wo.diff then
             vim.cmd.normal({']c', bang = true})
           else
+            --- @diagnostic disable-next-line: missing-fields, param-type-mismatch
             gs.nav_hunk('next', { navigation_message = false })
           end
         end)
@@ -627,34 +628,50 @@ return {
           if vim.wo.diff then
             vim.cmd.normal({'[c', bang = true})
           else
+            --- @diagnostic disable-next-line: missing-fields, param-type-mismatch
             gs.nav_hunk('prev', { navigation_message = false })
           end
         end)
 
-        -- self:ensure_file_in_index() is called too early
+        -- gitsigns stages buffer content; ensure_file_in_index() runs too early
         -- https://github.com/lewis6991/gitsigns.nvim/blob/c3070fcc2e7da1798041219fde8d88f2e4bf7eb5/lua/gitsigns/git.lua#L178
+        local function saved(fn)
+          return function(...)
+            if vim.bo[bufnr].modified then vim.cmd('silent write') end
+            return fn(...)
+          end
+        end
+
+        -- `git apply --cached` (how gitsigns stages) leaves a zeroed stat, so
+        -- gitstatusd re-hashes the file every prompt. Refreshing it is a side
+        -- effect of this query; `git add --refresh -- <file>` does the same but
+        -- is noisier. Never `update-index`: its trailing path means "register
+        -- worktree content" and clobbers a partial stage with the whole buffer.
         vim.api.nvim_create_autocmd('User', {
+          group = vim.api.nvim_create_augroup('user.gitsigns.sync', { clear = true }),
           pattern = 'GitSignsChanged',
+          -- a truthy return deletes the autocmd
           callback = function(args)
-            vim.cmd('silent write');
-            vim.schedule(function() vim.system({ 'git', 'diff', '--no-ext-diff', '--quiet', '--', args.data.file }) end);
+            vim.system(
+              { 'git', 'diff', '--no-ext-diff', '--quiet', '--', args.data.file },
+              { cwd = vim.fs.dirname(args.data.file) }
+            )
           end,
         })
 
         -- Actions
-        map('n', '<leader>hs', gs.stage_hunk)
-        map('v', '<leader>hs', || -> gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')})
+        -- hs also unstages, on a staged sign
+        map('n', '<leader>hs', saved(gs.stage_hunk))
+        map('v', '<leader>hs', saved(|| -> gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')}))
         map('n', '<leader>hr', gs.reset_hunk)
         map('v', '<leader>hr', || -> gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')})
-        map('n', '<leader>hS', gs.stage_buffer)
-        map('n', '<leader>hu', gs.undo_stage_hunk)
+        map('n', '<leader>hS', saved(gs.stage_buffer))
         map('n', '<leader>hR', gs.reset_buffer)
         map('n', '<leader>hp', gs.preview_hunk_inline)
         map('n', '<leader>hb', || -> gs.blame_line { full = true })
         map('n', '<leader>tb', gs.toggle_current_line_blame)
         map('n', '<leader>hd', gs.diffthis)
         map('n', '<leader>hD', || -> gs.diffthis('~'))
-        map('n', '<leader>td', gs.toggle_deleted)
 
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
