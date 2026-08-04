@@ -1,3 +1,14 @@
+-- the ]e/]w/]h jumps pass float=true; nothing else opens one, so idle cursor does
+vim.api.nvim_create_autocmd('CursorHold', {
+  callback = function()
+    if vim.fn.win_gettype() == 'popup' then return end  -- already in a float
+    -- open_float reuses the LSP preview slot, so it would evict K's hover
+    local hover = vim.b.lsp_floating_preview
+    if hover and vim.api.nvim_win_is_valid(hover) then return end
+    vim.diagnostic.open_float(nil, { focus = false, scope = 'cursor' })
+  end,
+})
+
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
