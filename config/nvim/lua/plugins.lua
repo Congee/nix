@@ -231,7 +231,7 @@ return {
             ["<c-a>"] = || -> require('readline').beginning_of_line(),
             ["<c-u>"] = || -> require('readline').backward_kill_line(),
           };
-          local buf = require('fff.picker_ui').state.input_buf;
+          local buf = require('fff.picker_ui.picker_ui').state.input_buf;
           local opts = { buffer = buf, noremap = true, silent = true };
           for key, action in pairs(keys) do
             vim.keymap.set('i', key, action, opts)
