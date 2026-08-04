@@ -1139,28 +1139,6 @@ return {
     lazy = true,
     event = 'UIEnter',
   },
-  {
-    "nvim-neotest/neotest",
-    dependencies = {
-      "nvim-neotest/nvim-nio",
-      "nvim-neotest/neotest-python",
-      "nvim-neotest/neotest-vim-test",
-      "neovim-treesitter/nvim-treesitter",
-      "antoinemadec/FixCursorHold.nvim"
-    },
-    enabled = false,
-    config = function()
-      require('neotest').setup({
-        adapters = {
-          require('neotest-python')({}),
-          require('neotest-vim-test')({
-            ignore_file_types = { "python", "vim" }
-          }),
-        }
-      });
-    end,
-    ft = { "python" },
-  },
   { 'qvalentin/helm-ls.nvim', lazy = true, ft = 'helm', opts = {} },
   -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
   { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
