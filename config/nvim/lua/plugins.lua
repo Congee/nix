@@ -274,7 +274,9 @@ return {
     --- @module 'snacks'
     --- @type snacks.Config
     opts = {
+      --- @diagnostic disable-next-line: missing-fields
       image = { doc = { inline = false } },
+      --- @diagnostic disable-next-line: missing-fields
       picker = {
         enabled = true,
         layout = {
@@ -314,7 +316,6 @@ return {
     },
     --- @module 'octo'
     --- @type OctoConfig
-    --- @diagnostic disable-next-line: missing-fields
     opts = {
       default_to_projects_v2 = true,
       picker = 'snacks',
@@ -435,7 +436,6 @@ return {
     "MeanderingProgrammer/render-markdown.nvim",
     --- @module 'render-markdown'
     --- @type render.md.Config
-    --- @diagnostic disable: missing-fields
     opts = {
       completions = { blink = { enabled = true } },
       code = { style = 'normal' },  -- remove ``` langeuage indicator on hover
@@ -448,7 +448,6 @@ return {
         },
       },
     },
-    --- @diagnostic enable: missing-fields
   },
   {
     'obsidian-nvim/obsidian.nvim',
@@ -599,7 +598,6 @@ return {
     dependencies = 'nvim-lua/plenary.nvim',
     --- @module 'gitsigns'
     --- @type Gitsigns.Config
-    --- @diagnostic disable-next-line: missing-fields
     opts = {
       -- Options passed to nvim_open_win
       preview_config = {
@@ -662,7 +660,6 @@ return {
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
       end
     },
-    --- @diagnostic enable: missing-fields
     lazy = true,
     event = "UIEnter",
   },
@@ -820,13 +817,11 @@ return {
     --- @module 'lazydev'
     --- @type lazydev.Config
     opts = {
-      --- @diagnostic disable: missing-fields
       library = {
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
         { path = "wezterm-types", mods = { "wezterm" } },
         { path = 'nvim-lspconfig', words = { 'lspconfig' } },
       },
-      --- @diagnostic enable: missing-fields
     },
   },
   {
@@ -1055,6 +1050,7 @@ return {
     lazy = true,
     event = 'VeryLazy',
     config = function()
+      --- @diagnostic disable-next-line: missing-fields
       require("neo-tree").setup({
         window = {
           mappings = {
