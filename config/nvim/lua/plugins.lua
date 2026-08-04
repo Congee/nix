@@ -5,9 +5,7 @@
 --- @param what "'fg'" | "'bg'"
 --- @param mode "'gui'" | "'cterm'" | "'term'"
 --- @return string
-_G.hiof = function(id, what, mode)
-  return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode)
-end
+_G.hiof = |id, what, mode| -> vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode);
 
 --- @generic K, V
 --- @param tbl table<K, V>
@@ -48,7 +46,7 @@ end
 --- @generic T
 --- @param x T
 --- @return T
-function _G.id(x) return x end
+_G.id = |x| -> x
 
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
@@ -86,9 +84,9 @@ return {
     lazy = true,
     event = 'VeryLazy',
     config = function()
-      vim.api.nvim_create_user_command('Duck', function() require("duck").hatch() end, {})
-      vim.api.nvim_create_user_command('DuckCook', function() require("duck").cook() end, {})
-      vim.api.nvim_create_user_command('DuckCookAll', function() require("duck").cook_all() end, {})
+      vim.api.nvim_create_user_command('Duck', || -> require("duck").hatch(), {})
+      vim.api.nvim_create_user_command('DuckCook', || -> require("duck").cook(), {})
+      vim.api.nvim_create_user_command('DuckCookAll', || -> require("duck").cook_all(), {})
     end
   },
   -- {
@@ -205,7 +203,7 @@ return {
       }, ',');
       vim.cmd [[hi Cursor guifg=NONE guibg=NONE gui=nocombine ]]
     end),
-    enabled = function() return vim.fn.has('linux') == 1 end,
+    enabled = || -> vim.fn.has('linux') == 1,
   },
 
   {
@@ -222,10 +220,10 @@ return {
       end
 
       local opts = { silent = true, remap = true, expr = true }
-      vim.keymap.set('n', 'f', function() return check('f') end, opts)
-      vim.keymap.set('n', 'F', function() return check('F') end, opts)
-      vim.keymap.set('n', 't', function() return check('t') end, opts)
-      vim.keymap.set('n', 'T', function() return check('T') end, opts)
+      vim.keymap.set('n', 'f', || -> check('f'), opts)
+      vim.keymap.set('n', 'F', || -> check('F'), opts)
+      vim.keymap.set('n', 't', || -> check('t'), opts)
+      vim.keymap.set('n', 'T', || -> check('T'), opts)
       vim.cmd [[
         map ;     <Plug>(clever-f-repeat-forward)
         map <M-,> <Plug>(clever-f-repeat-back)
@@ -236,7 +234,7 @@ return {
     "dmtrKovalenko/fff.nvim",
     dependencies = { 'assistcontrol/readline.nvim' },
     -- build = "nix run .#release",
-    build = function() require("fff.download").download_binary() end,
+    build = || -> require("fff.download").download_binary(),
     opts = { -- (optional)
       debug = {
         enabled = true,     -- we expect your collaboration at least during the beta
@@ -249,14 +247,14 @@ return {
         function()
           require("fff").find_files() -- or find_in_git_root() if you only want git files
           local keys = {
-            ["<c-k>"] = function() require('readline').kill_line() end,
+            ["<c-k>"] = || -> require('readline').kill_line(),
             ["<c-f>"] = '<Right>',
-            ["<a-f>"] = function() require('readline').forward_word() end,
-            ["<a-d>"] = function() require('readline').kill_word() end,
+            ["<a-f>"] = || -> require('readline').forward_word(),
+            ["<a-d>"] = || -> require('readline').kill_word(),
             ["<c-d>"] = '<Delete>',
             ["<c-b>"] = '<Left>',
-            ["<c-a>"] = function() require('readline').beginning_of_line() end,
-            ["<c-u>"] = function() require('readline').backward_kill_line() end,
+            ["<c-a>"] = || -> require('readline').beginning_of_line(),
+            ["<c-u>"] = || -> require('readline').backward_kill_line(),
           };
           local buf = require('fff.picker_ui').state.input_buf;
           local opts = { buffer = buf, noremap = true, silent = true };
@@ -285,14 +283,14 @@ return {
         win = {
           input = {
             keys = {
-              ["<c-k>"] = function() require('readline').kill_line() end,
+              ["<c-k>"] = || -> require('readline').kill_line(),
               ["<c-f>"] = { '<Right>', expr = true, mode = { 'i' } },
-              ["<a-f>"] = function() require('readline').forward_word() end,
-              ["<a-d>"] = function() require('readline').kill_word() end,
+              ["<a-f>"] = || -> require('readline').forward_word(),
+              ["<a-d>"] = || -> require('readline').kill_word(),
               ["<c-d>"] = { '<Delete>', expr = true, mode = { 'i' } },
               ["<c-b>"] = { '<Left>', expr = true, mode = { 'i' } },
-              ["<c-a>"] = function() require('readline').beginning_of_line() end,
-              ["<c-u>"] = function() require('readline').backward_kill_line() end,
+              ["<c-a>"] = || -> require('readline').beginning_of_line(),
+              ["<c-u>"] = || -> require('readline').backward_kill_line(),
             }
           }
         },
@@ -403,9 +401,8 @@ return {
     },
     init = function()
       vim.api.nvim_create_autocmd('FileType', {
-        callback = function(args)
-          vim.api.nvim_set_option_value("formatexpr", "v:lua.require'conform'.formatexpr({'timeout_ms': 1000})", { buf = args.buf })
-        end
+        callback = |args| -> vim.api.nvim_set_option_value(
+          "formatexpr", "v:lua.require'conform'.formatexpr({'timeout_ms': 1000})", { buf = args.buf }),
       });
     end,
     lazy = true,
@@ -521,7 +518,7 @@ return {
     main = 'pickaxe',
     cmd = { 'Pickaxe', 'PickaxeSearch' },
     keys = {
-      { '<leader>gp', function() require('pickaxe').open() end, desc = 'Pickaxe blame stack' },
+      { '<leader>gp', || -> require('pickaxe').open(), desc = 'Pickaxe blame stack' },
     },
     --- @module 'pickaxe'
     --- @type pickaxe.Config
@@ -544,25 +541,25 @@ return {
     keys = {
       {
         '<LocalLeader>ct',
-        function() vim.cmd [[ ConflictMarkerThemselves ]] end,
+        || -> vim.cmd [[ ConflictMarkerThemselves ]],
         mode = 'n',
         desc = "ConflictMarkerThemselves",
       },
       {
         '<LocalLeader>co',
-        function() vim.cmd [[ ConflictMarkerOurselves ]] end,
+        || -> vim.cmd [[ ConflictMarkerOurselves ]],
         mode = 'n',
         desc = "ConflictMarkerOurselves",
       },
       {
         '<LocalLeader>cb',
-        function() vim.cmd [[ ConflictMarkerBoth ]] end,
+        || -> vim.cmd [[ ConflictMarkerBoth ]],
         mode = 'n',
         desc = "ConflictMarkerBoth",
       },
       {
         '<LocalLeader>cn',
-        function() vim.cmd [[ ConflictMarkerNone ]] end,
+        || -> vim.cmd [[ ConflictMarkerNone ]],
         mode = 'n',
         desc = "ConflictMarkerNone",
       },
@@ -648,17 +645,17 @@ return {
 
         -- Actions
         map('n', '<leader>hs', gs.stage_hunk)
-        map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')}; end)
+        map('v', '<leader>hs', || -> gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')})
         map('n', '<leader>hr', gs.reset_hunk)
-        map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end)
+        map('v', '<leader>hr', || -> gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')})
         map('n', '<leader>hS', gs.stage_buffer)
         map('n', '<leader>hu', gs.undo_stage_hunk)
         map('n', '<leader>hR', gs.reset_buffer)
         map('n', '<leader>hp', gs.preview_hunk_inline)
-        map('n', '<leader>hb', function() gs.blame_line { full = true } end)
+        map('n', '<leader>hb', || -> gs.blame_line { full = true })
         map('n', '<leader>tb', gs.toggle_current_line_blame)
         map('n', '<leader>hd', gs.diffthis)
-        map('n', '<leader>hD', function() gs.diffthis('~') end)
+        map('n', '<leader>hD', || -> gs.diffthis('~'))
         map('n', '<leader>td', gs.toggle_deleted)
 
         -- Text object
@@ -994,9 +991,7 @@ return {
     'nvim-mini/mini.cmdline',
     version = false,
     dependencies = { 'nvim-mini/mini.nvim' },
-    config = function() require('mini.cmdline').setup({
-      autocomplete = { enable = false }
-    }) end,
+    config = || -> require('mini.cmdline').setup({ autocomplete = { enable = false } }),
     event = 'VeryLazy',
   },
   { 'MrcJkb/haskell-tools.nvim', ft = { "haskell" }, },
@@ -1044,7 +1039,7 @@ return {
         python = {'ruff'},
       }
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-        callback = function() require("lint").try_lint() end,
+        callback = || -> require("lint").try_lint(),
       })
     end,
     lazy = true,
@@ -1109,9 +1104,7 @@ return {
               vim.cmd("buffer " .. bufnr)
             end
           end,
-          middle_mouse_command = function(bufnr)
-            require('snacks.bufdelete').delete(bufnr)
-          end,
+          middle_mouse_command = |bufnr| -> require('snacks.bufdelete').delete(bufnr),
           right_mouse_command = function() end,
           indicator = { style = "none" },
         },
@@ -1284,14 +1277,9 @@ return {
       require('nvim-treesitter-textobjects').setup({
         select = { lookahead = true },
       })
-      local function select(query)
-        return function()
-          require('nvim-treesitter-textobjects.select').select_textobject(query, 'textobjects')
-        end
-      end
-      local function swap(fn, query)
-        return function() require('nvim-treesitter-textobjects.swap')[fn](query) end
-      end
+      local select = |query| -> || ->
+        require('nvim-treesitter-textobjects.select').select_textobject(query, 'textobjects')
+      local swap = |fn, query| -> || -> require('nvim-treesitter-textobjects.swap')[fn](query)
       vim.keymap.set({ 'x', 'o' }, 'af', select('@function.outer'))
       vim.keymap.set({ 'x', 'o' }, 'if', select('@function.inner'))
       vim.keymap.set({ 'x', 'o' }, 'ac', select('@class.outer'))
