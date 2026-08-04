@@ -71,6 +71,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
         })
     end, opts)
 
+    vim.keymap.set('n', '<leader>ih', function()
+      local filter = { bufnr = bufnr }
+      vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled(filter), filter)
+    end, opts)
+
     local client = vim.lsp.get_client_by_id(ev.data.client_id);
     if client == nil then return end
 

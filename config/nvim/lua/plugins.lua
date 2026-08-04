@@ -997,7 +997,7 @@ return {
     config = function()
       require('lsp.keymaps')
 
-      vim.lsp.inlay_hint.enable(true);
+      -- inlay hints stay off; <leader>ih toggles them per buffer
       -- on by default, but the default style is 'background'
       vim.lsp.document_color.enable(true, nil, { style = 'foreground' });
 
