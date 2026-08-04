@@ -847,6 +847,7 @@ return {
     --- @module 'blink.cmp'
     --- @type blink.cmp.Config
     opts = {
+      snippets = { preset = 'luasnip' },
       signature = { enabled = true },
       appearance = {
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
@@ -862,6 +863,8 @@ return {
         ['<C-n>'] = { 'select_next', 'fallback' },
         ['<C-e>'] = { 'cancel', 'fallback' },
         ['<C-y>'] = { 'select_and_accept', 'fallback' },
+        ['<Tab>'] = { 'snippet_forward', 'fallback' },
+        ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
       },
       cmdline = {
         keymap = {
@@ -936,7 +939,6 @@ return {
           'snippets',
           -- 'buffer',
           'crates',
-          'ultisnips',
         },
         providers = {
           lsp = {
@@ -959,9 +961,6 @@ return {
           },
           crates = {
             name = 'crates', module = 'blink.compat.source',
-          },
-          ultisnips = {
-            name = 'ultisnips', module = 'blink.compat.source',
           },
           sshconfig = {
             name = 'sshconfig', module = 'blink.compat.source',
