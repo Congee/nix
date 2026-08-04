@@ -463,14 +463,18 @@ return {
         },
       },
       attachments = {
-        img_folder = "~/assets/images",
+        folder = "~/assets/images",
       },
       legacy_commands = false,
       open = { use_advanced_uri = true },
-      completion = { nvim_cmp = false },
-      picker = { name = 'snacks.pick' },
     };
-    ft = "markdown",
+    -- vault-only. `*` spans `/` in autocmd patterns, so the leading one matches
+    -- either ~/OneDrive or the CloudStorage path it symlinks to, and the
+    -- trailing one recurses into subfolders.
+    event = {
+      'BufReadPre */remotely-save/Obsidian/*.md',
+      'BufNewFile */remotely-save/Obsidian/*.md',
+    },
   },
   {
     'assistcontrol/readline.nvim',
