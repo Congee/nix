@@ -993,32 +993,19 @@ return {
   {
     'neovim/nvim-lspconfig',
     dependencies = { 'nvim-lua/lsp-status.nvim' },
-    event = 'VeryLazy';
-    -- event = { 'BufReadPre', 'BufNewFile' },
-    opts = { inlay_hints = { enabled = true } },
+    event = 'VeryLazy',
     config = function()
-
-      for server, config in pairs(require('lsp.configs')) do
-        -- vim.lsp.config(server, config);
-        -- vim.lsp.enable(server);
-        require('lspconfig')[server].setup(config)
-      end
-
-      vim.api.nvim_create_autocmd('LspAttach', {
-        callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if client and client.server_capabilities.definitionProvider then
-            vim.api.nvim_buf_set_option(args.buf, "tagfunc", "v:lua.vim.lsp.tagfunc")
-          end
-
-          if client and client:supports_method('textDocument/documentColor') then
-            vim.lsp.document_color.enable(true, args.buf, { style = 'foreground' })
-          end
-        end
-      });
-
-      vim.cmd 'LspStart'; -- to be VeryLazy
       require('lsp.keymaps')
+
+      vim.lsp.inlay_hint.enable(true);
+      -- on by default, but the default style is 'background'
+      vim.lsp.document_color.enable(true, nil, { style = 'foreground' });
+
+      -- enable() last: it replays FileType for buffers opened before VeryLazy
+      for server, config in pairs(require('lsp.configs')) do
+        vim.lsp.config(server, config);
+        vim.lsp.enable(server);
+      end
     end
   },
   {
