@@ -52,23 +52,6 @@
         value = final.runCommandLocal "${name}-stub" { } "mkdir -p $out";
       }) stubbedPackages);
 
-    # desktop-only: on this nixpkgs pin the wayfire stack (wf-config 0.10,
-    # wayfire 0.10.1, incl. its wf-touch subproject) enables doctest unit tests,
-    # but their test binaries link `-ldoctest` while nixpkgs' doctest 2.5.0 is
-    # header-only -> `ld: cannot find -ldoctest`. The libraries themselves build
-    # fine (and older pins built because the tests were gated differently), so
-    # turn the tests off. Affects nixpkgs and the wayland overlay equally; only
-    # the desktop config pulls wayfire. (wcm has no tests; it just needs wayfire.)
-    desktopBuildFixes = _: prev: {
-      wf-config = prev.wf-config.overrideAttrs (o: {
-        doCheck = false;
-        mesonFlags = (o.mesonFlags or [ ]) ++ [ "-Dtests=disabled" ];
-      });
-      wayfire = prev.wayfire.overrideAttrs (o: {
-        doCheck = false;
-        mesonFlags = (o.mesonFlags or [ ]) ++ [ "-Dtests=disabled" "-Dwf-touch:tests=disabled" ];
-      });
-    };
   in {
     # home-manager
     homeConfigurations = {
@@ -87,7 +70,6 @@
               # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
               # unmaintained). Stable still ships it, so keep the same look.
               (_: prev: { inherit (nixos.legacyPackages.${prev.system}) dracula-theme; })
-              desktopBuildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
