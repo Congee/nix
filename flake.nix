@@ -45,20 +45,6 @@
   let
     username = (import inputs.identity).username;
 
-    # Work around an upstream package that fails to *build* (not eval) against
-    # the current nixpkgs pin. Kept minimal so the rest of the closure stays
-    # cache-hit on Cachix. litecli's dep cli-helpers has failing pytest cases
-    # after a Pygments bump; skip its test phase (runtime is unaffected).
-    buildFixes = _: prev: {
-      litecli = prev.litecli.override {
-        python3Packages = prev.python3Packages // {
-          cli-helpers = prev.python3Packages.cli-helpers.overridePythonAttrs (_: {
-            doCheck = false;
-          });
-        };
-      };
-    };
-
     stubbedPackages = import inputs.stubs;
     stubOverlay = final: _prev:
       builtins.listToAttrs (map (name: {
@@ -101,7 +87,6 @@
               # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
               # unmaintained). Stable still ships it, so keep the same look.
               (_: prev: { inherit (nixos.legacyPackages.${prev.system}) dracula-theme; })
-              buildFixes
               desktopBuildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
@@ -123,7 +108,6 @@
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
-              buildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
@@ -141,7 +125,6 @@
               inputs.nur.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
-              buildFixes
               stubOverlay
               (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
             ];
