@@ -8,20 +8,15 @@
 _G.hiof = |id, what, mode| -> vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode);
 
 -- vim.print already returns its argument, but typed as `any`
---- @generic T
+--- @generic const T
 --- @param x T
 --- @return T
 _G.trace = |x| -> vim.print(x);
 
-if _VERSION == "Lua 5.1" or _VERSION == "LuaJIT" then
-  ---@diagnostic disable: deprecated
-  table.unpack = unpack
-end
-
---- @generic T
+--- @generic const T
 --- @param x T
 --- @return T
-_G.id = |x| -> x
+_G.id = |x| -> x;
 
 -- Use nvim-treesitter instead of vim-polyglot for:
 -- filetype => module
