@@ -10,11 +10,18 @@ else
     against=$(git hash-object -t tree /dev/null)
 fi
 
-# Find files with trailing whitespace
-for file in `exec git diff-index --check --cached $against -- | sed '/^[+-]/d' | sed -r 's/:[0-9]+:.*//' | uniq` ; do
-    # Fix them!
-    sed -i 's/[[:space:]]*$//' "$file"
-done
+# Fix files with trailing whitespace, then restage them.
+git diff-index --check --cached "$against" -- \
+    | sed -e '/^[+-]/d' -e 's/:[0-9][0-9]*:.*$//' \
+    | sort -u \
+    | while IFS= read -r file; do
+        # [[:blank:]], not [[:space:]]: stripping \r corrupts CRLF files (.ics).
+        # No sed -i: GNU wants -i, BSD wants -i ''. cat keeps mode and inode.
+        tmp=$(mktemp) || exit 1
+        sed 's/[[:blank:]]*$//' "$file" > "$tmp" && cat "$tmp" > "$file"
+        rm -f "$tmp"
+        git add "$file"
+    done
 
 set -eu
 hook_name="$(basename "$0")"
