@@ -894,22 +894,18 @@ return {
       fuzzy = {
         -- prebuilt_binaries = { download = true },
         sorts = {
-          'score', 'kind', 'label',
+          -- before 'score': score differs on nearly every pair, so anything
+          -- after it never runs. `_`-prefixed means private -> rank last.
           --- @type blink.cmp.SortFunction
-          [4] = function (a, b)
-            if a.client_name ~= 'emmylua_ls' then return nil end
+          function (a, b)
+            if a.client_name ~= 'emmylua_ls' or b.client_name ~= 'emmylua_ls' then return nil end
 
             local aunderscore = a.label:find('^_') ~= nil;
             local bunderscore = b.label:find('^_') ~= nil;
 
-            if aunderscore and not bunderscore then
-              return false;
-            elseif not aunderscore and bunderscore then
-              return false;
-            else
-              return a.label < b.label
-            end
-          end
+            if aunderscore ~= bunderscore then return bunderscore end
+          end,
+          'score', 'kind', 'label',
         },
       },
       completion = {
