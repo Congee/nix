@@ -415,7 +415,7 @@ return {
     --- @type render.md.Config
     opts = {
       completions = { blink = { enabled = true } },
-      code = { style = 'normal' },  -- remove ``` langeuage indicator on hover
+      code = { style = 'normal' },  -- remove ``` language indicator on hover
       image = {},
       overrides = {
         buftype = {
@@ -432,7 +432,7 @@ return {
     ---@module 'obsidian'
     ---@type obsidian.config
     opts = {
-      ui = { enable = false },  -- render-markdown.nvim instaed
+      ui = { enable = false },  -- render-markdown.nvim instead
       workspaces = {
         {
           name = "Obsidian",
