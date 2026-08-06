@@ -623,23 +623,6 @@ return {
           end
         end
 
-        -- `git apply --cached` (how gitsigns stages) leaves a zeroed stat, so
-        -- gitstatusd re-hashes the file every prompt. Refreshing it is a side
-        -- effect of this query; `git add --refresh -- <file>` does the same but
-        -- is noisier. Never `update-index`: its trailing path means "register
-        -- worktree content" and clobbers a partial stage with the whole buffer.
-        vim.api.nvim_create_autocmd('User', {
-          group = vim.api.nvim_create_augroup('user.gitsigns.sync', { clear = true }),
-          pattern = 'GitSignsChanged',
-          -- a truthy return deletes the autocmd
-          callback = function(args)
-            vim.system(
-              { 'git', 'diff', '--no-ext-diff', '--quiet', '--', args.data.file },
-              { cwd = vim.fs.dirname(args.data.file) }
-            )
-          end,
-        })
-
         -- Actions
         -- hs also unstages, on a staged sign
         map('n', '<leader>hs', saved(gs.stage_hunk))
@@ -658,6 +641,24 @@ return {
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>')
       end
     },
+    config = function(_, opts)
+      -- `git apply --cached` (how gitsigns stages) leaves a zeroed stat, so
+      -- gitstatusd re-hashes the file every prompt. Refreshing it is a side
+      -- effect of this query; `git add --refresh -- <file>` does the same but
+      -- is noisier. Never `update-index`: its trailing path means "register
+      -- worktree content" and clobbers a partial stage with the whole buffer.
+      vim.api.nvim_create_autocmd('User', {
+        group = vim.api.nvim_create_augroup('user.gitsigns.sync', {}),
+        pattern = 'GitSignsChanged',
+        callback = function(args)
+          vim.system(
+            { 'git', 'diff', '--no-ext-diff', '--quiet', '--', args.data.file },
+            { cwd = vim.fs.dirname(args.data.file) }
+          )
+        end,
+      })
+      require('gitsigns').setup(opts)
+    end,
     lazy = true,
     event = "UIEnter",
   },
