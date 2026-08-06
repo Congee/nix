@@ -1,5 +1,12 @@
+-- nightly outruns plugin authors; keep :checkhealth vim.deprecated, drop the noise
+vim.deprecate = function(name, alternative, version, plugin)
+  if plugin == nil or plugin == 'Nvim' then
+    require('vim.deprecated.health').add(name, version, debug.traceback('', 2), alternative)
+  end
+end
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   vim.fn.system({
     "git",
     "clone",
