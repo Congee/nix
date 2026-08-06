@@ -286,7 +286,7 @@ return {
   },
   {
     'pwntester/octo.nvim',
-    requires = {
+    dependencies = {
       'nvim-lua/plenary.nvim',
       'folke/snacks.nvim',
       'nvim-tree/nvim-web-devicons',
@@ -768,7 +768,7 @@ return {
     'saecki/crates.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = { "BufRead Cargo.toml" },
-    opts = { complete = { cmp = { enabled = true } } },
+    opts = { completion = { cmp = { enabled = true } } },
   },
   {
     "andrewferrier/debugprint.nvim",
