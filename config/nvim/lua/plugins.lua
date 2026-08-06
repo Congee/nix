@@ -1161,6 +1161,11 @@ return {
       -- the node under the cursor, then grn grows / grm shrinks the visual
       -- selection node-wise (scope increment `grc` not carried over)
       local stacks = {} ---@type table<integer, TSNode[]>
+      vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
+        group = vim.api.nvim_create_augroup('user.treesitter.select', {}),
+        callback = function(ev) stacks[ev.buf] = nil end,
+      })
+      --- @param stack TSNode[]
       local function select_top(stack)
         local sr, sc, er, ec = stack[#stack]:range()
         if ec == 0 then er, ec = er - 1, math.max(#vim.fn.getline(er), 1) end
