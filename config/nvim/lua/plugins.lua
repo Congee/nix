@@ -1232,8 +1232,8 @@ return {
         select = { lookahead = true },
       })
       local select = |query| -> || ->
-        require('nvim-treesitter-textobjects.select').select_textobject(query, 'textobjects')
-      local swap = |fn, query| -> || -> require('nvim-treesitter-textobjects.swap')[fn](query)
+        require('nvim-treesitter-textobjects.select').select_textobject(query, 'textobjects');
+      local swap = |fn, query| -> || -> require('nvim-treesitter-textobjects.swap')[fn](query);
       vim.keymap.set({ 'x', 'o' }, 'af', select('@function.outer'))
       vim.keymap.set({ 'x', 'o' }, 'if', select('@function.inner'))
       vim.keymap.set({ 'x', 'o' }, 'ac', select('@class.outer'))
