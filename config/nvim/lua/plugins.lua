@@ -167,7 +167,7 @@ return {
       vim.cmd [[autocmd ColorScheme * ++once hi diffChanged guifg=#61afef]]
       vim.cmd [[colorscheme onedark ]]
       vim.cmd [[hi Operator gui=None ]] -- no longer italic
-      vim.cmd [[hi @variable guifg=clear ]]
+      vim.cmd [[hi @variable guifg=NONE ]]
 
       -- make indent area contrast
       vim.o.guicursor = table.concat({
