@@ -941,16 +941,10 @@ return {
         },
         providers = {
           lsp = {
-            name = 'lsp',
-            module = 'blink.cmp.sources.lsp',
             transform_items = function(_, items)
+              local Property = require('blink.cmp.types').CompletionItemKind.Property
               return vim.tbl_filter(
-                function(item)
-                  if item.client_name == 'vtsls' then
-                    return item.kind ~= require("blink.cmp.types").CompletionItemKind.Property
-                  else
-                    return item end
-                end,
+                |item| -> item.client_name ~= 'vtsls' or item.kind ~= Property,
                 items
               );
             end,
