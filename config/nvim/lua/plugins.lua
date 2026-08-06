@@ -2,8 +2,8 @@
 -- https://github.com/wbthomason/packer.nvim/issues/1001#issuecomment-1206609769
 
 --- @param id string
---- @param what "'fg'" | "'bg'"
---- @param mode "'gui'" | "'cterm'" | "'term'"
+--- @param what 'fg' | 'bg'
+--- @param mode 'gui' | 'cterm' | 'term'
 --- @return string
 _G.hiof = |id, what, mode| -> vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(id)), what, mode);
 
@@ -89,12 +89,19 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     dependencies = 'neovim-treesitter/nvim-treesitter',
     config = function()
-      require('ibl').setup();
-      vim.g.indent_blankline_filetype_exclude = { 'help', 'neo-tree' }
-      vim.g.indent_blankline_char = '│';
+      -- IblIndent defaults to Whitespace; use the text color instead. ibl copies
+      -- IblIndent into its own char group, so setting it afterwards does nothing
+      -- -- HIGHLIGHT_SETUP fires just before that copy, on setup and ColorScheme.
+      local hooks = require('ibl.hooks')
+      hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+        local fg = _G.hiof('Normal', 'fg', 'gui')
+        if fg ~= '' then vim.api.nvim_set_hl(0, 'IblIndent', { fg = fg }) end
+      end)
 
-      -- Actually need something like the freground color of the text
-      vim.cmd([[autocmd ColorScheme hi IndentBlanklineChar guifg=synIDattr(synIDtrans(hlID('Normal')), 'fg', 'gui')]])
+      require('ibl').setup({
+        exclude = { filetypes = { 'help', 'neo-tree' } },
+        indent = { char = '│' },
+      });
     end,
     lazy = true,
     event = "ColorScheme",
