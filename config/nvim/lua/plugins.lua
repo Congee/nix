@@ -52,7 +52,7 @@ return {
   {
     'tamton-aquib/duck.nvim',
     lazy = true,
-    event = 'VeryLazy',
+    cmd = { 'Duck', 'DuckCook', 'DuckCookAll' },
     config = function()
       vim.api.nvim_create_user_command('Duck', || -> require("duck").hatch(), {})
       vim.api.nvim_create_user_command('DuckCook', || -> require("duck").cook(), {})
