@@ -232,7 +232,7 @@ in
     bash-language-server
     biome
     buf
-    basedpyright
+    ty
     clang-tools
     ctop
     docker-compose-language-service
@@ -244,7 +244,6 @@ in
     markdownlint-cli2 mermaid-cli
     # mesonlsp
     nil
-    # pyright
     ruff
 
     stylua
@@ -334,18 +333,11 @@ in
   # https://github.com/kovidgoyal/kitty-themes/tree/master/themes
   programs.kitty.themeFile = "OneDark-Pro";
   programs.kitty.extraConfig = builtins.readFile ../config/kitty/kitty.conf;
+  # kitty's python API ships only in its source tree, so the kittens below
+  # have nothing to resolve `kitty.*` against without this.
   xdg.configFile."kitty/pyproject.toml".text = ''
-    [tool.basedpyright]
-    include = []
-    exclude = []
-
-    reportUnusedImport = false
-    reportMissingModuleSource = false
-    reportUnusedParameter = false
-
-    executionEnvironments = [
-      { root = ".", extraPaths = [ "${pkgs.kitty.src}" ] }
-    ]
+    [tool.ty.environment]
+    extra-paths = [ "${pkgs.kitty.src}" ]
   '';
   xdg.configFile."kitty/search.py".source = ln "${kitty_search}/search.py";
   xdg.configFile."kitty/scroll_mark.py".source = ln "${kitty_search}/scroll_mark.py";

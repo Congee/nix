@@ -6,7 +6,7 @@ local lsp_status = require('lsp-status');
 --- @type table<string, lspconfig.Config>
 --- @diagnostic disable: missing-fields
 return {
-  basedpyright = {},
+  ty = {},
   nil_ls = {},
   bashls = {},
   dockerls = {},
