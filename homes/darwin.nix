@@ -3,6 +3,10 @@
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
   nur = pkgs.nur.repos.congee;
+
+  # Reclaims disk in the shape of `nh clean all --ask`; the site table lives in the script.
+  disk-doctor = pkgs.writeShellScriptBin "disk-doctor"
+    (builtins.readFile ../scripts/disk-doctor.sh);
 in
 {
   imports = [
@@ -30,6 +34,7 @@ in
     (pkgs.writeShellScriptBin "ggrep" "exec -a $0 ${gnugrep}/bin/grep $@")
     (pkgs.writeShellScriptBin "gsed" "exec -a $0 ${gnused}/bin/sed $@")
     (pkgs.writeShellScriptBin "timeout" ''exec ${pkgs.perl}/bin/perl -e 'alarm shift; exec @ARGV' "$@"'')
+    disk-doctor
   ];
 
   home.file."Library/Application Support/lspmux/config.toml".text = ''
@@ -45,6 +50,17 @@ in
       StandardOutPath = "/tmp/lspmux.out";
       RunAtLoad = true;
       KeepAlive = true;
+    };
+  };
+
+  # Report only — deleting is always a deliberate `disk-doctor --ask`.
+  launchd.agents.disk-doctor-report = {
+    enable = true;
+    config = {
+      ProgramArguments = [ "${disk-doctor}/bin/disk-doctor" ];
+      StartCalendarInterval = [ { Day = 1; Hour = 4; } ];
+      StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/disk-doctor.log";
+      StandardOutPath = "${config.home.homeDirectory}/Library/Logs/disk-doctor.log";
     };
   };
 
