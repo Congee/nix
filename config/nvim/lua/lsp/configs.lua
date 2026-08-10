@@ -1,9 +1,8 @@
 -- To debug :lua print(vim.inspect(vim.lsp.get_client_by_id(1).config))
 
-local lspconfig = require('lspconfig');
 local lsp_status = require('lsp-status');
 
---- @type table<string, lspconfig.Config>
+--- @type table<string, vim.lsp.Config>
 --- @diagnostic disable: missing-fields
 return {
   ty = {},
@@ -144,9 +143,7 @@ return {
   buf_ls = { },
 
   sourcekit = {
-    filetypes = {'swift', 'objc', 'objcpp'},
-    root_dir = lspconfig.util.root_pattern('Package.swift', '.git'),
-    single_file_support = true,
+    filetypes = {'swift', 'objc', 'objcpp'}, -- c/cpp stay with clangd
   },
   clangd = {
     handlers = lsp_status.extensions.clangd.setup(),
