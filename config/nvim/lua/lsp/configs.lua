@@ -119,6 +119,29 @@ return {
   },
 
   emmylua_ls = {
+    -- documentHighlight resolves locals by scope, but a member by name, over every equal-text
+    -- token in the file: on `vim.api.nvim_create_autocmd` a bogus `abc.nvim_create_autocmd()`
+    -- lights up too. references does resolve members, so re-ask when the response is all TEXT.
+    -- https://github.com/EmmyLuaLs/emmylua-analyzer-rust/blob/0.25.1/crates/emmylua_ls/src/handlers/document_highlight/highlight_tokens.rs#L74
+    handlers = {
+      ['textDocument/documentHighlight'] = function(_, result, ctx)
+        local client = vim.lsp.get_client_by_id(ctx.client_id)
+        if client == nil or result == nil or #result == 0 then return end
+        local function paint(items)
+          vim.lsp.util.buf_highlight_references(ctx.bufnr, items, client.offset_encoding)
+        end
+        if not vim.iter(result):all(|h| -> h.kind == 1) then return paint(result) end
+
+        local params = vim.deepcopy(ctx.params)
+        params.context = { includeDeclaration = true }
+        client:request('textDocument/references', params, function(_, refs)
+          if not vim.api.nvim_buf_is_valid(ctx.bufnr) then return end
+          local uri = vim.uri_from_bufnr(ctx.bufnr)
+          local here = vim.tbl_filter(|r| -> r.uri == uri, refs or {})
+          paint(next(here) and here or result)  -- keyword pairs come back empty
+        end, ctx.bufnr)
+      end,
+    },
     settings = {
       ---@schema https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json
       emmylua = {

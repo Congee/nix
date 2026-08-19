@@ -129,6 +129,10 @@ return {
     config = vim.schedule_wrap(function()
       vim.cmd [[colorscheme carbonfox]]
       vim.cmd [[hi Operator gui=None ]] -- no longer italic
+      -- sel0 is invisible under CursorLine; sel1 is the palette's search bg
+      vim.cmd [[hi LspReferenceText  guibg=#525253]]
+      vim.cmd [[hi LspReferenceRead  guibg=#525253]]
+      vim.cmd [[hi LspReferenceWrite guibg=#525253 gui=underline]] -- tell writes from reads
 
       -- make indent area contrast
       vim.o.guicursor = table.concat({
@@ -253,6 +257,7 @@ return {
     opts = {
       --- @diagnostic disable-next-line: missing-fields
       image = { doc = { inline = false } },
+      words = { enabled = true }, -- lsp references of the symbol under the cursor
       --- @diagnostic disable-next-line: missing-fields
       picker = {
         enabled = true,
@@ -989,7 +994,6 @@ return {
     config = function()
       require('lsp.keymaps')
 
-      -- inlay hints stay off; <leader>ih toggles them per buffer
       -- on by default, but the default style is 'background'
       vim.lsp.document_color.enable(true, nil, { style = 'foreground' });
 
