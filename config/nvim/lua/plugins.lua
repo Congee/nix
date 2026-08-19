@@ -357,7 +357,7 @@ return {
         -- Customize or remove this keymap to your liking
         "<leader>ft",
         function()
-          require("conform").format({ async = true, lsp_fallback = true })
+          require('conform').format({ async = true })
         end,
         mode = "",
         desc = "Format buffer",
@@ -372,8 +372,7 @@ return {
         vue = { "prettierd", "prettier" },
         javascript = { 'clang_format' },
         typescript = { 'prettierd', 'prettier' },
-        python = { 'isort' },
-        yaml = { command = 'yamlfmt', args = { '-i', '-n' } },
+        yaml = { 'yamlfmt' },
         ["*"] = { "trim_whitespace" },
       },
     },
@@ -1006,7 +1005,6 @@ return {
     config = function()
       require('lint').linters_by_ft = {
         -- javascript = {'eslint_d'},
-        python = {'ruff'},
       }
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         callback = || -> require("lint").try_lint(),
@@ -1121,7 +1119,6 @@ return {
   },
   { 'qvalentin/helm-ls.nvim', lazy = true, ft = 'helm', opts = {} },
   -- use 'heavenshell/vim-pydocstring', {'for': 'python'}
-  { 'wookayin/semshi', build = ':UpdateRemotePlugins', lazy = true, ft = "python" },
   {
     'neovim-treesitter/nvim-treesitter',
     branch = 'main',

@@ -46,14 +46,12 @@ augroup file_type
   " Alternative: au FileType python AutoFormatBuffer autopep8
   " au FileType c,cpp,proto AutoFormatBuffer clang-format
 
-  " au Filetype python nmap <LocalLeader>rn :Semshi rename
   au BufRead *.rkt se ft=racket
   au BufRead *.ejs se ft=embedded_template
   au BufRead flake.lock se ft=json
   " au FileType python set equalprg=autopep8\ -
   au FileType scheme let b:AutoPairs = {"(": ")"}
   au Filetype python setlocal keywordprg=pydoc3
-  au FileType python hi semshiImported ctermfg=214 guifg=#aaaaaa cterm=bold gui=bold
   au FileType python setlocal foldmethod=marker
   au FileType haskell hi Structure guifg=#00ffaf
   au FileType haskell hi Type      guifg=#61afef

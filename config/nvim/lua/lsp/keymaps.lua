@@ -41,6 +41,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.keymap.set("n", "<space>", function() vim.cmd.RustLsp { 'hover', 'range' } end, opts)
     end
     vim.keymap.set('n', '<leader>ac', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', '<leader>oi', function()
+        vim.lsp.buf.code_action({
+            context = { only = { 'source.organizeImports' }, diagnostics = {} },
+            apply = true,
+        })
+    end, opts)
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set('n', '[h', function()
       vim.diagnostic.jump({ count = -1, severity = vim.diagnostic.severity.HINT, float = true })

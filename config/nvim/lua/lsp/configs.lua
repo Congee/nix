@@ -6,6 +6,7 @@ local lsp_status = require('lsp-status');
 --- @diagnostic disable: missing-fields
 return {
   ty = {},
+  ruff = {},
   nil_ls = {},
   bashls = {
     -- man's SGR escapes survive bashls' `col -bx` and litter the hover float
