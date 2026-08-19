@@ -7,7 +7,10 @@ local lsp_status = require('lsp-status');
 return {
   ty = {},
   nil_ls = {},
-  bashls = {},
+  bashls = {
+    -- man's SGR escapes survive bashls' `col -bx` and litter the hover float
+    cmd_env = { GROFF_NO_SGR = '1' },
+  },
   dockerls = {},
   html = {},
   ansiblels = {},
