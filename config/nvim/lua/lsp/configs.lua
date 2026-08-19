@@ -119,9 +119,8 @@ return {
       ---@schema https://raw.githubusercontent.com/EmmyLuaLs/emmylua-analyzer-rust/refs/heads/main/crates/emmylua_code_analysis/resources/schema.json
       emmylua = {
         runtime = {
-          -- "LuaJIT" is plain 2.1; -Ext adds the backported v3.0 syntax
-          -- (renamed to "LuaJIT"/"LuaJIT2" after 0.24.0)
-          version = "LuaJIT-Ext",
+          -- LuaJIT3 is what accepts the backported v3.0 syntax (`|x| -> y`).
+          version = "LuaJIT3",
           requirePattern = {
             "?.lua",
             "?/init.lua",
