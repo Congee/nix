@@ -11,6 +11,7 @@ in
 {
   imports = [
     ./common.nix
+    ./ios-sideload-refresh.nix
   ];
 
   home.packages = with pkgs; [
@@ -61,6 +62,17 @@ in
       StartCalendarInterval = [ { Day = 1; Hour = 4; } ];
       StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/disk-doctor.log";
       StandardOutPath = "${config.home.homeDirectory}/Library/Logs/disk-doctor.log";
+    };
+  };
+
+  # Personal-team signing dies after 7 days and takes the sideloaded app with it.
+  services.ios-sideload-refresh = {
+    enable = true;
+    apps.alfa = {
+      bundleId = "me.congee.alfa";
+      workdir = "${config.home.homeDirectory}/dev/Alfa";
+      device = "Monad";
+      command = [ "Tools/alfa-install.sh" ];
     };
   };
 
