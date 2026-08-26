@@ -70,7 +70,7 @@ in
   # Home Manager needs a bit of information about you and the
   # paths it should manage.
   home.username = username;
-  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/${username}" else "/home/${username}";
+  home.homeDirectory = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/${username}" else "/home/${username}";
   # xdg.configFile."nixpkgs/home.nix".source = ln ./home.nix;
 
   # This value determines the Home Manager release that your
@@ -351,7 +351,7 @@ in
   # programs.tmux.enable = true;
   # programs.tmux.tmuxinator.enable = true;
   home.file.".tmux.conf".text = with pkgs;
-  (builtins.readFile ../config/.tmux.conf) + lib.optionalString stdenv.isDarwin
+  (builtins.readFile ../config/.tmux.conf) + lib.optionalString stdenv.hostPlatform.isDarwin
   ''
     # Make pam_tid.so work in tmux
     __helper="${pam-reattach}/bin/reattach-to-session-namespace";
