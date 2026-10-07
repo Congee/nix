@@ -30,6 +30,7 @@ _G.treesitter_ft_mod = {
   hcl             = 'hcl',
   helm            = 'helm',
   html            = 'html',
+  javascript      = 'javascript',
   -- lua             = 'lua',
   nix             = 'nix',
   proto           = 'proto',
@@ -290,20 +291,56 @@ return {
     },
   },
   {
-    'pwntester/octo.nvim',
+    'Congee/atlas.nvim', -- fork of emrearmagan/atlas.nvim
     dependencies = {
-      'nvim-lua/plenary.nvim',
       'folke/snacks.nvim',
       'nvim-tree/nvim-web-devicons',
+      'MeanderingProgrammer/render-markdown.nvim',
     },
-    --- @module 'octo'
-    --- @type OctoConfig
+    --- @module 'atlas'
+    --- @type AtlasConfig
     opts = {
-      default_to_projects_v2 = true,
-      picker = 'snacks',
+      ui = { picker = 'snacks' },
+      providers = { github = {} },
+      pulls = { diff = {
+        explorer = { show_commits = 'multiple' },
+        lsp = {
+          enabled = true,
+          -- every ignored node_modules/.venv, at any depth
+          link = function(ctx)
+            local res = vim.system({ 'git', '-C', ctx.repo_root, 'ls-files', '-oi', '--exclude-standard', '--directory' },
+              { text = true }):wait()
+            if res.code ~= 0 then return end
+            local link = {}
+            for path in vim.gsplit(res.stdout, '\n', { trimempty = true }) do
+              path = path:gsub('/$', '')
+              local name = vim.fs.basename(path)
+              if name == 'node_modules' or name == '.venv' then table.insert(link, path) end
+            end
+            return link
+          end,
+        },
+      } },
     },
-    lazy = true,
-    event = 'VeryLazy',
+    config = function(_, opts)
+      -- setup() sets laststatus=3 globally; scope it to tabs showing Atlas
+      local laststatus = vim.o.laststatus
+      require('atlas').setup(opts)
+      local function sync()
+        local atlas = vim.iter(vim.api.nvim_tabpage_list_wins(0)):any(function(win)
+          return vim.wo[win].statusline:find("atlas.ui.statusline", 1, true) ~= nil
+        end)
+        vim.o.laststatus = atlas and 3 or laststatus
+      end
+      vim.api.nvim_create_autocmd('TabEnter', { callback = sync })
+      vim.api.nvim_create_autocmd('OptionSet', { pattern = 'statusline', callback = sync })
+      vim.api.nvim_create_autocmd('User', {
+        pattern = { 'AtlasUIClosed', 'AtlasDiffClosed' },
+        callback = function() vim.schedule(sync) end,
+      })
+      sync()
+    end,
+    cmd = 'Atlas',
   },
   { 'rafcamlet/nvim-luapad',                    lazy = true,   ft = "lua" },
 
