@@ -392,26 +392,15 @@ return {
   },
 
   {
-    'iamcco/markdown-preview.nvim',
+    'sammaji/markdown-preview.nvim',
     ft = { 'markdown' },
-    build = 'cd app && yarn install',
-    cmd = 'MarkdownPreview',
-    config = function()
-      vim.g.mkdp_open_ip = 'localhost'
-      -- To debug
-      -- vim.env.NVIM_MKDP_LOG_FILE = '/tmp/mkdp.log'
-      -- vim.env.NVIM_MKDP_LOG_LEVEL = 'debug'
-
-      -- wsl2
-      if vim.fn.has('wsl') == 1 then
-        vim.cmd([[
-            function! g:OpenBrowser(url)
-              silent exe '!/mnt/c/Windows/System32/cmd.exe /c start' a:url
-            endfunction
-        ]]);
-        vim.g.mkdp_browserfunc = 'g:OpenBrowser'
-      end
-    end
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    -- To debug
+    -- init = function()
+    --   vim.env.NVIM_MKDP_LOG_FILE = '/tmp/mkdp.log'
+    --   vim.env.NVIM_MKDP_LOG_LEVEL = 'debug'
+    -- end,
+    opts = {},
   },
   {
     "MeanderingProgrammer/render-markdown.nvim",
