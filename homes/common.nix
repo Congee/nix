@@ -295,7 +295,7 @@ in
   programs.codex.enable = true;
   programs.claude-code = {
     enable = true;
-    package = pkgs.llm-agents.claude-code;
+    package = lib.mkDefault pkgs.llm-agents.claude-code;
   };
 
   programs.k9s.enable = true;

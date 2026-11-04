@@ -7,6 +7,10 @@ let
   # Reclaims disk in the shape of `nh clean all --ask`; the site table lives in the script.
   disk-doctor = pkgs.writeShellScriptBin "disk-doctor"
     (builtins.readFile ../scripts/disk-doctor.sh);
+
+  # TCC keys bare CLI binaries by path, so run claude from a fixed one.
+  claude-code = pkgs.llm-agents.claude-code;
+  claude-bin = "${config.home.homeDirectory}/.local/libexec/claude/claude";
 in
 {
   imports = [
@@ -86,6 +90,24 @@ in
   # Copies keep a stable path, so TCC grants survive updates instead of piling up per store path.
   targets.darwin.linkApps.enable = false;
   targets.darwin.copyApps.enable = true;
+
+  programs.claude-code.package = pkgs.runCommand "claude-code-${claude-code.version}" {
+    inherit (claude-code) version meta;
+  } ''
+    mkdir -p $out/bin
+    substitute ${claude-code}/bin/claude $out/bin/claude \
+      --replace-fail ${claude-code}/bin/.claude-wrapped ${claude-bin}
+    chmod +x $out/bin/claude
+  '';
+  # Rename over the old copy so running sessions keep their inode.
+  home.activation.claude-bin = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if ! cmp -s ${claude-code}/bin/.claude-wrapped ${claude-bin}; then
+      run mkdir -p ${dirOf claude-bin}
+      run rm -f ${claude-bin}.tmp
+      run cp ${claude-code}/bin/.claude-wrapped ${claude-bin}.tmp
+      run mv -f ${claude-bin}.tmp ${claude-bin}
+    fi
+  '';
 
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
