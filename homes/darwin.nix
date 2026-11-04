@@ -83,6 +83,10 @@ in
     zsh -c '/usr/bin/tic -x =(${pkgs.ncurses}/bin/infocmp -x tmux-256color)'
   '';
 
+  # Copies keep a stable path, so TCC grants survive updates instead of piling up per store path.
+  targets.darwin.linkApps.enable = false;
+  targets.darwin.copyApps.enable = true;
+
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
   home.sessionVariables = {
