@@ -64,6 +64,10 @@ let
       sed -i 's|loop.loop(handler)|loop.loop(handler)\n    call_remote_control(["resize-window", "--self", "--axis=reset"])|' $out/search.py
     '';
   };
+  kitty_pyapi = pkgs.runCommand "kitty-pyapi" { } ''
+    cd ${pkgs.kitty.src}
+    find kitty kittens \( -name '*.py' -o -name '*.pyi' \) -exec install -Dm644 {} $out/{} \;
+  '';
 in
 {
   manual.manpages.enable = false;
@@ -324,6 +328,8 @@ in
   # https://stackoverflow.com/questions/16943819/where-do-uti-come-from
   # defaults read com.apple.LaunchServices/com.apple.launchservices.secure
   programs.kitty.enable = true;
+  # Developer-signed, so TCC keys grants by bundle id, not by store path.
+  programs.kitty.package = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.kitty-bin else pkgs.kitty;
   programs.kitty.darwinLaunchOptions = [
     "--single-instance"
     "--override=allow_remote_control=socket-only"
@@ -337,7 +343,7 @@ in
   # have nothing to resolve `kitty.*` against without this.
   xdg.configFile."kitty/pyproject.toml".text = ''
     [tool.ty.environment]
-    extra-paths = [ "${pkgs.kitty.src}" ]
+    extra-paths = [ "${kitty_pyapi}" ]
   '';
   xdg.configFile."kitty/search.py".source = ln "${kitty_search}/search.py";
   xdg.configFile."kitty/scroll_mark.py".source = ln "${kitty_search}/scroll_mark.py";
