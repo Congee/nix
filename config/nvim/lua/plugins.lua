@@ -862,14 +862,13 @@ return {
   {
     'saghen/blink.cmp',
     version = '*',
-    dependencies = { "fang2hou/blink-copilot" },
     build = 'nix run .#build-plugin',
     lazy = true,
     keys = {
       {
         '<C-x><C-o>',
         function()
-          require('blink.cmp').show({ providers = { 'lsp', 'snippets', 'copilot' } })
+          require('blink.cmp').show({ providers = { 'lsp', 'snippets' } })
           require('blink.cmp').show_documentation()
           require('blink.cmp').hide_documentation()
         end,
@@ -987,12 +986,6 @@ return {
           },
           sshconfig = {
             name = 'sshconfig', module = 'blink.compat.source',
-          },
-          copilot = {
-            name = "copilot",
-            module = "blink-copilot",
-            async = true,
-            score_offset = 4,
           },
         },
       },

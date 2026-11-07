@@ -232,7 +232,6 @@ in
 
     # vscode-langservers-extracted # json-lsp bin/vscode-json-languageserver
     # autopep8
-    copilot-language-server
     bash-language-server
     biome
     buf
