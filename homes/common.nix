@@ -320,7 +320,8 @@ in
   # https://github.com/NixOS/nixpkgs/issues/507531
   programs.direnv.package = pkgs.direnv.overrideAttrs (_: { doCheck = false; });
   programs.direnv.nix-direnv.enable = true;
-  programs.direnv.enableZshIntegration = true;
+  # HM's hook embeds the store path; GC breaks it in long-lived shells
+  programs.direnv.enableZshIntegration = false;
 
   # https://github.com/philocalyst/infat
   # https://apple.stackexchange.com/questions/49447/revert-filetype-association
@@ -410,6 +411,7 @@ in
   programs.zsh.enableCompletion = false;  # the nix-zsh-completions is too old;
   programs.zsh.initContent = lib.mkMerge [
     (lib.mkOrder 850 "autoload -U compinit && compinit")
+    ''eval "$(direnv hook zsh)"''
     (lib.mkOrder 1200 (builtins.concatStringsSep "\n" [
       (builtins.replaceStrings [ "@USERNAME@" ] [ username ] (builtins.readFile ../config/.zshrc))
       # it's already set but not inherited to home-manager zsh
