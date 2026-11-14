@@ -141,6 +141,9 @@ in
     };
   };
 
+  # A live tree of service manager jobs on the console
+  services.bootvine.enable = true;
+
   # FIXME: do not login until graphical.target is ready
   services.greetd.enable = true;
   services.greetd.settings = {

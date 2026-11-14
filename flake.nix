@@ -16,6 +16,9 @@
     flake-compat.url                    = "github:edolstra/flake-compat";
     flake-compat.flake                  = false;
 
+    bootvine.url                        = "git+https://codeberg.org/wvhulle/bootvine";
+    bootvine.inputs.nixpkgs.follows     = "nixos";
+
     llm-agents.url                      = "github:numtide/llm-agents.nix";
     llm-agents.inputs.nixpkgs.follows   = "nixpkgs";
 
@@ -41,7 +44,7 @@
     stubs.flake                         = false;
   };
 
-  outputs = { self, home-manager, darwin, nixpkgs, nixos, ... } @ inputs:
+  outputs = { self, home-manager, darwin, nixpkgs, bootvine, nixos, ... } @ inputs:
   let
     username = (import inputs.identity).username;
 
@@ -129,6 +132,7 @@
             "steam-runtime"
           ];
         }
+        bootvine.nixosModules.default
         ./hosts/blackbox/configuration.nix
       ];
       specialArgs = { inherit inputs username; };
