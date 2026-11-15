@@ -409,7 +409,8 @@
         "nixpkgs": "nixpkgs_2",
         "nur": "nur",
         "stubs": "stubs",
-        "wayland": "wayland"
+        "wayland": "wayland",
+        "wayshot": "wayshot"
       }
     },
     "stubs": {
@@ -492,6 +493,27 @@
       "original": {
         "owner": "nix-community",
         "repo": "nixpkgs-wayland",
+        "type": "github"
+      }
+    },
+    "wayshot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794104359,
+        "narHash": "sha256-UXDOK3GD1v+ZiNQ98Q22TnU+bSLAliiskAj4iCThRFY=",
+        "owner": "waycrate",
+        "repo": "wayshot",
+        "rev": "a2c10049a325b51989536d784ea5d084f88e3238",
+        "type": "github"
+      },
+      "original": {
+        "owner": "waycrate",
+        "ref": "v1.7.1-wayshot",
+        "repo": "wayshot",
         "type": "github"
       }
     }

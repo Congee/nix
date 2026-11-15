@@ -7,6 +7,9 @@
     nixpkgs.url                         = "github:NixOS/nixpkgs/nixos-unstable";
     nixos.url                           = "github:NixOS/nixpkgs/nixos-26.05";
     wayland.url                         = "github:nix-community/nixpkgs-wayland";
+    # nixpkgs 1.6.0 panics on Esc; drop once nixpkgs has >= 1.7.1
+    wayshot.url                         = "github:waycrate/wayshot/v1.7.1-wayshot";
+    wayshot.inputs.nixpkgs.follows      = "nixpkgs";
     neovim-nightly.url                  = "github:nix-community/neovim-nightly-overlay";
     home-manager.url                    = "github:nix-community/home-manager";
     # home-manager.url                    = "github:Congee/home-manager";
@@ -67,6 +70,7 @@
             nixpkgs.overlays = [
               inputs.nur.overlays.default
               inputs.wayland.overlay
+              inputs.wayshot.overlays.default
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
               # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
