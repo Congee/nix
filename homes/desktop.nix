@@ -10,6 +10,7 @@ in
 
     # wayland
     unstable.waybar
+    quickshell  # experimental second bar, config/quickshell
     wayfire
     wayfirePlugins.wcm  # wayfire config manager
     swaynotificationcenter  # notifacation daemon
@@ -73,7 +74,7 @@ in
     charles
     zoom-us
     mpv
-    (writeScriptBin "whereami" ''${geoclue2}/libexec/geoclue-2.0/demos/where-am-i "$@"'')
+    (writeShellScriptBin "whereami" ''${geoclue2}/libexec/geoclue-2.0/demos/where-am-i "$@"'')
 
     nerd-fonts.caskaydia-cove
     nerd-fonts.code-new-roman
@@ -139,6 +140,8 @@ in
   programs.waybar.package = pkgs.unstable.waybar;
   programs.waybar.systemd.enable = false;
   xdg.configFile."waybar".source = ln ../config/waybar;
+  # String path, not ../config: links the live checkout so edits hot-reload
+  xdg.configFile."quickshell".source = ln "${config.home.homeDirectory}/.nix/config/quickshell";
 
   xdg.configFile."wayfire.ini".source = ln ../config/wayfire.conf;
 
