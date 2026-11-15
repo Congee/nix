@@ -55,6 +55,11 @@ in
 
   services.tailscale.enable = true;
 
+  # Delete old nix-direnv roots
+  services.angrr.enable = true;
+  services.angrr.period = "1month";
+  services.angrr.timer.enable = true;
+
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";

@@ -38,6 +38,7 @@
   # Delete old nix-direnv roots
   services.angrr.enable = true;
   services.angrr.period = "1month";
+  services.angrr.timer.enable = true;
 
   # Create /etc/bashrc that loads the nix-darwin environment.
   programs.zsh.enable = true;  # default shell on catalina

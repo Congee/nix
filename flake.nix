@@ -24,7 +24,6 @@
 
     angrr.url                           = "github:linyinfeng/angrr";
     angrr.inputs.nixpkgs.follows        = "nixpkgs";
-    angrr.inputs.flake-compat.follows   = "flake-compat";
 
     # Out-of-tree identity (username). The committed default is a placeholder;
     # keep your real username outside the repo and select it per-invocation with:
@@ -133,6 +132,7 @@
           ];
         }
         bootvine.nixosModules.default
+        inputs.angrr.nixosModules.angrr
         ./hosts/blackbox/configuration.nix
       ];
       specialArgs = { inherit inputs username; };
