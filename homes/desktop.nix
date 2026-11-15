@@ -200,6 +200,7 @@ in
   gtk.font.package = pkgs.noto-fonts;
   gtk.theme.name = "Dracula";
   gtk.theme.package = pkgs.dracula-theme;
+  gtk.gtk4.theme = config.gtk.theme;  # keep legacy default (stateVersion < 26.05)
   gtk.iconTheme.name = "Papirus-Dark-Maia";  # Candy and Tela also look good
   gtk.iconTheme.package = pkgs.papirus-maia-icon-theme;
   gtk.gtk3.extraConfig = {

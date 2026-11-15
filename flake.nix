@@ -71,9 +71,9 @@
               inputs.llm-agents.overlays.shared-nixpkgs
               # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
               # unmaintained). Stable still ships it, so keep the same look.
-              (_: prev: { inherit (nixos.legacyPackages.${prev.system}) dracula-theme; })
+              (_: prev: { inherit (nixos.legacyPackages.${prev.stdenv.hostPlatform.system}) dracula-theme; })
               stubOverlay
-              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}; })
             ];
             nixpkgs.config.allowUnfreePredicate = (_: true);
             # for goldendict
@@ -93,7 +93,7 @@
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
               stubOverlay
-              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}; })
             ];
           }
         ];
@@ -110,7 +110,7 @@
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
               stubOverlay
-              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.system}; })
+              (_: prev: { unstable = nixpkgs.legacyPackages.${prev.stdenv.hostPlatform.system}; })
             ];
           }
         ];
