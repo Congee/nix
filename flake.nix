@@ -71,6 +71,7 @@
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.wayshot.overlays.default
+              (import ./overlays/wayfire.nix)
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
               # unstable dropped dracula-theme with gtk-engine-murrine (GTK 2,
