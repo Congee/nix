@@ -9,8 +9,7 @@ in
   home.packages = with pkgs; [
 
     # wayland
-    unstable.waybar
-    quickshell  # experimental second bar, config/quickshell
+    quickshell  # top bar, config/quickshell
     wayfire
     wayfirePlugins.wcm  # wayfire config manager
     swaynotificationcenter  # notifacation daemon
@@ -136,10 +135,6 @@ in
   programs.obs-studio.package = [pkgs.obs-studio];
   programs.obs-studio.plugins = [pkgs.obs-studio-plugins.wlrobs];
 
-  programs.waybar.enable = true;
-  programs.waybar.package = pkgs.unstable.waybar;
-  programs.waybar.systemd.enable = false;
-  xdg.configFile."waybar".source = ln ../config/waybar;
   # String path, not ../config: links the live checkout so edits hot-reload
   xdg.configFile."quickshell".source = ln "${config.home.homeDirectory}/.nix/config/quickshell";
 

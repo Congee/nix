@@ -15,6 +15,7 @@ PanelWindow {
     Row {
         anchors { left: parent.left; leftMargin: 12; verticalCenter: parent.verticalCenter }
         spacing: 14
+        Caffeine { window: bar; anchors.verticalCenter: parent.verticalCenter }
         Workspaces { output: bar.screen ? bar.screen.name : ""; anchors.verticalCenter: parent.verticalCenter }
         ActiveWindow { anchors.verticalCenter: parent.verticalCenter }
     }
