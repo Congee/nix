@@ -321,7 +321,7 @@ in
     "--single-instance"
     "--override=allow_remote_control=socket-only"
     "--listen-on=unix:/tmp/kitty.socket"
-    "--session=~/.config/kitty/startup_session"
+    "--session=~/.local/state/kitty/last.kitty-session"
   ];
   # https://github.com/kovidgoyal/kitty-themes/tree/master/themes
   programs.kitty.themeFile = "OneDark-Pro";
@@ -339,6 +339,11 @@ in
   xdg.configFile."kitty/watcher.py".source = ln ../config/kitty/watcher.py;
   xdg.configFile."kitty/tab_bar.py".source = ln ../config/kitty/tab_bar.py;
   xdg.configFile."kitty/startup_session".source = ln ../config/kitty/startup_session;
+  # watcher.py saves the session here on quit; fall back to startup_session
+  home.activation.kittyLastSession = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    f="$HOME/.local/state/kitty/last.kitty-session"
+    [ -e "$f" ] || run install -Dm644 ${../config/kitty/startup_session} "$f"
+  '';
 
   # must be put before zsh, or some zsh settings are overriden
   # programs.tmux.enable = true;

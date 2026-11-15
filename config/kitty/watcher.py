@@ -4,13 +4,31 @@ from typing import Any
 from kitty.boss import Boss
 from kitty.window import Window
 
+# Loaded by --session on the next launch (seeded from startup_session)
+LAST_SESSION = '~/.local/state/kitty/last.kitty-session'
+
+
+def save_last_session(boss: Boss) -> None:
+    boss.save_as_session('--save-only', LAST_SESSION)
+
 
 def on_load(boss: Boss, data: dict[str, Any]) -> None:
     # This is a special function that is called just once when this watcher
     # module is first loaded, can be used to perform any initializztion/one
     # time setup. Any exceptions in this function are printed to kitty's
     # STDERR but otherwise ignored.
-    ...
+
+    # Every OS window close (Super+Q, quit, SIGTERM, compositor exit) ends
+    # here, before the shells are hung up; no watcher event covers all of them
+    os_window_closed = boss.on_os_window_closed
+
+    def on_os_window_closed(os_window_id: int, *args: Any) -> None:
+        tm = boss.os_window_map.get(os_window_id)
+        if len(boss.os_window_map) == 1 and tm is not None and any(len(tab) for tab in tm):
+            save_last_session(boss)
+        os_window_closed(os_window_id, *args)
+
+    boss.on_os_window_closed = on_os_window_closed  # type: ignore[method-assign]
 
 def on_resize(boss: Boss, window: Window, data: dict[str, Any]) -> None:
     # Here data will contain old_geometry and new_geometry
