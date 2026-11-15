@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, username, ... }:
 
 let
   # xanmod has a problem with cgroups for k3s
@@ -59,6 +59,10 @@ in
   services.angrr.enable = true;
   services.angrr.period = "1month";
   services.angrr.timer.enable = true;
+
+  programs.wireshark.enable = true;
+  programs.wireshark.package = pkgs.wireshark;
+  users.users.${username}.extraGroups = [ "wireshark" ];
 
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";

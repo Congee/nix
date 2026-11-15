@@ -3,15 +3,6 @@
 let
   ln = config.lib.file.mkOutOfStoreSymlink;
 
-  wsudo = (pkgs.writeScriptBin "wsudo" ''
-    #small script to enable root access to x-windows system
-    xhost +SI:localuser:root
-    sudo --shell "$@"
-    #disable root access after application terminates
-    xhost -SI:localuser:root
-    #print access status to allow verification that root access was removed
-    xhost
-  '').overrideAttrs (_: { prefreLocalBuild = true; buildInputs = [pkgs.xorg.xhost]; });
 in
 {
   home.enableNixpkgsReleaseCheck = false;
@@ -72,9 +63,7 @@ in
     evolution
     element-desktop
 
-    xorg.xhost
-    wsudo
-    wireshark
+    # wireshark: see programs.wireshark in hosts/blackbox
     termshark
     # tdesktop  # telegram
     musescore
