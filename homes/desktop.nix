@@ -12,11 +12,9 @@ in
     unstable.waybar
     wayfire
     wayfirePlugins.wcm  # wayfire config manager
-    wofi
     swaynotificationcenter  # notifacation daemon
     gtk-layer-shell
     aml  # vnc server
-    clipman
     wev  # like xev to show keyboard events
     pamixer  # pamixer to control volume
     wlay  # graphical output management
@@ -117,7 +115,13 @@ in
   # services.kanshi.enable = true;
   # services.kanshi.systemdTarget = "graphical.target";
 
-  services.cliphist.enable = true;
+  # Launcher + clipboard history; started from wayfire.conf [autostart]
+  programs.vicinae.enable = true;
+  programs.vicinae.settings = {
+    keybinding = "emacs";  # C-n / C-p
+    font.normal.size = 14;  # unset picks ~10.5
+    launcher_window.size = { width = 1078; height = 672; };  # 1.4x, same aspect
+  };
 
   # pdf
   programs.zathura.enable = true;
@@ -133,8 +137,6 @@ in
   xdg.configFile."waybar".source = ln ../config/waybar;
 
   xdg.configFile."wayfire.ini".source = ln ../config/wayfire.conf;
-  xdg.configFile."wofi/config".source = ln ../config/wofi/config;
-  xdg.configFile."wofi/style.css".source = ln ../config/wofi/style.css;
 
   fonts.fontconfig.enable = true;
   xdg.configFile."fontconfig/fonts.conf".source = ln ../config/fonts.conf;
