@@ -121,6 +121,7 @@ in
     keybinding = "emacs";  # C-n / C-p
     font.normal.size = 14;  # unset picks ~10.5
     launcher_window.size = { width = 1078; height = 672; };  # 1.4x, same aspect
+    launcher_window.opacity = 0.8;  # < 1 so wayfire's [blur] shows through
   };
 
   # pdf
