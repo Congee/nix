@@ -119,6 +119,9 @@ in
   programs.vicinae.enable = true;
   programs.vicinae.settings = {
     keybinding = "emacs";  # C-n / C-p
+    # Free C-p / C-n for navigation (C-S-p is action.pin)
+    keybinds."open-search-filter" = "control+shift+F";
+    keybinds."action.new" = "control+shift+N";
     font.normal.size = 14;  # unset picks ~10.5
     launcher_window.size = { width = 1078; height = 672; };  # 1.4x, same aspect
     launcher_window.opacity = 0.8;  # < 1 so wayfire's [blur] shows through
