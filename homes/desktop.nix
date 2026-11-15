@@ -174,6 +174,7 @@ in
 
   programs.firefox.enable = true;
   programs.firefox.package = pkgs.firefox;
+  programs.firefox.configPath = "${config.xdg.configHome}/mozilla/firefox";
   programs.firefox.profiles.default = {
     id = 0;  # means default
     isDefault = true;  # also sets to default if id is not 0

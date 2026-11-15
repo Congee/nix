@@ -61,7 +61,7 @@ in
 
   networking.useNetworkd = true; # gets multiple name servers via dhcp
   services.resolved.enable = true;
-  services.resolved.dnsovertls = "opportunistic";
+  services.resolved.settings.Resolve.DNSOverTLS = "opportunistic";
 
   # Set your time zone.
   time.timeZone = "America/New_York";
