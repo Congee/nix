@@ -123,6 +123,7 @@
       };
     };
     desktop = self.homeConfigurations.desktop.activationPackage;
+    mac = self.homeConfigurations.mac.activationPackage;
     wsl = self.homeConfigurations.wsl.activationPackage;
 
     nixosConfigurations.blackbox = nixos.lib.nixosSystem {
@@ -143,7 +144,7 @@
       specialArgs = { inherit inputs username; };
     };
 
-    darwinConfigurations.mac = darwin.lib.darwinSystem {
+    darwinConfigurations.darwin = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
         inputs.angrr.darwinModules.angrr
@@ -151,6 +152,5 @@
       ];
       specialArgs = { inherit inputs username; };
     };
-    inherit (self.darwinConfigurations) mac;
   };
 }

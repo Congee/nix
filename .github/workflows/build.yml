@@ -34,7 +34,7 @@ jobs:
           # agent-browser's `next build` and everything else build unpatched.
           - os: macos-latest
             targets: >-
-              .#darwinConfigurations.mac.system
+              .#darwinConfigurations.darwin.system
               .#homeConfigurations.mac.activationPackage
     runs-on: ${{ matrix.os }}
     steps:
