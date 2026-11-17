@@ -284,6 +284,15 @@ in
     package = lib.mkDefault pkgs.llm-agents.claude-code;
   };
 
+  # Follows programs.chromium, so the launched browser carries its flags.
+  home.file.".agent-browser/config.json" = lib.mkIf config.programs.chromium.enable {
+    text = builtins.toJSON {
+      headed = true;
+      executablePath = lib.getExe config.programs.chromium.finalPackage;
+      args = "--no-startup-window"; # else headed Chrome adds an untracked blank tab
+    };
+  };
+
   programs.k9s.enable = true;
   programs.k9s.plugins = {
     #--- Create debug container for selected pod in current namespace

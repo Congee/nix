@@ -116,16 +116,16 @@ in
   };
 
   programs.chromium.enable = true;
-  programs.chromium.extraOpts = {
-    "BrowserSignin" = 0;
-    "SyncDisabled" = true;
-    "PasswordManagerEnabled" = false;
-  };
-  programs.chromium.extensions = [
-    "cjpalhdlnbpafiamejdnhcphjbkeiagm" # ublock origin
+  targets.darwin.defaults."com.google.Chrome".PasswordManagerEnabled = false;
+  programs.chromium.commandLineArgs = [
+    "--no-first-run"
+    "--disable-sync"
+    "--remote-debugging-port=9222"
   ];
-  programs.chromium.package = pkgs.google-chrome; # .override { commandLineArgs = "--remote-debugging-port=9222"; };
-  programs.chromium.commandLineArgs = [ "--remote-debugging-port=9222" ];
+  programs.chromium.extensions = [
+    { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # ublock origin
+  ];
+  programs.chromium.package = pkgs.google-chrome;
 
   # Point oxker at OrbStack's docker socket. $HOME is kept literal (single-quoted
   # in the generated alias) so it resolves at runtime and the absolute home path
