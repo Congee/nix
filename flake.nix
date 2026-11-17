@@ -71,6 +71,8 @@
               inputs.nur.overlays.default
               inputs.wayland.overlay
               inputs.wayshot.overlays.default
+              # Built from source: skip the unused AVIF (rav1e) / JPEG-XL encoders
+              (_: prev: { wayshot = prev.wayshot.override { avifSupport = false; jxlSupport = false; }; })
               (import ./overlays/wayfire.nix)
               inputs.neovim-nightly.overlays.default
               inputs.llm-agents.overlays.shared-nixpkgs
